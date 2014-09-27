@@ -1,2 +1,5 @@
+painting
+creepy painting
+armor
 door
 nothing

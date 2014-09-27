@@ -2,6 +2,8 @@ common ring
 golden ring
 diamond ring
 MAGICAL RING
+common chest
+SECRET CHEST
 rusty sword
 iron sword
 gold sword

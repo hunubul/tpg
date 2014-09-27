@@ -1,4 +1,4 @@
 painting
 creepy painting
-window
+door
 nothing

@@ -16,6 +16,7 @@ class szoba{
   vector <string> w4; //wall4, jobbra levő fal dolgai
   vector <string> c;  //ceiling, plafon dolgai
 
+public:
 szoba(){
   vector<string> fv=padlo();
   int asd=rand() % 5; //hany targy
@@ -23,7 +24,7 @@ szoba(){
   {
     int bsd=rand() % fv.size();
     f.push_back(fv[bsd]);
-    fv.erase(fv[bsd]);
+    fv.erase(fv.begin()+bsd-1);
   }
 
 

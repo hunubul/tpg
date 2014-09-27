@@ -24,7 +24,7 @@ szoba(){
   {
     int bsd=rand() % fv.size();
     f.push_back(fv[bsd]);
-    fv.erase(fv.begin()+bsd-1);
+    fv.erase(fv.begin()+bsd);
   }
 
 

@@ -1,5 +1,5 @@
 #include "szoba.h"
-/*MÉG CSAK PADLÓ VAN IMPLEMENTÁLVA, MINDEN MÁS FELÜLET KI VAN KOMMENTEZVE, ELVILEG ELÉG KISZEDNI, HOGY MŰKÖDJÖN*/
+/*MÉG CSAK PADLÓ VAN IMPLEMENTÁLVA, MINDEN MÁS FELÜLET KI VAN KOMMENTEZVE, ELVILEG ELÉG KISZEDNI, HOGY MÛKÖDJÖN*/
 using namespace std;
 
 szoba::szoba()
@@ -26,15 +26,23 @@ vector<string> szoba::padlo()
 {
     ifstream floorf ("dolgok/f.txt");
     vector <string> floorv;
-    while (floorf.good())
+    if (!floorf.fail())
     {
-        string temp="";
-        //floorf>>ws; //Ez kell???
-        getline(floorf,temp,'\n'); //mindenhova getline kell valszleg
-        if (temp!="")
+        while (floorf.good())
         {
-            floorv.push_back(temp);
+            string temp="";
+            //floorf>>ws; //Ez kell???
+            getline(floorf,temp,'\n'); //mindenhova getline kell valszleg
+            if (temp!="")
+            {
+                floorv.push_back(temp);
+            }
         }
+    }
+    else
+    {
+        cout << "Error: couldn't find \"dolgok/f.txt\"\n";
+        exit(1);
     }
     return floorv;
 }

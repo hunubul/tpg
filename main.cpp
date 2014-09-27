@@ -1,9 +1,17 @@
-#include <iostream>
+#include "szoba.cpp"
 
 using namespace std;
-
+void Kiir(szoba asd)
+{
+    for(int i=0;i<asd.f.size();i++)
+    {
+        cout<<asd.f[i]<<endl;
+    }
+}
 int main()
 {
-    cout << "Hello world!" << endl;
+    srand(time(NULL));
+    szoba asd;
+    Kiir(asd);
     return 0;
 }

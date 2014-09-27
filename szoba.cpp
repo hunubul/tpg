@@ -1,42 +1,55 @@
-#include "szoba.h"
+#include <string>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+
 /*MÉG CSAK PADLÓ VAN IMPLEMENTÁLVA, MINDEN MÁS FELÜLET KI VAN KOMMENTEZVE, ELVILEG ELÉG KISZEDNI, HOGY MŰKÖDJÖN*/
 using namespace std;
 
-szoba::szoba()
-{
-    vector<string> fv=padlo();
-    int asd=rand() % 5;   //hány tárgy legyen max választva
-    for (int i=0; i<asd; i++)   //sorsolás
-    {
-        int bsd=rand() % fv.size();
-        f.push_back(fv[bsd]);
-        fv.erase(fv.begin()+bsd);
-    }
+class szoba{
+  vector <string> f;  //floor, padló dolgai
+  vector <string> w2; //wall2, szembe levő fal dolgai
+  vector <string> w3; //wall3, balra levő fal dolgai
+  vector <string> w4; //wall4, jobbra levő fal dolgai
+  vector <string> c;  //ceiling, plafon dolgai
+
+public:
+szoba(){
+  vector<string> fv=padlo();
+  int asd=rand() % 5; //hany targy
+  for (int i=0; i<asd; i++) //sorsolas
+  {
+    int bsd=rand() % fv.size();
+    f.push_back(fv[bsd]);
+    fv.erase(fv.begin()+bsd);
+  }
 
 
-    /*vector<string> w2v=fal2();
-      vector<string> w3v=fal3();
-      vector<string> w4v=fal4();
-      vector<string> cv=plafon();*/
+/*vector<string> w2v=fal2();
+  vector<string> w3v=fal3();
+  vector<string> w4v=fal4();
+  vector<string> cv=plafon();*/
 
 }
 
 /*--------------beolvas fgv-ek--------------*/
-vector<string> szoba::padlo()
-{
-    ifstream floorf ("dolgok/f.txt");
-    vector <string> floorv;
-    while (floorf.good())
+vector<string> padlo(){
+  ifstream floorf ("dolgok/f.txt");
+  vector <string> floorv;
+  while (floorf.good())
+  {
+    string temp="";
+    floorf>>ws;
+    getline(floorf,temp,'\n'); //mindenhova getline kell valszleg
+    if (temp!="")
     {
-        string temp="";
-        //floorf>>ws; //Ez kell???
-        getline(floorf,temp,'\n'); //mindenhova getline kell valszleg
-        if (temp!="")
-        {
-            floorv.push_back(temp);
-        }
+      floorv.push_back(temp);
     }
-    return floorv;
+  }
+  return floorv;
 }
 /*
 vector<string> fal2(){
@@ -100,3 +113,4 @@ vector<string> plafon(){
   return c;
 }*/
 /*--------------beolvas fgv-ek vege--------------*/
+};

@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include <vector>
 #include <fstream>
 #include <ctime>
@@ -6,7 +7,7 @@
 #include <stdlib.h>
 
 /*MÉG CSAK PADLÓ VAN IMPLEMENTÁLVA, MINDEN MÁS FELÜLET KI VAN KOMMENTEZVE, ELVILEG ELÉG KISZEDNI, HOGY MŰKÖDJÖN*/
-using namespace std
+using namespace std;
 
 class szoba{
   vector <string> f;  //floor, padló dolgai

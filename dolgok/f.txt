@@ -1,0 +1,10 @@
+common ring
+golden ring
+diamond ring
+MAGICAL RING
+rusty sword
+iron sword
+gold sword
+UBER SWORD
+white skull
+crystal skull

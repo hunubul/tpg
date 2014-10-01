@@ -18,6 +18,10 @@ public: //Ideiglenes public -> 18.sor eredeti public (main.cpp->asd.f.size()-ná
 //public:
     szoba();
     std::vector<std::string> padlo();
+    std::vector<std::string> fal2();
+    /*std::vector<std::string> fal3();
+    std::vector<std::string> fal4();
+    std::vector<std::string> plafon();*/
 };
 
 #endif // SZOBA_H_INCLUDED

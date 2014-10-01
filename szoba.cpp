@@ -1,5 +1,5 @@
 #include "szoba.h"
-/*ELVILEG MINDEN FELÜLET MEGVAN, A BEOLVASANDÓ FÁJLOKAT MÉG BUHERÁLNI KÉNE*/
+/*ELVILEG MINDEN FELÜLET MEGVAN, DE CSAK A SZEMBE MEG PADLÓ VAN BERAKVA, A BEOLVASANDÓ FÁJLOKAT MÉG BUHERÁLNI KÉNE*/
 using namespace std;
 
 szoba::szoba()
@@ -20,7 +20,7 @@ szoba::szoba()
         w2.push_back(w2v[bsd]);
         w2v.erase(w2v.begin()+bsd);
     }
-    vector<string> w3v=fal3();
+    /*vector<string> w3v=fal3();
     asd=rand() % 3;   //hány tárgy legyen max választva
     for (int i=0; i<asd; i++)   //sorsolás
     {
@@ -43,7 +43,7 @@ szoba::szoba()
         int bsd=rand() % cv.size();
         c.push_back(cv[bsd]);
         cv.erase(cv.begin()+bsd);
-    }
+    }*/
 
 }
 
@@ -89,7 +89,7 @@ vector<string> fal2(){
   }
   return w2v;
 }
-vector<string> fal3(){
+/*vector<string> fal3(){
   ifstream w2f ("dolgok/w3.txt");
   vector <string> w3v;
   while (w3f.good())
@@ -133,5 +133,5 @@ vector<string> plafon(){
       }
   }
   return c;
-}
+}*/
 /*--------------beolvas fgv-ek vege--------------*/

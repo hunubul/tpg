@@ -10,7 +10,7 @@
 class szoba
 {
 public: //Ideiglenes public -> 18.sor eredeti public (main.cpp->asd.f.size()-nál szükséges a publikus elérés)
-    std::vector <std::string> f;
+    std::vector <std::string> f; //eltűntek ezeknek a leírásai, hogy melyik micsoda, gondolok itt a w2-3-4,re
     std::vector <std::string> w2;
     std::vector <std::string> w3;
     std::vector <std::string> w4;

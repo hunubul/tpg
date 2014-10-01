@@ -10,3 +10,6 @@ gold sword
 UBER SWORD
 white skull
 crystal skull
+hostile giant enemy crab
+hostile MLG pro
+hostile eyebrows

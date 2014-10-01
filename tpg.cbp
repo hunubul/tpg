@@ -33,6 +33,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="main.cpp" />
+		<Unit filename="osztalyok_omlesztve.h" />
 		<Unit filename="szoba.cpp" />
 		<Unit filename="szoba.h">
 			<Option target="&lt;{~None~}&gt;" />

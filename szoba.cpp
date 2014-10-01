@@ -2,6 +2,8 @@
 /*ELVILEG MINDEN FELÜLET MEGVAN, DE CSAK A SZEMBE MEG PADLÓ VAN BERAKVA, A BEOLVASANDÓ FÁJLOKAT MÉG BUHERÁLNI KÉNE*/
 using namespace std;
 
+
+/*--------------Konstruktorok kezdete--------------*/
 szoba::szoba()
 {
     vector<string> fv=padlo();
@@ -47,6 +49,8 @@ szoba::szoba()
 
 }
 
+/*--------------Konstruktorok vege--------------*/
+
 /*--------------beolvas fgv-ek--------------*/
 vector<string> szoba::padlo()
 {
@@ -74,7 +78,7 @@ vector<string> szoba::padlo()
     }
     return floorv;
 }
-vector<string> fal2(){
+vector<string> szoba::fal2(){
   ifstream w2f ("dolgok/w2.txt");
   vector <string> w2v;
   while (w2f.good())
@@ -135,3 +139,25 @@ vector<string> plafon(){
   return c;
 }*/
 /*--------------beolvas fgv-ek vege--------------*/
+
+
+/*--------------public fv-ek KEZDETE ------------*/
+
+void szoba::print_f (ostream &out)
+/* specifications:
+ * inputs :
+ *   - vector<string> szoba.f : az adat amit ki akarunk irni
+ *   - ostream &out : output stream referencia : a stream ahova ki akarunk irni (lehet cout, vagy fajl is);
+ * output :
+ *   - ostream &out : -||-
+ * format : 1 string / line (no header, no footer)
+ */
+{
+    // fordito direktiva : -std=c++11 // Settings -> Complier... -> Complier Settings -> Complier Flags -> Have g++ follow the C++11 ISO C++ standard
+    for(auto s:f)
+    {
+        out << s << endl;
+    }
+}
+
+/*--------------public fv-ek VEGE ------------*/

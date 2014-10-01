@@ -1,5 +1,5 @@
 #include "szoba.h"
-/*MÉG CSAK PADLÓ VAN IMPLEMENTÁLVA, MINDEN MÁS FELÜLET KI VAN KOMMENTEZVE, ELVILEG ELÉG KISZEDNI, HOGY MÛKÖDJÖN*/
+/*ELVILEG MINDEN FELÜLET MEGVAN, A BEOLVASANDÓ FÁJLOKAT MÉG BUHERÁLNI KÉNE*/
 using namespace std;
 
 szoba::szoba()
@@ -12,12 +12,38 @@ szoba::szoba()
         f.push_back(fv[bsd]);
         fv.erase(fv.begin()+bsd);
     }
-
-
-    /*vector<string> w2v=fal2();
-      vector<string> w3v=fal3();
-      vector<string> w4v=fal4();
-      vector<string> cv=plafon();*/
+    vector<string> w2v=fal2();
+    asd=1+rand() % 3;   //hány tárgy legyen max választva
+    for (int i=0; i<asd; i++)   //sorsolás
+    {
+        int bsd=rand() % w2v.size();
+        w2.push_back(w2v[bsd]);
+        w2v.erase(w2v.begin()+bsd);
+    }
+    vector<string> w3v=fal3();
+    asd=rand() % 3;   //hány tárgy legyen max választva
+    for (int i=0; i<asd; i++)   //sorsolás
+    {
+        int bsd=rand() % w3v.size();
+        w3.push_back(w3v[bsd]);
+        w3v.erase(w3v.begin()+bsd);
+    }
+    vector<string> w4v=fal4();
+    asd=rand() % 3;   //hány tárgy legyen max választva
+    for (int i=0; i<asd; i++)   //sorsolás
+    {
+        int bsd=rand() % w4v.size();
+        w4.push_back(w4v[bsd]);
+        w4v.erase(w4v.begin()+bsd);
+    }
+    vector<string> cv=plafon();
+    asd=rand() % 3;   //hány tárgy legyen max választva
+    for (int i=0; i<asd; i++)   //sorsolás
+    {
+        int bsd=rand() % cv.size();
+        c.push_back(cv[bsd]);
+        cv.erase(cv.begin()+bsd);
+    }
 
 }
 
@@ -26,12 +52,14 @@ vector<string> szoba::padlo()
 {
     ifstream floorf ("dolgok/f.txt");
     vector <string> floorv;
-    if (!floorf.fail())
+    if (!floorf.fail()) //Ezt teljesen fölösleges belerakni, nem dolgozunk nem létező fájlokkal ám...
+    //A többit enélkül megcsinálom, ettől nagyon hosszú lesz a kód, de amíg prealfában van akár belerakhatod
     {
         while (floorf.good())
         {
             string temp="";
-            //floorf>>ws; //Ez kell???
+            floorf>>ws; //Ez kell??? Jah, főleg az utolsónál, hogy ne legyen egy enter a vektor utolsó tagjaként.
+            //Simán be tudja olvasni, és ártani nem árt
             getline(floorf,temp,'\n'); //mindenhova getline kell valszleg
             if (temp!="")
             {
@@ -46,7 +74,6 @@ vector<string> szoba::padlo()
     }
     return floorv;
 }
-/*
 vector<string> fal2(){
   ifstream w2f ("dolgok/w2.txt");
   vector <string> w2v;
@@ -54,7 +81,7 @@ vector<string> fal2(){
   {
     string temp="";
     w2f>>ws;
-    w2f>>temp;
+    getline(w2f,temp,'\n');
     if (temp!="")
       {
       w2v.push_back(temp);
@@ -69,7 +96,7 @@ vector<string> fal3(){
   {
     string temp="";
     w3f>>ws;
-    w3f>>temp;
+    getline(w3f,temp,'\n');
     if (temp!="")
       {
       w3v.push_back(temp);
@@ -84,7 +111,7 @@ vector<string> fal4(){
   {
     string temp="";
     w4f>>ws;
-    w4f>>temp;
+    getline(w4f,temp,'\n');
     if (temp!="")
       {
       w4v.push_back(temp);
@@ -93,18 +120,18 @@ vector<string> fal4(){
   return w4v;
 }
 vector<string> plafon(){
-  ifstream c ("dolgok/c.txt");
+  ifstream cf ("dolgok/c.txt");
   vector <string> c;
-  while (c.good())
+  while (cf.good())
   {
     string temp="";
-    c>>ws;
-    c>>temp;
+    cf>>ws;
+    getline(cf,temp,'\n');
     if (temp!="")
       {
       c.push_back(temp);
       }
   }
   return c;
-}*/
+}
 /*--------------beolvas fgv-ek vege--------------*/

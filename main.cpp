@@ -11,12 +11,3 @@ int main()
     asd.print_f(cout);
     return 0;
 }
-
-// kovetkezo verzioban torolni:
-//void Kiir(szoba asd)
-//{
-//    for(int i=0;i<asd.f.size();i++)
-//    {
-//        cout<<asd.f[i]<<endl;
-//    }
-//}

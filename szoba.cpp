@@ -74,6 +74,7 @@ vector<string> szoba::padlo()
     else
     {
         cout << "Error: couldn't find \"dolgok/f.txt\"\n";
+        throw exception();
         exit(1);
     }
     return floorv;

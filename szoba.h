@@ -11,12 +11,13 @@ class szoba
 {
 protected:  //azert nem private, hogy orokolheto legyen
 //public: //Ideiglenes public -> 18.sor eredeti public (main.cpp->asd.f.size()-nál szükséges a publikus elérés)
-    std::vector <std::string> f; //eltűntek ezeknek a leírásai, hogy melyik micsoda, gondolok itt a w2-3-4,re
-    // gondolom w = wall w2 = wall2
+    std::vector <std::string> f; //floor, azaz padlo, a szoba közepe
+    //eltűntek ezeknek a leírásai, hogy melyik micsoda, gondolok itt a w2-3-4,re
+    //melyik a szembe, jobbra, mert ezek ki voltak írva még múltkor
     std::vector <std::string> w2;
     std::vector <std::string> w3;
     std::vector <std::string> w4;
-    std::vector <std::string> c; //c = continer = lada ?
+    std::vector <std::string> c; //ceiling, azaz plafon
 //public:
 
     std::vector<std::string> padlo();

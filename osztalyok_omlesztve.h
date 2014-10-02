@@ -5,7 +5,6 @@
  * De azért kösz!
 
 
-
  * Ez egy ideglenes fajl amibe kicsit strukturaltabban
  * osszeszedjuk, hogy milyen objektumokat tervezunk megvalositani
  *

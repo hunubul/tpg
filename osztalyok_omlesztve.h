@@ -1,14 +1,19 @@
 #ifndef OSZTALYOK_H
 #define OSZTALYOK_H
 
-/* Ez egy ideglenes fajl amibe kicsit strukturaltabban
+/* Nem így fogjuk csinálni, hanem teljesen máshogy. Ezeket a classokat szinte biztos, hogy nem fogjuk használni..
+ * De azért kösz!
+
+
+
+ * Ez egy ideglenes fajl amibe kicsit strukturaltabban
  * osszeszedjuk, hogy milyen objektumokat tervezunk megvalositani
  *
  * TODO szetszedni darabokra
  * TODO tagfugvenyeket megirni
  *
  * esetleg erdemes lehet egy osztaly strukturat kozosen kitalalni
- */
+ *
 
 class item //mindennek az ose == minden item == az egesz terkep 1 item
 {

@@ -26,7 +26,8 @@ protected:  //azert nem private, hogy orokolheto legyen
 
 public:
     szoba(); //not default ctor
-
+    
+    ajto();
     void print_f (std::ostream &out);
 };
 

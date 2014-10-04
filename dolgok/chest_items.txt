@@ -1,0 +1,43 @@
+golden ring,ring
+MAGICKAL RING,ring
+silver ring,ring
+ancient ring,ring
+silver necklace,necklace
+ruby necklace,necklace
+diamond necklace,necklace
+tiara,helmet
+iron helmet,helmet
+fedora,helmet
+cylinder,helmet
+bunny ears,helmet
+cat ears,helmet
+casual hat,helmet
+UNUSUAL HAT,helmet
+leather armor,armor
+chainmail,armor
+dark armor,armor
+filthy clothes,armor
+chesthair,armor
+silver armor,armor
+knight gloves,gloves
+leather gloves,gloves
+filthy pants,pants
+silver pants,pants
+dark pants,pants
+leather pants,pants
+iron boots,boots
+leather boots,boots
+shoes,boots
+iron longsword,weapon
+morning star,weapon
+club,weapon
+spiked club,weapon
+iron shortsword,weapon
+golden longsword,weapon
+UNUSUAL CLUB,weapon
+mace,weapon
+hammer,weapon
+bow,weapon
+rapier,weapon
+zweihander,weapon
+ceremonial knife,weapon

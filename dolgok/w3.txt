@@ -1,7 +1,7 @@
 painting of a man
 creepy painting
-armor
-statue
+switch
+creepy statue
 door
 unknown object
 unknown object

@@ -1,8 +1,8 @@
-bone knife,weapon
-rusty key,consumable
-rusty key,consumable
-rusty key,consumable
-iron key,consumable
-iron key,consumable
-iron key,consumable
-trap revealer,consumable
+bone knife,weapon,Cutting piece of bone.,thrust,2
+rusty key,consumables,Open chests.,,0
+rusty key,consumables,Open chests.,,0
+rusty key,consumables,Open chests.,,0
+iron key,consumables,Open chests.,,0
+iron key,consumables,Open chests.,,0
+iron key,consumables,Open chests.,,0
+trap revealer,consumables,Reveals traps.,,0

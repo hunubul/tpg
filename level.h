@@ -6,5 +6,5 @@ class level
   public:
   std::vector<vector<std::int>> terkep; //egyértelmű
   level();
-}
+};
 #endif

@@ -1,3 +1,5 @@
+hp potion,consumables,Restores health.,,0
+lare hp potion,consumables,Restores health.,,0
 golden ring,ring,,,0
 MAGICKAL RING,ring,,,0
 silver ring,ring,,,0

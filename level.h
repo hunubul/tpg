@@ -9,7 +9,7 @@ struct koor
 class level
 {
   public:
-  std::vector<vector<std::int>> terkep; //egyértelmű
+  std::vector<vector<koor>> terkep; //egyértelmű
   level();
 };
 #endif

@@ -1,0 +1,8 @@
+bone knife,weapon
+rusty key,consumable
+rusty key,consumable
+rusty key,consumable
+iron key,consumable
+iron key,consumable
+iron key,consumable
+trap revealer,consumable

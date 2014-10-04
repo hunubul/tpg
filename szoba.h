@@ -7,6 +7,8 @@
 #include <ctime>
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
+#include <limits.h>
 class szoba
 {
 protected:  //azert nem private, hogy orokolheto legyen

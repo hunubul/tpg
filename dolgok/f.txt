@@ -1,15 +1,15 @@
-common ring
-golden ring
-diamond ring
-MAGICAL RING
+painting of a man
+filthy flag
+skulls
 common chest
-SECRET CHEST
-rusty sword
-iron sword
-gold sword
-UBER SWORD
-white skull
-crystal skull
+golden chest
+locked chest
 hostile giant enemy crab
 hostile MLG pro
 hostile eyebrows
+hostile troll
+hostile orc
+hostile thief
+hostile skeleton
+hostile anon
+hostile plumber

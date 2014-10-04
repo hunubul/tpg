@@ -4,9 +4,7 @@
 class level
 {
   public:
-  std::vector<vector<szoba::szoba>> terkep; //egyértelmű
-  int ii; //jelenlegi i koordináta
-  int jj; //jelenlegi j koordináta
+  std::vector<vector<std::int>> terkep; //egyértelmű
   level();
 }
 #endif

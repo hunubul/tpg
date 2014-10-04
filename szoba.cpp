@@ -144,6 +144,8 @@ vector<string> plafon(){
 
 /*--------------public fv-ek KEZDETE ------------*/
 
+
+
 void szoba::print_f (ostream &out)
 /* specifications:
  * inputs :

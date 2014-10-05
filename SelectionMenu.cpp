@@ -16,7 +16,7 @@ int SelectionMenu::SelectionMenuOut(vector<string> options)
     }
     while (!returnpressed)
     {
-        if(GetAsyncKeyState(VK_UP) & (0x8000 != 0))
+        if(GetAsyncKeyState(VK_UP) & 1)
         {
             ClearOut(j);
             j--;
@@ -24,7 +24,7 @@ int SelectionMenu::SelectionMenuOut(vector<string> options)
                 j=N-1;
             WriteOut(j);
         }
-        else if(GetAsyncKeyState(VK_DOWN) & (0x8000 != 0))
+        else if(GetAsyncKeyState(VK_DOWN) & 1)
         {
             ClearOut(j);
             j++;
@@ -32,7 +32,7 @@ int SelectionMenu::SelectionMenuOut(vector<string> options)
                 j=0;
             WriteOut(j);
         }
-        else if(GetAsyncKeyState(VK_RETURN) & (0x8000 != 0))
+        else if(GetAsyncKeyState(VK_RETURN) & 1)
             returnpressed=true;
     }
     return j;

@@ -12,18 +12,11 @@ class szoba
 protected:  //azert nem private, hogy orokolheto legyen
 //public:
     std::vector <std::string> f;  //floor, azaz padlo, a szoba közepe
-    std::vector <std::string> w2; //wall, szembe fal
-    std::vector <std::string> w3; //wall, baloldali fal
-    std::vector <std::string> w4; //wall, jobboldali fal
-    std::vector <std::string> c;  //ceiling, azaz plafon
-//public:
-
-    std::vector<std::string> padlo();
-    std::vector<std::string> fal2();
-    /*std::vector<std::string> fal3();
-    std::vector<std::string> fal4();
-    std::vector<std::string> plafon();*/
-
+    std::vector <std::string> west; //wall, szembe fal
+    std::vector <std::string> east; //wall, baloldali fal
+    std::vector <std::string> north; //wall, jobboldali fal
+    std::vector <std::string> south;  //ceiling, azaz plafon
+    std::vector <std::string> c;
 public:
     szoba(); //not default ctor
     

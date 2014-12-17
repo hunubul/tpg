@@ -7,36 +7,44 @@ using namespace std;
 szoba::szoba()
 {
     vector<string> fv=padlo();
-    int asd=rand() % 5;   //hány tárgy legyen max választva
+    int asd=rand() % 4;   //hány tárgy legyen max választva
     for (int i=0; i<asd; i++)   //sorsolás
     {
         int bsd=rand() % fv.size();
         f.push_back(fv[bsd]);
         fv.erase(fv.begin()+bsd);
     }
-    vector<string> w2v=fal2();
-    asd=1+rand() % 3;   //hány tárgy legyen max választva
+    vector<string> westv=faltolt();
+    asd=1+rand() % 5;   //hány tárgy legyen max választva
     for (int i=0; i<asd; i++)   //sorsolás
     {
-        int bsd=rand() % w2v.size();
-        w2.push_back(w2v[bsd]);
-        w2v.erase(w2v.begin()+bsd);
+        int bsd=rand() % westv.size();
+        west.push_back(westv[bsd]);
+        westv.erase(westv.begin()+bsd);
     }
-    /*vector<string> w3v=fal3();
-    asd=rand() % 3;   //hány tárgy legyen max választva
+    vector<string> eastv=faltolt();
+    asd=1+rand() % 5;   //hány tárgy legyen max választva
     for (int i=0; i<asd; i++)   //sorsolás
     {
-        int bsd=rand() % w3v.size();
-        w3.push_back(w3v[bsd]);
-        w3v.erase(w3v.begin()+bsd);
+        int bsd=rand() % eastv.size();
+        east.push_back(eastv[bsd]);
+        eastv.erase(eastv.begin()+bsd);
     }
-    vector<string> w4v=fal4();
-    asd=rand() % 3;   //hány tárgy legyen max választva
+    vector<string> northv=faltolt();
+    asd=1+rand() % 5;   //hány tárgy legyen max választva
     for (int i=0; i<asd; i++)   //sorsolás
     {
-        int bsd=rand() % w4v.size();
-        w4.push_back(w4v[bsd]);
-        w4v.erase(w4v.begin()+bsd);
+        int bsd=rand() % northv.size();
+        north.push_back(northv[bsd]);
+        northv.erase(northv.begin()+bsd);
+    }
+    vector<string> southv=faltolt();
+    asd=1+rand() % 5;   //hány tárgy legyen max választva
+    for (int i=0; i<asd; i++)   //sorsolás
+    {
+        int bsd=rand() % southv.size();
+        south.push_back(southv[bsd]);
+        southv.erase(southv.begin()+bsd);
     }
     vector<string> cv=plafon();
     asd=rand() % 3;   //hány tárgy legyen max választva
@@ -79,50 +87,20 @@ vector<string> szoba::padlo()
     }
     return floorv;
 }
-vector<string> szoba::fal2(){
-  ifstream w2f ("dolgok/w2.txt");
-  vector <string> w2v;
-  while (w2f.good())
+vector<string> szoba::faltolt(){
+  ifstream wf ("dolgok/wall.txt");
+  vector <string> wv;
+  while (wf.good())
   {
     string temp="";
-    w2f>>ws;
-    getline(w2f,temp,'\n');
+    wf>>ws;
+    getline(wf,temp,'\n');
     if (temp!="")
       {
-      w2v.push_back(temp);
+      wv.push_back(temp);
       }
   }
-  return w2v;
-}
-/*vector<string> fal3(){
-  ifstream w2f ("dolgok/w3.txt");
-  vector <string> w3v;
-  while (w3f.good())
-  {
-    string temp="";
-    w3f>>ws;
-    getline(w3f,temp,'\n');
-    if (temp!="")
-      {
-      w3v.push_back(temp);
-      }
-  }
-  return w3v;
-}
-vector<string> fal4(){
-  ifstream w2f ("dolgok/w4.txt");
-  vector <string> w4v;
-  while (w4f.good())
-  {
-    string temp="";
-    w4f>>ws;
-    getline(w4f,temp,'\n');
-    if (temp!="")
-      {
-      w4v.push_back(temp);
-      }
-  }
-  return w4v;
+  return wv;
 }
 vector<string> plafon(){
   ifstream cf ("dolgok/c.txt");
@@ -138,7 +116,7 @@ vector<string> plafon(){
       }
   }
   return c;
-}*/
+}
 /*--------------beolvas fgv-ek vege--------------*/
 
 

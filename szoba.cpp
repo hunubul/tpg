@@ -1,121 +1,124 @@
-#include "szoba.h"
+/**
+ * @file szoba.cpp
+ * @brief fõ implementációk
+ */
+#include "main.h"
 /*ELVILEG MINDEN FELÜLET MEGVAN, DE CSAK A SZEMBE MEG PADLÓ VAN BERAKVA, A BEOLVASANDÓ FÁJLOKAT MÉG BUHERÁLNI KÉNE*/
 using namespace std;
 
-
 /*--------------Konstruktorok kezdete--------------*/
-szoba::szoba()
-{
-    vector<string> fv=padlo();
-    int asd=rand() % 4;   //hány tárgy legyen max választva
-    for (int i=0; i<asd; i++)   //sorsolás
-    {
-        int bsd=rand() % fv.size();
-        f.push_back(fv[bsd]);
-        fv.erase(fv.begin()+bsd);
+szoba::szoba(DOOR_DIRECTION direction) {
+    if(direction!=DOOR_NONE) {
+        int asd;
+        /* A padlón levõ dolgok */
+        vector<string> fv=padlo();
+        asd=rand() % 4;   //hány tárgy legyen max választva
+        for (int i=0; i<asd; i++) { //sorsolás
+            int bsd=rand() % fv.size();
+            f.push_back(fv[bsd]);
+            fv.erase(fv.begin()+bsd);
+        }
+        /* A bal falon levõ dolgok */
+        if((direction&DOOR_LEFT)==0) {
+            vector<string> westv=faltolt();
+            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            for (int i=0; i<asd; i++) { //sorsolás
+                int bsd=rand() % westv.size();
+                west.push_back(westv[bsd]);
+                westv.erase(westv.begin()+bsd);
+            }
+        } else {
+            west.push_back("LEFT DOOR");
+        }
+        /* A szembe falon levõ dolgok */
+        if((direction&DOOR_UP)==0) {
+            vector<string> northv=faltolt();
+            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            for (int i=0; i<asd; i++) { //sorsolás
+                int bsd=rand() % northv.size();
+                north.push_back(northv[bsd]);
+                northv.erase(northv.begin()+bsd);
+            }
+        } else {
+            north.push_back("FRONT DOOR");
+        }
+        /* A jobb falon levõ dolgok */
+        if((direction&DOOR_RIGHT)==0) {
+            vector<string> eastv=faltolt();
+            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            for (int i=0; i<asd; i++) { //sorsolás
+                int bsd=rand() % eastv.size();
+                east.push_back(eastv[bsd]);
+                eastv.erase(eastv.begin()+bsd);
+            }
+        } else {
+            east.push_back("RIGHT DOOR");
+        }
+        /* A hátsó falon levõ dolgok */
+        if((direction&DOOR_DOWN)==0) {
+            vector<string> southv=faltolt();
+            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            for (int i=0; i<asd; i++) { //sorsolás
+                int bsd=rand() % southv.size();
+                south.push_back(southv[bsd]);
+                southv.erase(southv.begin()+bsd);
+            }
+        } else {
+            south.push_back("BACK DOOR");
+        }
+        vector<string> cv=plafon();
+        asd=rand() % 3;   //hány tárgy legyen max választva
+        for (int i=0; i<asd; i++) { //sorsolás
+            int bsd=rand() % cv.size();
+            c.push_back(cv[bsd]);
+            cv.erase(cv.begin()+bsd);
+        }
     }
-    vector<string> westv=faltolt();
-    asd=1+rand() % 5;   //hány tárgy legyen max választva
-    for (int i=0; i<asd; i++)   //sorsolás
-    {
-        int bsd=rand() % westv.size();
-        west.push_back(westv[bsd]);
-        westv.erase(westv.begin()+bsd);
-    }
-    vector<string> eastv=faltolt();
-    asd=1+rand() % 5;   //hány tárgy legyen max választva
-    for (int i=0; i<asd; i++)   //sorsolás
-    {
-        int bsd=rand() % eastv.size();
-        east.push_back(eastv[bsd]);
-        eastv.erase(eastv.begin()+bsd);
-    }
-    vector<string> northv=faltolt();
-    asd=1+rand() % 5;   //hány tárgy legyen max választva
-    for (int i=0; i<asd; i++)   //sorsolás
-    {
-        int bsd=rand() % northv.size();
-        north.push_back(northv[bsd]);
-        northv.erase(northv.begin()+bsd);
-    }
-    vector<string> southv=faltolt();
-    asd=1+rand() % 5;   //hány tárgy legyen max választva
-    for (int i=0; i<asd; i++)   //sorsolás
-    {
-        int bsd=rand() % southv.size();
-        south.push_back(southv[bsd]);
-        southv.erase(southv.begin()+bsd);
-    }
-    vector<string> cv=plafon();
-    asd=rand() % 3;   //hány tárgy legyen max választva
-    for (int i=0; i<asd; i++)   //sorsolás
-    {
-        int bsd=rand() % cv.size();
-        c.push_back(cv[bsd]);
-        cv.erase(cv.begin()+bsd);
-    }*/
+}
+szoba::~szoba() {
 
 }
-
 /*--------------Konstruktorok vege--------------*/
 
 /*--------------beolvas fgv-ek--------------*/
-vector<string> szoba::padlo()
-{
+vector<string> szoba::padlo() {
     ifstream floorf ("dolgok/f.txt");
     vector <string> floorv;
-    if (!floorf.fail()) //Ezt teljesen fölösleges belerakni, nem dolgozunk nem létező fájlokkal ám...
-    //A többit enélkül megcsinálom, ettől nagyon hosszú lesz a kód, de amíg prealfában van akár belerakhatod
-    {
-        while (floorf.good())
-        {
-            string temp="";
-            floorf>>ws; //Ez kell??? Jah, főleg az utolsónál, hogy ne legyen egy enter a vektor utolsó tagjaként.
-            //Simán be tudja olvasni, és ártani nem árt
-            getline(floorf,temp,'\n'); //mindenhova getline kell valszleg
-            if (temp!="")
-            {
-                floorv.push_back(temp);
-            }
+    while (floorf.good()) {
+        string temp="";
+        floorf>>ws; //Összes WhiteSpace karaktert elvet az elsõ nem WS karakterig
+        getline(floorf,temp,'\n'); //mindenhova getline kell valszleg
+        if (temp!="") {
+            floorv.push_back(temp);
         }
-    }
-    else
-    {
-        cout << "Error: couldn't find \"dolgok/f.txt\"\n";
-        throw exception();
-        exit(1);
     }
     return floorv;
 }
-vector<string> szoba::faltolt(){
-  ifstream wf ("dolgok/wall.txt");
-  vector <string> wv;
-  while (wf.good())
-  {
-    string temp="";
-    wf>>ws;
-    getline(wf,temp,'\n');
-    if (temp!="")
-      {
-      wv.push_back(temp);
-      }
-  }
-  return wv;
+vector<string> szoba::faltolt() {
+    ifstream wf ("dolgok/wall.txt");
+    vector <string> wv;
+    while (wf.good()) {
+        string temp="";
+        wf>>ws;
+        getline(wf,temp,'\n');
+        if (temp!="") {
+            wv.push_back(temp);
+        }
+    }
+    return wv;
 }
-vector<string> plafon(){
-  ifstream cf ("dolgok/c.txt");
-  vector <string> c;
-  while (cf.good())
-  {
-    string temp="";
-    cf>>ws;
-    getline(cf,temp,'\n');
-    if (temp!="")
-      {
-      c.push_back(temp);
-      }
-  }
-  return c;
+vector<string> szoba::plafon() {
+    ifstream cf ("dolgok/c.txt");
+    vector <string> c;
+    while (cf.good()) {
+        string temp="";
+        cf>>ws;
+        getline(cf,temp,'\n');
+        if (temp!="") {
+            c.push_back(temp);
+        }
+    }
+    return c;
 }
 /*--------------beolvas fgv-ek vege--------------*/
 
@@ -123,8 +126,135 @@ vector<string> plafon(){
 /*--------------public fv-ek KEZDETE ------------*/
 
 
+void szoba::writeout(IRANY irany) {
+    vector<string>::iterator it;
+    int y=1;
+    /* A plafonon levõ dolgok */
+    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Ceiling:");
+    y+=2;
+    for(it=c.begin(); it!=c.end(); it++)         {
+        TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+        y++;
+    }
+    /* A szembe levõ dolgok */
+    y=ConsoleHeight/2-35;
+    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Front wall:");
+    /* A baloldali falon levõ dolgok */
+    y=ConsoleHeight/2-20;
+    TCODConsole::root->printEx(0,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"Left wall:");
+    /* A jobboldali falon levõ dolgok */
+    y=ConsoleHeight/2-20;
+    TCODConsole::root->printEx(ConsoleWidth-1,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"Right wall:");
+    /* A padlón levõ dolgok */
+    y=ConsoleHeight/2+5;
+    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Floor:");
+    y+=2;
+    for(it=f.begin(); it!=f.end(); it++)         {
+        TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+        y++;
+    }
+    /* A hátul levõ dolgok */
+    y=ConsoleHeight/2+15;
+    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Behind wall:");
+    write4real(irany);
+}
 
-void szoba::print_f (ostream &out)
+void szoba::write4real(IRANY irany) {
+    vector<string>::iterator it;
+    int y;
+    switch(irany) {
+    case UP:
+        y=ConsoleHeight/2-33; //Teteje
+        for(it=north.begin(); it!=north.end(); it++) {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Balra
+        for(it=west.begin(); it!=west.end(); it++)   {
+            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2+17; //Alja
+        for(it=south.begin(); it!=south.end(); it++) {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Jobbra
+        for(it=east.begin(); it!=east.end(); it++)   {
+            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+            y++;
+        }
+        break;
+    case RIGHT:
+        y=ConsoleHeight/2-33; //Teteje
+        for(it=east.begin(); it!=east.end(); it++) {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Balra
+        for(it=north.begin(); it!=north.end(); it++)   {
+            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2+17; //Alja
+        for(it=west.begin(); it!=west.end(); it++) {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Jobbra
+        for(it=south.begin(); it!=south.end(); it++)   {
+            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+            y++;
+        }
+        break;
+    case DOWN:
+        y=ConsoleHeight/2-33; //Teteje
+        for(it=south.begin(); it!=south.end(); it++)   {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Balra
+        for(it=east.begin(); it!=east.end(); it++) {
+            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2+17; //Alja
+        for(it=north.begin(); it!=north.end(); it++)   {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Jobbra
+        for(it=west.begin(); it!=west.end(); it++) {
+            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+            y++;
+        }
+        break;
+    case LEFT:
+        y=ConsoleHeight/2-33; //Teteje
+        for(it=west.begin(); it!=west.end(); it++) {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Balra
+        for(it=south.begin(); it!=south.end(); it++)   {
+            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2+17; //Alja
+        for(it=east.begin(); it!=east.end(); it++) {
+            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+            y++;
+        }
+        y=ConsoleHeight/2-18; //Jobbra
+        for(it=north.begin(); it!=north.end(); it++)   {
+            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+            y++;
+        }
+        break;
+    }
+}
+
+//void szoba::print_f (ostream &out)
 /* specifications:
  * inputs :
  *   - vector<string> szoba.f : az adat amit ki akarunk irni
@@ -133,12 +263,12 @@ void szoba::print_f (ostream &out)
  *   - ostream &out : -||-
  * format : 1 string / line (no header, no footer)
  */
-{
-    // fordito direktiva : -std=c++11 // Settings -> Complier... -> Complier Settings -> Complier Flags -> Have g++ follow the C++11 ISO C++ standard
-    for(auto s:f)
-    {
-        out << s << endl;
-    }
-}
+//{
+//    // fordito direktiva : -std=c++11 // Settings -> Complier... -> Complier Settings -> Complier Flags -> Have g++ follow the C++11 ISO C++ standard
+//    for(auto s:f)
+//    {
+//        out << s << endl;
+//    }
+//}
 
 /*--------------public fv-ek VEGE ------------*/

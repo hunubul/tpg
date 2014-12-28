@@ -1,8 +1,0 @@
-hostile giant enemy crab,100,3,2
-hostile MLG pro,100,3,2
-hostile troll,100,3,2
-hostile orc,100,3,2
-hostile thief,100,3,2
-hostile skeleton,100,3,2
-hostile anon,100,3,2
-hostile plumber,100,3,2

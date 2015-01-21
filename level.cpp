@@ -24,6 +24,7 @@ level::level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter) : MidX(MidX),
             temp.push_back(0);
         }
         Map.push_back(temp);
+        FOV.push_back(temp);
     }
     counter=2;
     Map[posX][posY]=1;
@@ -151,11 +152,28 @@ void level::merre(IRANY honnan) {
  */
 void level::writeout(int posX,int posY) {
     TCODConsole::root->clear();
+    RoomWriteout();
     for (int i=0; i<MaxRoomX; i++) {
         for (int j=0; j<MaxRoomY; j++) {
+            if(posX==i&&posY==j) {
+                FOV[i][j]=1;
+                TCODConsole::root->setDefaultForeground(TCODColor::red);
+            }
+#ifdef DEBUG
             writearrow();
-            if(posX==i&&posY==j) TCODConsole::root->setDefaultForeground(TCODColor::red);
-            TCODConsole::root->print(i,j,"%d",Map[i][j]);
+            if(Map[i][j]==1) TCODConsole::root->print(i,j,"#");
+            else TCODConsole::root->print(i,j," ");
+#else
+            if(FOV[i][j]==1) {
+                TCODConsole::root->print(i,j,"#");
+                TCODConsole::root->setDefaultForeground(TCODColor::white);
+                if(i-1>=0      &&Map[i-1][j]==1&&FOV[i-1][j]!=1) TCODConsole::root->print(i-1,j  ,"?");
+                if(j-1>=0      &&Map[i][j-1]==1&&FOV[i][j-1]!=1) TCODConsole::root->print(i  ,j-1,"?");
+                if(i+1<MaxRoomX&&Map[i+1][j]==1&&FOV[i+1][j]!=1) TCODConsole::root->print(i+1,j  ,"?");
+                if(j+1<MaxRoomY&&Map[i][j+1]==1&&FOV[i][j+1]!=1) TCODConsole::root->print(i  ,j+1,"?");
+            }
+            else if(TCODConsole::root->getChar(i,j)!='?') TCODConsole::root->print(i,j," ");
+#endif // DEBUG
             TCODConsole::root->setDefaultForeground(TCODColor::white);
         }
     }
@@ -181,4 +199,32 @@ void level::writearrow() {
         TCODConsole::root->print(MaxRoomX+3,1,"  ");
         break;
     }
+}
+void level::RoomWriteout() {
+    CONSOLEINFO Con;
+    IMAGE PNG;
+    SUBSECTION subsec;
+    CHAR_SET CharSet;
+    /*-----------Initializing CONSOLEINFO-----------*/
+    Con.FontSize.X = FontX;
+    Con.FontSize.Y = FontY;
+    Con.CharAmount.X = ConsoleWidth;
+    Con.CharAmount.Y = ConsoleHeight;
+    Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+    Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+    /*----------------------------------------------*/
+    CharSetImporter(&CharSet,"8x14asciichars.dat");
+    CalculateWeights(&CharSet); /* Calculating charset weights... */
+    PNG.ASCII_Color = NULL;
+    lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, "images/Room.png");
+    PNG.HeightTile = Con.CharAmount.Y;
+    PNG.WidthTile = Con.CharAmount.X;
+    subsec.height=(double)PNG.Height/PNG.HeightTile; /* Calculating SUBSECTION in pixels */
+    subsec.width =(double)PNG.Width/PNG.WidthTile; /* Calculating SUBSECTION in pixels */
+    ProcessPNG(&PNG,subsec); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+    IMAGE2ASCII(&PNG,CharSet);
+    WriteOut(PNG,false,"");
+    free(PNG.Image);
+    free(PNG.ASCII_Image);
+    free(PNG.Weight);
 }

@@ -32,9 +32,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="$(#libtcod.include)" />
+			<Add directory="includes" />
 		</Compiler>
 		<Linker>
 			<Add library="$(#libtcod.lib)\libtcod-mingw.a" />
+			<Add library="includes\libImage2ASCIIcolors.a" />
 			<Add directory="$(#libtcod.bin)" />
 		</Linker>
 		<Unit filename="itemek.cpp" />

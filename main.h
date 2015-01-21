@@ -1,14 +1,20 @@
 /**
  * @file main.h
- * @brief include-ok, be·llÌt·sok
+ * @brief include-ok, be√°ll√≠t√°sok
  */
 #ifndef MAIN_H_INCLUDED
 #define MAIN_H_INCLUDED
 
-static const int ConsoleWidth=160;
-static const int ConsoleHeight=90;
+/* Define this to enable DEBUG MODE */
+//#define DEBUG
 
-/** @brief enum az ir·nynak */
+/** @brief Maximum map size */
+extern int MaxRoomX,MaxRoomY;
+extern int ConsoleWidth;
+extern int ConsoleHeight;
+extern int FontX;
+extern int FontY;
+/** @brief enum az ir√°nynak */
 typedef enum {LEFT=3,UP=0,RIGHT=1,DOWN=2} IRANY;
 
 #include "libtcod.hpp"
@@ -22,5 +28,6 @@ typedef enum {LEFT=3,UP=0,RIGHT=1,DOWN=2} IRANY;
 #include "szoba.h"
 #include "itemek.h"
 #include "level.h"
+#include "Image2ASCIIcolors.h"
 
 #endif // MAIN_H_INCLUDED

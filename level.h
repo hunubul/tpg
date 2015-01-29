@@ -16,6 +16,11 @@ public:
     level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter);
     void engine();
     void writeout(int posX,int posY);
+
     void RoomWriteout();
+    void WriteOutBoxes();
+    void Pic2ASCII(std::string PicName);
+    void WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize);
+    void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 };
 #endif

@@ -17,13 +17,13 @@ private: //Függvények
     std::vector<std::string> plafon();  /**< plafon beolvasó függvény */
 void write4real(IRANY irany);
 protected:  //azert nem private, hogy orokolheto legyen
+public:
     std::vector<std::string> f;  /**< floor, azaz padlo, a szoba közepe */
     std::vector<std::string> west;  /**< west wall, baloldali fal */
     std::vector<std::string> east;  /**< east wall, jobboldali fal */
     std::vector<std::string> north; /**< north wall, szemben lévõ fal */
     std::vector<std::string> south; /**< south wall, hátul lévõ fal */
     std::vector<std::string> c;     /**< ceiling, azaz plafon */
-public:
     szoba(DOOR_DIRECTION direction);  /**< Konstruktor */
     ~szoba(); /**< Destruktor */
 

@@ -6,7 +6,7 @@
 #define MAIN_H_INCLUDED
 
 /* Define this to enable DEBUG MODE */
-//#define DEBUG
+#define DEBUG
 
 /** @brief Maximum map size */
 extern int MaxRoomX,MaxRoomY;
@@ -25,9 +25,9 @@ typedef enum {LEFT=3,UP=0,RIGHT=1,DOWN=2} IRANY;
 #include <ctime>
 #include <stdio.h>
 #include <stdlib.h>
+#include "Image2ASCIIcolors.h"
 #include "szoba.h"
 #include "itemek.h"
 #include "level.h"
-#include "Image2ASCIIcolors.h"
 
 #endif // MAIN_H_INCLUDED

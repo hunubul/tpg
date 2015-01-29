@@ -39,14 +39,14 @@ vector<ITEMS> chest::beolvas() {
             temp_items.name = temp;
             temp_items.type = UNKNOWN;
             temp_items.pickupDescr = "";
-            temp_items.helpDescr = "";
-            temp_items.value = 0;
+            temp_items.dmgType = "";
+            temp_items.multiplier = 0;
         }
         if(state == 2) temp_items.type = temp;
         if(state == 3) temp_items.pickupDescr = temp;
-        if(state == 4) temp_items.helpDescr = temp;
+        if(state == 4) temp_items.dmgType = temp;
         if(state == 5) {
-            temp_items.value = atoi(temp.c_str());
+            temp_items.multiplier = atoi(temp.c_str());
             itemek.push_back(temp_items);
             state = 0;
         }

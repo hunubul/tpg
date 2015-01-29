@@ -231,26 +231,27 @@ void level::RoomWriteout() {
 void level::WriteOutBoxes() {
     SIZES TopLeft;
     SIZES BoxSize;
+    szoba aktSzoba = terkep[posX][posY];
     //*** Ceiling ***
-    if(szoba::c.size() == 1) {
+    if(aktSzoba.c.size() == 1) {
         TopLeft.X = ConsoleWidth*0.25;
         TopLeft.Y = 0;
         BoxSize.X = ConsoleWidth*0.5;
         BoxSize.Y = ConsoleHeight*0.24;
-
-    } else if(szoba::c.size() == 2) {
+        Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
+    } else if(aktSzoba.c.size() == 2) {
         //Elso dolog
         TopLeft.X = ConsoleWidth*0.25;
         TopLeft.Y = 0;
         BoxSize.X = (ConsoleWidth*0.5)/2;
         BoxSize.Y = ConsoleHeight*0.24;
-
+        Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
         //Masodik dolog
         TopLeft.X = ConsoleWidth*0.25+(ConsoleWidth*0.5)/2;
         TopLeft.Y = 0;
         BoxSize.X = (ConsoleWidth*0.5)/2;
         BoxSize.Y = ConsoleHeight*0.24;
-
+        Pic2ASCII(aktSzoba.c[1], TopLeft, BoxSize);
     }
 }
 void level::Pic2ASCII(string PicName,SIZES TopLeft,SIZES BoxSize) {
@@ -258,7 +259,7 @@ void level::Pic2ASCII(string PicName,SIZES TopLeft,SIZES BoxSize) {
     IMAGE PNG;
     SUBSECTION subsec;
     CHAR_SET CharSet;
-    string PicPath = "images/"+PicName;
+    string PicPath = "images/"+PicName+".png";
     /*-----------Initializing CONSOLEINFO-----------*/
     Con.FontSize.X = FontX;
     Con.FontSize.Y = FontY;

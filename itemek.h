@@ -12,8 +12,8 @@ typedef struct {
     //ITEM_OWNER owner; /**< Az item gazdája */
     std::string type;   /**< Az item típusa */
     std::string pickupDescr; /**< Felvételkor az item leírás */
-    std::string helpDescr;   /**< Helpben az item leírása */
-    int value;
+    std::string dmgType;   /**< Helpben az item leírása */
+    int multiplier;
 } ITEMS;
 
 /** @brief chest class beolvassa az adatokat és vektorban tárolja õket */

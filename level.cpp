@@ -153,6 +153,7 @@ void level::merre(IRANY honnan) {
 void level::writeout(int posX,int posY) {
     TCODConsole::root->clear();
     RoomWriteout();
+    WriteOutBoxes();
     for (int i=0; i<MaxRoomX; i++) {
         for (int j=0; j<MaxRoomY; j++) {
             if(posX==i&&posY==j) {
@@ -171,13 +172,12 @@ void level::writeout(int posX,int posY) {
                 if(j-1>=0      &&Map[i][j-1]==1&&FOV[i][j-1]!=1) TCODConsole::root->print(i  ,j-1,"?");
                 if(i+1<MaxRoomX&&Map[i+1][j]==1&&FOV[i+1][j]!=1) TCODConsole::root->print(i+1,j  ,"?");
                 if(j+1<MaxRoomY&&Map[i][j+1]==1&&FOV[i][j+1]!=1) TCODConsole::root->print(i  ,j+1,"?");
-            }
-            else if(TCODConsole::root->getChar(i,j)!='?') TCODConsole::root->print(i,j," ");
+            } else if(TCODConsole::root->getChar(i,j)!='?') TCODConsole::root->print(i,j," ");
 #endif // DEBUG
             TCODConsole::root->setDefaultForeground(TCODColor::white);
         }
     }
-    terkep[posX][posY].writeout((IRANY)most);
+    //terkep[posX][posY].writeout((IRANY)most);
     TCODConsole::root->flush();
 }
 void level::writearrow() {
@@ -227,4 +227,93 @@ void level::RoomWriteout() {
     free(PNG.Image);
     free(PNG.ASCII_Image);
     free(PNG.Weight);
+}
+void level::WriteOutBoxes() {
+    SIZES TopLeft;
+    SIZES BoxSize;
+    //*** Ceiling ***
+    if(szoba::c.size() == 1) {
+        TopLeft.X = ConsoleWidth*0.25;
+        TopLeft.Y = 0;
+        BoxSize.X = ConsoleWidth*0.5;
+        BoxSize.Y = ConsoleHeight*0.24;
+
+    } else if(szoba::c.size() == 2) {
+        //Elso dolog
+        TopLeft.X = ConsoleWidth*0.25;
+        TopLeft.Y = 0;
+        BoxSize.X = (ConsoleWidth*0.5)/2;
+        BoxSize.Y = ConsoleHeight*0.24;
+
+        //Masodik dolog
+        TopLeft.X = ConsoleWidth*0.25+(ConsoleWidth*0.5)/2;
+        TopLeft.Y = 0;
+        BoxSize.X = (ConsoleWidth*0.5)/2;
+        BoxSize.Y = ConsoleHeight*0.24;
+
+    }
+}
+void level::Pic2ASCII(string PicName,SIZES TopLeft,SIZES BoxSize) {
+    CONSOLEINFO Con;
+    IMAGE PNG;
+    SUBSECTION subsec;
+    CHAR_SET CharSet;
+    string PicPath = "images/"+PicName;
+    /*-----------Initializing CONSOLEINFO-----------*/
+    Con.FontSize.X = FontX;
+    Con.FontSize.Y = FontY;
+    Con.CharAmount.X = BoxSize.X;
+    Con.CharAmount.Y = BoxSize.Y;
+    Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+    Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+    /*----------------------------------------------*/
+    CharSetImporter(&CharSet,"8x14asciichars.dat");
+    CalculateWeights(&CharSet); /* Calculating charset weights... */
+    PNG.ASCII_Color = NULL;
+    lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
+    CalculatePNGSizes(&PNG,&subsec,Con);
+    ProcessPNG(&PNG,subsec); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+    IMAGE2ASCII(&PNG,CharSet);
+    WriteOutPic(PNG, TopLeft, BoxSize);
+    free(PNG.Image);
+    free(PNG.ASCII_Image);
+    free(PNG.Weight);
+}
+void level::WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize) {
+    unsigned i,j;
+    unsigned VerLeftover = (BoxSize.Y-PNG.HeightTile)/2; //Függőleges maradék amennyit fent és lent kihagy
+    unsigned HorLeftover = (BoxSize.X-PNG.WidthTile)/2; //Vízszintes maradék amennyit balra és jobbra kihagy
+    for (i=0; i<(unsigned)BoxSize.Y; i++) {
+        for (j=0; j<(unsigned)BoxSize.X; j++) {
+            TCODConsole::root->print(TopLeft.X+j,TopLeft.Y+i," ");
+        }
+    }
+    for (i=0; i<PNG.HeightTile; i++) {
+        for (j=0; j<PNG.WidthTile; j++) {
+            if(PNG.ASCII_Color!=NULL) TCODConsole::root->setDefaultForeground(PNG.ASCII_Color[j+i*PNG.WidthTile]);
+            TCODConsole::root->print(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i,"%c",PNG.ASCII_Image[j+i*PNG.WidthTile]);
+        }
+    }
+    TCODConsole::root->setDefaultForeground(TCODColor::white);
+    TCODConsole::root->flush();
+}
+void level::CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con) {
+    /* FONTSIZE.Y*subsection_scale*height_tile=height ; FONTSIZE.X*subsection_scale*width_tile=width */
+    if((double)PNG->Height/PNG->Width >= (double)(Con.Size.Y)/Con.Size.X) {
+        /* then height_tile is fixed = ConsoleHeight-2 (to fit in console screen) */
+        PNG->HeightTile = Con.CharAmount.Y;
+        subsec->scale=(double)PNG->Height/(PNG->HeightTile*Con.FontSize.Y);
+        PNG->WidthTile=PNG->Width/(Con.FontSize.X*subsec->scale);
+    } else {
+        /* then width_tile is fixed = ConsoleHeight-1 (to fit in console screen) */
+        PNG->WidthTile = Con.CharAmount.X;
+        subsec->scale=(double)PNG->Width/(PNG->WidthTile*Con.FontSize.X);
+        PNG->HeightTile=PNG->Height/(Con.FontSize.Y*subsec->scale);
+    }
+
+    subsec->height=Con.FontSize.Y*subsec->scale; /* Calculating SUBSECTION in pixels */
+    subsec->width =Con.FontSize.X*subsec->scale; /* Calculating SUBSECTION in pixels */
+
+    /*        height_tile = height/14; unsigned subsection_height=14;
+     *        width_tile = width/8;    unsigned subsection_height=8; */
 }

@@ -19,7 +19,7 @@ public:
 
     void RoomWriteout();
     void WriteOutBoxes();
-    void Pic2ASCII(std::string PicName);
+    void Pic2ASCII(std::string PicName,SIZES TopLeft,SIZES BoxSize);
     void WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize);
     void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 };

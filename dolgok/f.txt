@@ -6,11 +6,3 @@ skulls
 common chest
 golden chest
 locked chest
-hostile giant enemy crab
-hostile MLG pro
-hostile troll
-hostile orc
-hostile thief
-hostile skeleton
-hostile anon
-hostile plumber

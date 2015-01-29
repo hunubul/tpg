@@ -12,7 +12,7 @@ szoba::szoba(DOOR_DIRECTION direction) {
         int asd;
         /* A padlón levõ dolgok */
         vector<string> fv=padlo();
-        asd=rand() % 2;   //hány tárgy legyen max választva
+        asd=rand() % 2 +1;   //hány tárgy legyen max választva
         for (int i=0; i<asd; i++) { //sorsolás
             int bsd=rand() % fv.size();
             f.push_back(fv[bsd]);
@@ -68,7 +68,7 @@ szoba::szoba(DOOR_DIRECTION direction) {
         }
         /* plafonon levő dolgok */
         vector<string> cv=plafon();
-        asd=rand() % 2;   //hány tárgy legyen max választva
+        asd=rand() % 3;   //hány tárgy legyen max választva
         for (int i=0; i<asd; i++) { //sorsolás
             int bsd=rand() % cv.size();
             c.push_back(cv[bsd]);

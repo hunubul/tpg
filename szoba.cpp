@@ -12,7 +12,7 @@ szoba::szoba(DOOR_DIRECTION direction) {
         int asd;
         /* A padlón levõ dolgok */
         vector<string> fv=padlo();
-        asd=rand() % 4;   //hány tárgy legyen max választva
+        asd=rand() % 2;   //hány tárgy legyen max választva
         for (int i=0; i<asd; i++) { //sorsolás
             int bsd=rand() % fv.size();
             f.push_back(fv[bsd]);
@@ -66,8 +66,9 @@ szoba::szoba(DOOR_DIRECTION direction) {
         } else {
             south.push_back("BACK DOOR");
         }
+        /* plafonon levő dolgok */
         vector<string> cv=plafon();
-        asd=rand() % 3;   //hány tárgy legyen max választva
+        asd=rand() % 2;   //hány tárgy legyen max választva
         for (int i=0; i<asd; i++) { //sorsolás
             int bsd=rand() % cv.size();
             c.push_back(cv[bsd]);
@@ -124,8 +125,6 @@ vector<string> szoba::plafon() {
 
 
 /*--------------public fv-ek KEZDETE ------------*/
-
-
 void szoba::writeout(IRANY irany) {
     vector<string>::iterator it;
     int y=1;
@@ -253,22 +252,4 @@ void szoba::write4real(IRANY irany) {
         break;
     }
 }
-
-//void szoba::print_f (ostream &out)
-/* specifications:
- * inputs :
- *   - vector<string> szoba.f : az adat amit ki akarunk irni
- *   - ostream &out : output stream referencia : a stream ahova ki akarunk irni (lehet cout, vagy fajl is);
- * output :
- *   - ostream &out : -||-
- * format : 1 string / line (no header, no footer)
- */
-//{
-//    // fordito direktiva : -std=c++11 // Settings -> Complier... -> Complier Settings -> Complier Flags -> Have g++ follow the C++11 ISO C++ standard
-//    for(auto s:f)
-//    {
-//        out << s << endl;
-//    }
-//}
-
 /*--------------public fv-ek VEGE ------------*/

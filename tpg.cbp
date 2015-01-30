@@ -45,7 +45,6 @@
 		<Unit filename="level.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="main.h" />
-		<Unit filename="osztalyok_omlesztve.h" />
 		<Unit filename="szoba.cpp" />
 		<Unit filename="szoba.h">
 			<Option target="&lt;{~None~}&gt;" />

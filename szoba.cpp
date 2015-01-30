@@ -21,7 +21,7 @@ szoba::szoba(DOOR_DIRECTION direction) {
         /* A bal falon levõ dolgok */
         if((direction&DOOR_LEFT)==0) {
             vector<string> westv=faltolt();
-            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % westv.size();
                 west.push_back(westv[bsd]);
@@ -33,7 +33,7 @@ szoba::szoba(DOOR_DIRECTION direction) {
         /* A szembe falon levõ dolgok */
         if((direction&DOOR_UP)==0) {
             vector<string> northv=faltolt();
-            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % northv.size();
                 north.push_back(northv[bsd]);
@@ -45,7 +45,7 @@ szoba::szoba(DOOR_DIRECTION direction) {
         /* A jobb falon levõ dolgok */
         if((direction&DOOR_RIGHT)==0) {
             vector<string> eastv=faltolt();
-            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % eastv.size();
                 east.push_back(eastv[bsd]);
@@ -57,7 +57,7 @@ szoba::szoba(DOOR_DIRECTION direction) {
         /* A hátsó falon levõ dolgok */
         if((direction&DOOR_DOWN)==0) {
             vector<string> southv=faltolt();
-            asd=1+rand() % 5;   //hány tárgy legyen max választva
+            asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % southv.size();
                 south.push_back(southv[bsd]);
@@ -126,130 +126,130 @@ vector<string> szoba::plafon() {
 
 /*--------------public fv-ek KEZDETE ------------*/
 void szoba::writeout(IRANY irany) {
-    vector<string>::iterator it;
-    int y=1;
-    /* A plafonon levõ dolgok */
-    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Ceiling:");
-    y+=2;
-    for(it=c.begin(); it!=c.end(); it++)         {
-        TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-        y++;
-    }
-    /* A szembe levõ dolgok */
-    y=ConsoleHeight/2-35;
-    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Front wall:");
-    /* A baloldali falon levõ dolgok */
-    y=ConsoleHeight/2-20;
-    TCODConsole::root->printEx(0,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"Left wall:");
-    /* A jobboldali falon levõ dolgok */
-    y=ConsoleHeight/2-20;
-    TCODConsole::root->printEx(ConsoleWidth-1,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"Right wall:");
-    /* A padlón levõ dolgok */
-    y=ConsoleHeight/2+5;
-    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Floor:");
-    y+=2;
-    for(it=f.begin(); it!=f.end(); it++)         {
-        TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-        y++;
-    }
-    /* A hátul levõ dolgok */
-    y=ConsoleHeight/2+15;
-    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Behind wall:");
-    write4real(irany);
+//    vector<string>::iterator it;
+//    int y=1;
+//    /* A plafonon levõ dolgok */
+//    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Ceiling:");
+//    y+=2;
+//    for(it=c.begin(); it!=c.end(); it++)         {
+//        TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//        y++;
+//    }
+//    /* A szembe levõ dolgok */
+//    y=ConsoleHeight/2-35;
+//    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Front wall:");
+//    /* A baloldali falon levõ dolgok */
+//    y=ConsoleHeight/2-20;
+//    TCODConsole::root->printEx(0,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"Left wall:");
+//    /* A jobboldali falon levõ dolgok */
+//    y=ConsoleHeight/2-20;
+//    TCODConsole::root->printEx(ConsoleWidth-1,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"Right wall:");
+//    /* A padlón levõ dolgok */
+//    y=ConsoleHeight/2+5;
+//    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Floor:");
+//    y+=2;
+//    for(it=f.begin(); it!=f.end(); it++)         {
+//        TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//        y++;
+//    }
+//    /* A hátul levõ dolgok */
+//    y=ConsoleHeight/2+15;
+//    TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"Behind wall:");
+//    write4real(irany);
 }
 
 void szoba::write4real(IRANY irany) {
-    vector<string>::iterator it;
-    int y;
-    switch(irany) {
-    case UP:
-        y=ConsoleHeight/2-33; //Teteje
-        for(it=north.begin(); it!=north.end(); it++) {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Balra
-        for(it=west.begin(); it!=west.end(); it++)   {
-            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2+17; //Alja
-        for(it=south.begin(); it!=south.end(); it++) {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Jobbra
-        for(it=east.begin(); it!=east.end(); it++)   {
-            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
-            y++;
-        }
-        break;
-    case RIGHT:
-        y=ConsoleHeight/2-33; //Teteje
-        for(it=east.begin(); it!=east.end(); it++) {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Balra
-        for(it=north.begin(); it!=north.end(); it++)   {
-            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2+17; //Alja
-        for(it=west.begin(); it!=west.end(); it++) {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Jobbra
-        for(it=south.begin(); it!=south.end(); it++)   {
-            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
-            y++;
-        }
-        break;
-    case DOWN:
-        y=ConsoleHeight/2-33; //Teteje
-        for(it=south.begin(); it!=south.end(); it++)   {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Balra
-        for(it=east.begin(); it!=east.end(); it++) {
-            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2+17; //Alja
-        for(it=north.begin(); it!=north.end(); it++)   {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Jobbra
-        for(it=west.begin(); it!=west.end(); it++) {
-            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
-            y++;
-        }
-        break;
-    case LEFT:
-        y=ConsoleHeight/2-33; //Teteje
-        for(it=west.begin(); it!=west.end(); it++) {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Balra
-        for(it=south.begin(); it!=south.end(); it++)   {
-            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2+17; //Alja
-        for(it=east.begin(); it!=east.end(); it++) {
-            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
-            y++;
-        }
-        y=ConsoleHeight/2-18; //Jobbra
-        for(it=north.begin(); it!=north.end(); it++)   {
-            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
-            y++;
-        }
-        break;
-    }
+//    vector<string>::iterator it;
+//    int y;
+//    switch(irany) {
+//    case UP:
+//        y=ConsoleHeight/2-33; //Teteje
+//        for(it=north.begin(); it!=north.end(); it++) {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Balra
+//        for(it=west.begin(); it!=west.end(); it++)   {
+//            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2+17; //Alja
+//        for(it=south.begin(); it!=south.end(); it++) {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Jobbra
+//        for(it=east.begin(); it!=east.end(); it++)   {
+//            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        break;
+//    case RIGHT:
+//        y=ConsoleHeight/2-33; //Teteje
+//        for(it=east.begin(); it!=east.end(); it++) {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Balra
+//        for(it=north.begin(); it!=north.end(); it++)   {
+//            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2+17; //Alja
+//        for(it=west.begin(); it!=west.end(); it++) {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Jobbra
+//        for(it=south.begin(); it!=south.end(); it++)   {
+//            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        break;
+//    case DOWN:
+//        y=ConsoleHeight/2-33; //Teteje
+//        for(it=south.begin(); it!=south.end(); it++)   {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Balra
+//        for(it=east.begin(); it!=east.end(); it++) {
+//            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2+17; //Alja
+//        for(it=north.begin(); it!=north.end(); it++)   {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Jobbra
+//        for(it=west.begin(); it!=west.end(); it++) {
+//            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        break;
+//    case LEFT:
+//        y=ConsoleHeight/2-33; //Teteje
+//        for(it=west.begin(); it!=west.end(); it++) {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Balra
+//        for(it=south.begin(); it!=south.end(); it++)   {
+//            TCODConsole::root->printEx(4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_LEFT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2+17; //Alja
+//        for(it=east.begin(); it!=east.end(); it++) {
+//            TCODConsole::root->printEx(ConsoleWidth/2,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_CENTER,"%s",(*it).c_str());
+//            y++;
+//        }
+//        y=ConsoleHeight/2-18; //Jobbra
+//        for(it=north.begin(); it!=north.end(); it++)   {
+//            TCODConsole::root->printEx(ConsoleWidth-4,MaxRoomY+y,TCOD_BKGND_NONE,TCOD_RIGHT,"%s",(*it).c_str());
+//            y++;
+//        }
+//        break;
+//    }
 }
 /*--------------public fv-ek VEGE ------------*/

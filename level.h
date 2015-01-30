@@ -3,6 +3,7 @@
 
 class level {
 private:
+    int MaxRoomX,MaxRoomY;
     int MidX,MidY;
     int MaxCounter;
     int posX,posY;
@@ -15,10 +16,15 @@ public:
     std::vector<std::vector<szoba> > terkep; //egyértelmû
     level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter);
     void engine();
-    void writeout(int posX,int posY);
+    void writeout();
+    void WriteOutMiniMap();
 
     void RoomWriteout();
     void WriteOutBoxes();
+    void WriteMiddleBox(std::vector<std::string> aktFal);
+    void WriteLeftBox(std::vector<std::string> aktFal);
+    void WriteRightBox(std::vector<std::string> aktFal);
+    void ClearBox(SIZES TopLeft,SIZES BoxSize);
     void Pic2ASCII(std::string PicName,SIZES TopLeft,SIZES BoxSize);
     void WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize);
     void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);

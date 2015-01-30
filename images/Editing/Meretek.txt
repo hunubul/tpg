@@ -1,0 +1,22 @@
+*teljes*
+magasság: 720
+szélesség: 1280
+
+*felső*
+m:174
+kis alap:634
+nagy alap:1262
+
+*alsó*
+m:178
+kis alap:634
+nagy alap:1262
+
+*oldalsók*
+<->: 316
+kis függőleges: 351
+nagy függőleges:706
+
+*középső*
+magasság: 351
+szélesség: 628

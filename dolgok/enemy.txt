@@ -1,8 +1,8 @@
-giant enemy crab,100,3,2
-MLG pro,100,3,2
-troll,100,3,2
-orc,100,3,2
-thief,100,3,2
-skeleton,100,3,2
-anon,100,3,2
-plumber,100,3,2
+giant enemy crab,4,4,1
+MLG pro,8,4,1
+troll,6,7,4
+orc,6,5,5
+thief,6,2,3
+skeleton,3,3,0
+anon,1,12,0
+plumber,4,4,2

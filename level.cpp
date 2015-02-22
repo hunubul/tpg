@@ -223,7 +223,7 @@ void level::RoomWriteout() {
     Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
     Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
     /*----------------------------------------------*/
-    CharSetImporter(&CharSet,"8x14asciichars.dat");
+    CharSetImporter(&CharSet,"8x8terminal.dat");
     CalculateWeights(&CharSet); /* Calculating charset weights... */
     PNG.ASCII_Color = NULL;
     lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, "images/Room.png");
@@ -231,8 +231,7 @@ void level::RoomWriteout() {
     PNG.WidthTile = Con.CharAmount.X;
     subsec.height=(double)PNG.Height/PNG.HeightTile; /* Calculating SUBSECTION in pixels */
     subsec.width =(double)PNG.Width/PNG.WidthTile; /* Calculating SUBSECTION in pixels */
-    ProcessPNG(&PNG,subsec); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-    IMAGE2ASCII(&PNG,CharSet);
+    PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
     WriteOutPic(PNG,TopLeft,BoxSize);
     free(PNG.Image);
     free(PNG.ASCII_Image);
@@ -439,15 +438,14 @@ void level::Pic2ASCII(string PicName,SIZES TopLeft,SIZES BoxSize) {
     Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
     Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
     /*----------------------------------------------*/
-    CharSetImporter(&CharSet,"8x14asciichars.dat");
+    CharSetImporter(&CharSet,"8x8terminal.dat");
     CalculateWeights(&CharSet); /* Calculating charset weights... */
     PNG.ASCII_Color = NULL;
     int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
     ClearBox(TopLeft,BoxSize);
     if(!err) {
         CalculatePNGSizes(&PNG,&subsec,Con);
-        ProcessPNG(&PNG,subsec); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-        IMAGE2ASCII(&PNG,CharSet);
+        PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
         WriteOutPic(PNG, TopLeft, BoxSize);
         free(PNG.Image);
         free(PNG.ASCII_Image);
@@ -474,8 +472,8 @@ void level::WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize) {
         for (j=0; j<PNG.WidthTile; j++) {
             if(PNG.ASCII_Color!=NULL) TCODConsole::root->setDefaultForeground(PNG.ASCII_Color[j+i*PNG.WidthTile]);
             if((TCODConsole::root->getChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i)=='.' || TCODConsole::root->getChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i)==' ')
-               && PNG.ASCII_Image[j+i*PNG.WidthTile]!=' ')
-                TCODConsole::root->print(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i,"%c",PNG.ASCII_Image[j+i*PNG.WidthTile]);
+               )
+                TCODConsole::root->putChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i,PNG.ASCII_Image[j+i*PNG.WidthTile]);
         }
     }
     TCODConsole::root->setDefaultForeground(TCODColor::white);

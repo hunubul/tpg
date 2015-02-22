@@ -17,19 +17,18 @@
 #define ConsoleSize_X 160
 #define ConsoleSize_Y 90
 #define PATH_LONG 100
-#define ROOT_FOLDER "images"
+#define ROOT_FOLDER "h:/Dropbox/Public/source_codes/c/Image2ASCII/images"
 //#define BlockCharsOnly
 //#define ChangeBlackWhite
 //#define ExtendedASCIICharSet
-//#define PreciseASCIIgen
-#define AMPLIFIER 15
+#define PreciseASCIIgen
 /*------------------------------------------------------------*/
 #define FontSize_X 8
 #define FontSize_Y 8
 #define CHAR_X 8
-#define CHAR_Y 14
+#define CHAR_Y 8
 #ifdef ExtendedASCIICharSet
-#define CHAR_NUM 221 /* Extended ASCII */
+#define CHAR_NUM 255 /* Extended ASCII */
 #else
 #define CHAR_NUM 95  /* Standard ASCII */
 #endif /* ExtendedASCIICharSet */
@@ -45,7 +44,7 @@
  * @def ROOT_FOLDER
  *   @brief Root folder of the images
  * @def BlockCharsOnly
- *   @brief define this to WriteOut every ascii picture with only (whole) block characters
+ *   @brief Define this to WriteOut every ascii picture with only (whole) block characters
  * @def ChangeBlackWhite
  *   @brief Define this if you want to set the background color to white (instead of black)
  * @def ExtendedASCIICharSet
@@ -54,9 +53,6 @@
  *   @brief Define this to generate more accurate ASCII pictures (whole sizes are calculated) and CONSOLEINFO.FontSize will be = {CHAR_X,CHAR_Y} \n
             so pictures (to fit in max console screen) should be: CHAR_Y*(Con.CharAmount.Y - 2) high and CHAR_X*(Con.CharAmount.X - 1) wide
  *   @see CalculateImageSizesPrec()
- * @def AMPLIFIER
- *   @brief Contrast amplifier for PreciseASCIIGen, above this (ampl.) brightness (max) value a SUBSECTION's pixel brightnesses will be distributed
- *   @see PreciseProcessPNG()
  * @def FontSize_X
  *   @brief Width of a character in Console Window
  * @def FontSize_Y

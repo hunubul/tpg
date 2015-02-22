@@ -9,7 +9,7 @@
 typedef struct
 {
     char ARR[CHAR_NUM][CHAR_Y][CHAR_X]; /**< The matrix for each ASCII CHAR */
-    char CHAR[CHAR_NUM];                /**< Corresponding ASCII CHAR */
+    unsigned char CHAR[CHAR_NUM];                /**< Corresponding ASCII CHAR */
     int WEIGHT[CHAR_NUM];               /**< The weight (brightness) value of each ASCII CHAR */
     int SCALING_WEIGHT[CHAR_NUM];       /**< The scaled weight value for each ASCII CHAR @see CalculateWeights() */
 } CHAR_SET;
@@ -52,15 +52,15 @@ void CharSetImporter(CHAR_SET* CharSet,const char* filename);
 void CalculateWeights(CHAR_SET* CharSet);
 void Indexer(CHAR_SET* CharSet,int char_index);
 
-void CalculateImageSizes(IMAGE* img,SUBSECTION* subsec,CONSOLEINFO Con);
-void CalculateImageSizesPrec(IMAGE* img,SUBSECTION* subsec,CONSOLEINFO Con);
+void CalculateImageSizes(IMAGE* img,SUBSECTION* subsec,CONSOLEINFO& Con);
+void CalculateImageSizesPrec(IMAGE* img,SUBSECTION* subsec,CONSOLEINFO& Con);
 void DecodePPM(IMAGE* PPM,const char* filename_dest);
-void ProcessPPM(IMAGE* PPM,SUBSECTION subsec); /* out: IMAGE.Weight[] */
-void ProcessPNG(IMAGE* PNG,SUBSECTION subsec); /* out: IMAGE.Weight[] */
-void PreciseProcessPNG(IMAGE* PNG,SUBSECTION subsec,CHAR_SET CharSet); /* out: IMAGE.Weight[] */
+void ProcessPPM(IMAGE* PPM,SUBSECTION& subsec); /* out: IMAGE.Weight[] */
+void ProcessPNG(IMAGE* PNG,SUBSECTION& subsec); /* out: IMAGE.Weight[] */
+void PreciseProcessPNG(IMAGE* PNG,SUBSECTION& subsec,CHAR_SET& CharSet); /* out: IMAGE.Weight[] */
 
 /* WriteOut to Console (PNG as ASCII); Parameters:IMAGE_SCALING_WEIGHT,CHAR_SET_SCALING_WEIGHT,width_tile,height_tile,writetofile? */
-void IMAGE2ASCII(IMAGE* img,CHAR_SET CharSet);
+void IMAGE2ASCII(IMAGE* img,CHAR_SET& CharSet);
 
 void WriteOut(IMAGE img,int writetofile,const char* outfilename);
 

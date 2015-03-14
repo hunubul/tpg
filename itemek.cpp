@@ -28,27 +28,27 @@ vector<ITEMS> chest::beolvas() {
     ifstream chStream ("dolgok/chest_items.txt");
     vector<ITEMS> itemek;
     ITEMS temp_items;
-    int state = 0;
+    int pos = 0;
     while (chStream.good()) {
         string temp="";
         chStream>>ws; //Összes WhiteSpace karaktert elvet az elsõ nem WS karakterig
         getline(chStream,temp,','); //mindenhova getline kell valszleg
         while(temp[temp.length()-1]=='\t') /*Remove tabs*/ temp.erase(temp.length()-1);
-        state++;
-        if(state == 1) {
+        pos++;
+        if(pos == 1) {
             temp_items.name = temp;
             temp_items.type = UNKNOWN;
             temp_items.pickupDescr = "";
             temp_items.dmgType = "";
             temp_items.multiplier = 0;
         }
-        if(state == 2) temp_items.type = temp;
-        if(state == 3) temp_items.pickupDescr = temp;
-        if(state == 4) temp_items.dmgType = temp;
-        if(state == 5) {
+        else if(pos == 2) temp_items.type = temp;
+        else if(pos == 3) temp_items.pickupDescr = temp;
+        else if(pos == 4) temp_items.dmgType = temp;
+        else if(pos == 5) {
             temp_items.multiplier = atoi(temp.c_str());
             itemek.push_back(temp_items);
-            state = 0;
+            pos = 0;
         }
     }
     return itemek;

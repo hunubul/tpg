@@ -10,6 +10,7 @@ using namespace std;
 szoba::szoba(DOOR_DIRECTION direction) {
     if(direction!=DOOR_NONE) {
         int asd;
+        int rarity; //Ritkasága egy itemnek
         /* A padlón levõ dolgok */
         vector<string> fv=padlo();
         asd=rand() % 2 +1;   //hány tárgy legyen max választva
@@ -21,11 +22,16 @@ szoba::szoba(DOOR_DIRECTION direction) {
         /* A bal falon levõ dolgok */
         if((direction&DOOR_LEFT)==0) {
             vector<string> westv=faltolt();
-            asd=1+rand() % 4;   //hány tárgy legyen max választva
-            for (int i=0; i<asd; i++) { //sorsolás
+            asd=1+rand() % 4;   //hány tárgy legyen max választva, sorsolás
+            while((int)west.size()!=asd) {
                 int bsd=rand() % westv.size();
-                west.push_back(westv[bsd]);
-                westv.erase(westv.begin()+bsd);
+                char Name[westv[bsd].size()];
+                sscanf(westv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
+                if(rand()%rarity<MAX_RARITY) {
+                    string temp = Name;
+                    west.push_back(temp);
+                    westv.erase(westv.begin()+bsd);
+                }
             }
         } else {
             west.push_back("LEFT DOOR");
@@ -36,7 +42,10 @@ szoba::szoba(DOOR_DIRECTION direction) {
             asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % northv.size();
-                north.push_back(northv[bsd]);
+                char Name[northv[bsd].size()];
+                sscanf(northv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
+                string temp = Name;
+                north.push_back(temp);
                 northv.erase(northv.begin()+bsd);
             }
         } else {
@@ -48,7 +57,10 @@ szoba::szoba(DOOR_DIRECTION direction) {
             asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % eastv.size();
-                east.push_back(eastv[bsd]);
+                char Name[eastv[bsd].size()];
+                sscanf(eastv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
+                string temp = Name;
+                east.push_back(temp);
                 eastv.erase(eastv.begin()+bsd);
             }
         } else {
@@ -60,7 +72,10 @@ szoba::szoba(DOOR_DIRECTION direction) {
             asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % southv.size();
-                south.push_back(southv[bsd]);
+                char Name[southv[bsd].size()];
+                sscanf(southv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
+                string temp = Name;
+                south.push_back(temp);
                 southv.erase(southv.begin()+bsd);
             }
         } else {

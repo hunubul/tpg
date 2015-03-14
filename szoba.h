@@ -15,7 +15,7 @@ private: //Függvények
     std::vector<std::string> padlo();   /**< padlo beolvasó függvény*/
     std::vector<std::string> faltolt(); /**< fal beolvasó függvény */
     std::vector<std::string> plafon();  /**< plafon beolvasó függvény */
-void write4real(IRANY irany);
+    void write4real(IRANY irany);
 protected:  //azert nem private, hogy orokolheto legyen
 public:
     std::vector<std::string> f;  /**< floor, azaz padlo, a szoba közepe */

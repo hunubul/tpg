@@ -7,6 +7,7 @@
 
 /* Define this to enable DEBUG MODE */
 #define DEBUG
+#define MAX_RARITY 10
 
 #include "Image2ASCIIcolors.h"
 

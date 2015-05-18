@@ -1,4 +1,66 @@
 #include "main.h"
-using namespace std;
 
-character::character() {};
+SIZES enemy::BoxSize;
+SIZES enemy::TopLeft;
+
+character::character(int maxhp,int maxstam,int defense,int offense) :
+    maxhp(maxhp),hp(maxhp),maxstam(maxstam),stam(maxstam),defense(defense),offense(offense) {}
+
+bool character::damage(int DMG) {
+    double dmgMult=(rand()%80+81)/100.0;
+    hp-=(DMG/defense)*dmgMult;
+    if(hp<0) hp=0;
+    if(dmgMult>1.49999) return true;
+    return false;
+}
+
+void character::addHP(int pHp) {
+    hp+=pHp;
+    if(hp>100) hp=100;
+}
+
+void character::addStamina(int pStam) {
+    stam+=pStam;
+    if(stam>100) stam=100;
+}
+
+void character::subStamina(int pStam) {
+    stam-=pStam;
+    if(stam<0) stam=0;
+}
+
+player::player() : character(100,100,4,4) {
+
+}
+
+enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
+    character(100,100,defense,offense),def(def),atc(atc),name(name) {
+    enemy::BoxSize=(SIZES){ConsoleWidth*911/1280,ConsoleHeight*666/720};
+    enemy::TopLeft=(SIZES){ConsoleWidth-enemy::BoxSize.X,0};
+    CONSOLEINFO Con;
+    SUBSECTION subsec;
+    CHAR_SET CharSet;
+    std::string PicPath = "images/"+name+".png";
+    /*-----------Initializing CONSOLEINFO-----------*/
+    Con.FontSize.X = FontX;
+    Con.FontSize.Y = FontY;
+    Con.CharAmount.X = BoxSize.X;
+    Con.CharAmount.Y = BoxSize.Y;
+    Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+    Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+    /*----------------------------------------------*/
+    CharSetImporter(&CharSet,"8x8terminal.dat");
+    CalculateWeights(&CharSet); /* Calculating charset weights... */
+    PNG.ASCII_Color = NULL;
+    int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
+    if(!err) {
+        level::CalculatePNGSizes(&PNG,&subsec,Con);
+        PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+    }
+}
+
+enemy::~enemy() {
+//    free(PNG.Image);
+//    free(PNG.ASCII_Image);
+//    free(PNG.Weight);
+}

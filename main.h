@@ -33,6 +33,12 @@ typedef enum {LEFT=3,UP=0,RIGHT=1,DOWN=2} IRANY;
 #include "szoba.h"
 #include "itemek.h"
 #include "level.h"
+#include "character.h"
+#include "harc.h"
 
+extern player p1;
+extern std::vector<enemy> enemies;
+
+void BeolvasEnemyk();
 
 #endif // MAIN_H_INCLUDED

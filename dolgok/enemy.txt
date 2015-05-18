@@ -1,8 +1,8 @@
-giant enemy crab,4,4,UP,MID
+Giant Enemy Crab,4,4,UP,MID
 MLG pro,8,4,NONE,LEFT
-troll,6,7,DOWN,UP
-orc,6,5,RIGHT,LEFT
-thief,6,2,RIGHT,MID
-skeleton,3,3,NONE,NONE
-anon,1,12,DOWN,NONE
-plumber,4,4,DOWN,UP
+Troll,6,7,DOWN,UP
+Orc,6,5,RIGHT,LEFT
+Thief,6,2,RIGHT,MID
+Skeleton,3,3,NONE,NONE
+Anon,1,12,DOWN,NONE
+Plumber,4,4,DOWN,UP

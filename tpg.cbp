@@ -39,6 +39,12 @@
 			<Add library="includes\libImage2ASCIIcolors.a" />
 			<Add directory="$(#libtcod.bin)" />
 		</Linker>
+		<Unit filename="character.cpp" />
+		<Unit filename="character.h" />
+		<Unit filename="effects.cpp" />
+		<Unit filename="effects.h" />
+		<Unit filename="harc.cpp" />
+		<Unit filename="harc.h" />
 		<Unit filename="itemek.cpp" />
 		<Unit filename="itemek.h" />
 		<Unit filename="level.cpp" />

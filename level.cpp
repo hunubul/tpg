@@ -94,6 +94,7 @@ void level::engine() {
     do {
         writeout();
         Choice = TCODConsole::root->waitForKeypress(true);
+        HarcGUI(enemies[0]);
         switch(Choice.vk) { //Irány változó típusból adódik
         case TCODK_LEFT:
             lehet=(most+3)%4;

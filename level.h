@@ -26,7 +26,7 @@ public:
     void WriteRightBox(std::vector<std::string> aktFal);
     void ClearBox(SIZES TopLeft,SIZES BoxSize);
     void Pic2ASCII(std::string PicName,SIZES TopLeft,SIZES BoxSize);
-    void WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize);
-    void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
+    static void WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize);
+    static void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 };
 #endif

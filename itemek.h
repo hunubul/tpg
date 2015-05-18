@@ -2,7 +2,7 @@
 #define ITEMEK_H_INCLUDED
 
 /** @brief enum kinek lehet ilyen iteme */
-typedef enum {CHEST,ENEMY,PLAYER} ITEM_OWNER;
+//typedef enum {CHEST,ENEMY,PLAYER} ITEM_OWNER;
 /** @brief enum az item típusoknak */
 typedef enum {CONSUMABLE,RING,NECKLACE,HELMET,ARMOR,GLOVES,PANTS,BOOTS,WEAPON,UNKNOWN} ITEM_TYPE;
 

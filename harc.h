@@ -1,24 +1,18 @@
 #ifndef HARC_H_INCLUDED
 #define HARC_H_INCLUDED
 
-typedef enum {LEFT=4,MID=0,UP=1,RIGHT=2,DOWN=3,NONE=-1} ADIR; //preferált támadási irány
-typedef enum {KOR1=0,KOR2=1} ROUND; //éppen ki jön, a player vagy az enemy
+typedef enum {PLAYER_KOR=0,ENEMY_KOR=1} ROUND; //éppen ki jön, a player vagy az enemy
 
+typedef struct {
+    std::string msg;
+    TCOD_color_t color;
+} CONLOG;
 
-class harc {
-private:
-character p; //a player
-character e; //az enemy
-ADIR def; //preferált védekezés
-ADIR atc; //preferált támadás
-ROUND most;
-
-
-public:
-harc(character player, character enemy, std::string prefdef, std::string prefatc);
-
-};
-
+void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log);
+void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log);
+void PrintPlayerStats();
+void MenuSelection(int StartingPos,int selIndx,std::string choices[],TCOD_key_t&input,std::vector<CONLOG> &con_log);
+void HarcGUI(enemy e,ROUND most=(ROUND)0);
 
 
 

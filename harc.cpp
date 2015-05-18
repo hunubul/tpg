@@ -1,10 +1,239 @@
 #include "main.h"
-harc::harc(character player, character enemy, std::string prefdef, std::string prefatc){
-  p=player;
-  e=enemy;
-  def=predef;
-  atc=prefatc;
-  most=0;
+
+const int menu_height=10; //Menü magassága
+const int menu_ch_sel_width=20; //Kijelölés szélessége
+const int menu_harc_size=3; //Size of menu_choices
+std::string harc_menu_choices[]= {"Attack","Use item","Rest"};
+const int menu_attack_size=5;
+std::string attack_choices[]= {"from left","from above","from right","from below","frontal attack"};
+const int menu_defense_size=5;
+std::string defense_choices[]= {"block from left","block from above","block from right","block from below","block frontal attack"};
+const int menu_useitem_size=3;
+std::string useitem_choices[]= {"???","???","???"};
+const int con_log_StartingPos=4*menu_ch_sel_width;
+
+void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
+    p1.subStamina(5);
+    int dice=rand()%100;
+    ADIR local_def=e.def;
+    if(e.def!=ANONE) {
+        if(dice>=60) local_def=(ADIR)(local_def+1);
+        if(dice>=70) local_def=(ADIR)(local_def+1);
+        if(dice>=80) local_def=(ADIR)(local_def+1);
+        if(dice>=90) local_def=(ADIR)(local_def+1);
+        local_def=(ADIR)(local_def%5);
+    } else {
+        local_def=(ADIR)0;
+        if(dice>=20) local_def=(ADIR)(local_def+1);
+        if(dice>=40) local_def=(ADIR)(local_def+1);
+        if(dice>=60) local_def=(ADIR)(local_def+1);
+        if(dice>=80) local_def=(ADIR)(local_def+1);
+        local_def=(ADIR)(local_def%5);
+    }
+    if     (attack_choices[selIndx]=="from left"&&local_def==ALEFT&&e.getStamina()>=5) { con_log.push_back((CONLOG) {"You attacked from left, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
+    else if(attack_choices[selIndx]=="from above"&&local_def==AUP&&e.getStamina()>=5) { con_log.push_back((CONLOG) {"You attacked from above, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
+    else if(attack_choices[selIndx]=="from right"&&local_def==ARIGHT&&e.getStamina()>=5) { con_log.push_back((CONLOG) {"You attacked from right, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
+    else if(attack_choices[selIndx]=="from below"&&local_def==ADOWN&&e.getStamina()>=5) { con_log.push_back((CONLOG) {"You attacked from below, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
+    else if(attack_choices[selIndx]=="frontal attack"&&local_def==AMID&&e.getStamina()>=5) { con_log.push_back((CONLOG) {"Your frontal attack got blocked.",TCOD_cyan}); e.subStamina(5); }
+    else {
+        p1.subStamina(5);
+        bool Critical=e.damage(p1.offense*10);
+        con_log.push_back((CONLOG) {"Your attack was successful.",TCOD_pink});
+        if(Critical) con_log.push_back((CONLOG) {"Critical damage!",TCOD_flame});
+    }
 }
-harc::~harc{
+
+void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
+    e.subStamina(5);
+    int dice=rand()%100;
+    ADIR local_atc=e.atc;
+    if(e.atc!=ANONE) {
+        if(dice>=60) local_atc=(ADIR)(local_atc+1);
+        if(dice>=70) local_atc=(ADIR)(local_atc+1);
+        if(dice>=80) local_atc=(ADIR)(local_atc+1);
+        if(dice>=90) local_atc=(ADIR)(local_atc+1);
+        local_atc=(ADIR)(local_atc%5);
+    } else {
+        local_atc=(ADIR)0;
+        if(dice>=20) local_atc=(ADIR)(local_atc+1);
+        if(dice>=40) local_atc=(ADIR)(local_atc+1);
+        if(dice>=60) local_atc=(ADIR)(local_atc+1);
+        if(dice>=80) local_atc=(ADIR)(local_atc+1);
+        local_atc=(ADIR)(local_atc%5);
+    }
+    int selIndx=0;
+    TCOD_key_t input;
+    TCODConsole::root->rect(0,ConsoleHeight-menu_height,menu_ch_sel_width,menu_height,true);
+    if(p1.getStamina()>5) {
+        for(int i=0; i<menu_attack_size; i++) TCODConsole::root->print(0,ConsoleHeight-menu_height+i,"%s",defense_choices[i].c_str());
+        do {
+            MenuSelection(0,selIndx,defense_choices,input,con_log);
+            if(input.vk==TCODK_UP&&selIndx-1>=0) selIndx--;
+            if(input.vk==TCODK_DOWN&&selIndx+1<=menu_attack_size-1) selIndx++;
+        } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
+    } else {
+        do {
+            TCODConsole::root->print(0,ConsoleHeight-menu_height,"You are too tired to block.");
+            TCOD_console_flush();
+            input=TCODConsole::waitForKeypress(true); //Waiting for keypress
+        } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
+    }
+    TCODConsole::root->rect(0,ConsoleHeight-menu_height,menu_ch_sel_width*2,menu_height,true);
+    if     (defense_choices[selIndx]=="block from left"&&local_atc==ALEFT&&p1.getStamina()>=5) { con_log.push_back((CONLOG) {"You successfuly blocked an attack from left!",TCOD_gold}); p1.subStamina(5); }
+    else if(defense_choices[selIndx]=="block from above"&&local_atc==AUP&&p1.getStamina()>=5) { con_log.push_back((CONLOG) {"You successfuly blocked an attack from above!",TCOD_gold}); p1.subStamina(5); }
+    else if(defense_choices[selIndx]=="block from right"&&local_atc==ARIGHT&&p1.getStamina()>=5) { con_log.push_back((CONLOG) {"You successfuly blocked an attack from right!",TCOD_gold}); p1.subStamina(5); }
+    else if(defense_choices[selIndx]=="block from below"&&local_atc==ADOWN&&p1.getStamina()>=5) { con_log.push_back((CONLOG) {"You successfuly blocked an attack from below!",TCOD_gold}); p1.subStamina(5); }
+    else if(defense_choices[selIndx]=="block frontal attack"&&local_atc==AMID&&p1.getStamina()>=5) { con_log.push_back((CONLOG) {"You successfuly blocked a frontal attack!",TCOD_gold}); p1.subStamina(5); }
+    else {
+        e.subStamina(5);
+        bool Critical=p1.damage(e.offense*10);
+        if     (local_atc==ALEFT) con_log.push_back((CONLOG) {"The enemy successfuly hit you from left.",TCOD_purple});
+        else if(local_atc==AUP)   con_log.push_back((CONLOG) {"The enemy successfuly hit you from above.",TCOD_purple});
+        else if(local_atc==ARIGHT)con_log.push_back((CONLOG) {"The enemy successfuly hit you from right.",TCOD_purple});
+        else if(local_atc==ADOWN) con_log.push_back((CONLOG) {"The enemy successfuly hit you from below.",TCOD_purple});
+        else if(local_atc==AMID)  con_log.push_back((CONLOG) {"The enemy successfuly hit you with a frontal attack.",TCOD_purple});
+        if(Critical) con_log.push_back((CONLOG) {"Critical damage!",TCOD_flame});
+    }
+}
+
+void PrintPlayerStats() {
+    TCODConsole::root->rect(0,0,18,2,true);
+    TCODConsole::root->setDefaultForeground(TCOD_red);
+    TCODConsole::root->print(0,0,"     HP: %3d%%/100%%",p1.getHP());
+    TCODConsole::root->setDefaultForeground(TCOD_green);
+    TCODConsole::root->print(0,1,"STAMINA: %3d%%/100%%",p1.getStamina());
+    TCODConsole::root->setDefaultForeground(TCOD_white);
+}
+
+void MenuSelection(int StartingPos,int selIndx,std::string choices[],TCOD_key_t&input,std::vector<CONLOG> &con_log) {
+    //Display log
+    TCODConsole::root->setDefaultBackground(TCOD_darkest_gray);
+    TCODConsole::root->setDefaultForeground(TCOD_white);
+    TCODConsole::root->rect(con_log_StartingPos,ConsoleHeight-menu_height,ConsoleWidth-con_log_StartingPos,menu_height,true,TCOD_BKGND_SET);
+    for(int i=con_log.size()-menu_height; i<(int)con_log.size(); i++) {
+        if(i>=0) {
+            TCODConsole::root->setDefaultForeground(con_log[i].color);
+            TCODConsole::root->print(con_log_StartingPos,ConsoleHeight+i-con_log.size(),"%s",con_log[i].msg.c_str());
+        }
+    }
+
+    TCODConsole::root->setDefaultBackground(TCOD_white);
+    TCODConsole::root->setDefaultForeground(TCOD_black);
+    TCODConsole::root->print(StartingPos,ConsoleHeight-menu_height+selIndx,"%s",choices[selIndx].c_str());
+    TCODConsole::root->rect(StartingPos,ConsoleHeight-menu_height+selIndx,menu_ch_sel_width,1,false,TCOD_BKGND_SET);
+    TCOD_console_flush();
+    input=TCODConsole::waitForKeypress(true); //Waiting for keypress
+    TCODConsole::root->setDefaultBackground(TCOD_black);
+    TCODConsole::root->setDefaultForeground(TCOD_white);
+    TCODConsole::root->print(StartingPos,ConsoleHeight-menu_height+selIndx,"%s",choices[selIndx].c_str());
+    TCODConsole::root->rect(StartingPos,ConsoleHeight-menu_height+selIndx,menu_ch_sel_width,1,false,TCOD_BKGND_SET);
+}
+
+void HarcGUI(enemy e,ROUND most) {
+    std::vector<CONLOG> con_log;
+    con_log.push_back((CONLOG) {"A wild "+e.name+" appeared.",TCOD_white});
+
+    TCODConsole::root->clear();
+
+    level::WriteOutPic(e.PNG, enemy::TopLeft, enemy::BoxSize);
+
+    int selIndx=0;
+    int sub_selIndx=0;
+    TCOD_key_t input;
+    do {
+        PrintPlayerStats();
+        if(most==PLAYER_KOR) {
+            for(int i=0; i<menu_harc_size; i++) TCODConsole::root->print(0,ConsoleHeight-menu_height+i,"%s",harc_menu_choices[i].c_str());
+            MenuSelection(0,selIndx,harc_menu_choices,input,con_log);
+        }
+        if(input.vk==TCODK_UP&&selIndx-1>=0) selIndx--;
+        if(input.vk==TCODK_DOWN&&selIndx+1<=menu_harc_size-1) selIndx++;
+        if(input.vk==TCODK_ENTER) {
+            if(harc_menu_choices[selIndx]=="Attack"&&p1.getStamina()>=10)  {
+                for(int i=0; i<menu_attack_size; i++) TCODConsole::root->print(menu_ch_sel_width,ConsoleHeight-menu_height+i,"%s",attack_choices[i].c_str());
+                do {
+                    MenuSelection(menu_ch_sel_width,sub_selIndx,attack_choices,input,con_log);
+                    if(input.vk==TCODK_UP&&sub_selIndx-1>=0) sub_selIndx--;
+                    if(input.vk==TCODK_DOWN&&sub_selIndx+1<=menu_attack_size-1) sub_selIndx++;
+                } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
+                PlayerAttack(e,sub_selIndx,con_log);
+                most=ENEMY_KOR;
+                sub_selIndx=0;
+                TCODConsole::root->rect(menu_ch_sel_width,ConsoleHeight-menu_height,menu_ch_sel_width,menu_height,true);
+            } else if (harc_menu_choices[selIndx]=="Attack") con_log.push_back((CONLOG) {"You are exhausted, you can't attack.",TCOD_white});
+            if(harc_menu_choices[selIndx]=="Use item") {
+                for(int i=0; i<menu_useitem_size; i++) TCODConsole::root->print(menu_ch_sel_width,ConsoleHeight-menu_height+i,"%s",useitem_choices[i].c_str());
+                do {
+                    MenuSelection(menu_ch_sel_width,sub_selIndx,useitem_choices,input,con_log);
+                    if(input.vk==TCODK_UP&&sub_selIndx-1>=0) sub_selIndx--;
+                    if(input.vk==TCODK_DOWN&&sub_selIndx+1<=menu_useitem_size-1) sub_selIndx++;
+                } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
+                most=ENEMY_KOR;
+                sub_selIndx=0;
+                TCODConsole::root->rect(menu_ch_sel_width,ConsoleHeight-menu_height,menu_ch_sel_width,menu_height,true);
+            }
+            if(harc_menu_choices[selIndx]=="Rest")    {
+                p1.addStamina(50);
+                con_log.push_back((CONLOG) {"You gathered your strength.",TCOD_green});
+                PrintPlayerStats();
+                most=ENEMY_KOR;
+            }
+        }
+        if(most==ENEMY_KOR) {
+        switch(e.getHP()/10) {
+        case 0:
+            con_log.push_back((CONLOG) {e.name+" is dying.",TCOD_red});
+            break;
+        case 1:
+            con_log.push_back((CONLOG) {e.name+" writhes in agony.",TCOD_red});
+            break;
+        case 2:
+            con_log.push_back((CONLOG) {"Where does all this blood come from?",TCOD_red});
+            break;
+        case 3:
+            con_log.push_back((CONLOG) {e.name+" is bleeding badly AND screams.",TCOD_light_red});
+            break;
+        case 4:
+            con_log.push_back((CONLOG) {e.name+" is bleeding badly.",TCOD_light_red});
+            break;
+        case 5:
+            con_log.push_back((CONLOG) {e.name+" screams.",TCOD_light_red});
+            break;
+        case 6:
+            con_log.push_back((CONLOG) {e.name+" is bleeding.",TCOD_lighter_red});
+            break;
+        case 7:
+            con_log.push_back((CONLOG) {e.name+" is getting hurt.",TCOD_lighter_red});
+            break;
+        case 8:
+            con_log.push_back((CONLOG) {"Looks like "+e.name+" can bleed.",TCOD_lighter_red});
+            break;
+        case 9:
+            con_log.push_back((CONLOG) {"It seems "+e.name+" can take damage.",TCOD_lightest_red});
+            break;
+        }
+        if     (e.getStamina()<10) con_log.push_back((CONLOG) {e.name+" looks exhausted.",TCOD_light_green});
+        else if(e.getStamina()<20) con_log.push_back((CONLOG) {e.name+" is getting tired.",TCOD_light_green});
+
+        if(e.getStamina()<10) {
+            con_log.push_back((CONLOG) {e.name+" gathers his stenght.",TCOD_green});
+            e.addStamina(50);
+        } else EnemyAttack(e,con_log);
+            most=PLAYER_KOR;
+        }
+    } while(e.getHP()>0&&p1.getHP()>0&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
+    if(e.getHP()==0) {
+        PrintPlayerStats();
+        con_log.push_back((CONLOG) {e.name+" is dead!",TCOD_red});
+        std::string anyad[]={"Victory!"};
+        MenuSelection(0,0,anyad,input,con_log);
+    }
+    if(p1.getHP()==0) {
+        PrintPlayerStats();
+        con_log.push_back((CONLOG) {"K den.",TCOD_red});
+        std::string anyad[]={"Game Over!"};
+        MenuSelection(0,0,anyad,input,con_log);
+    }
+    p1.addHP(100);
+    p1.addStamina(100);
 }

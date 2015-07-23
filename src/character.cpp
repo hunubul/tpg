@@ -40,7 +40,7 @@ enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     CONSOLEINFO Con;
     SUBSECTION subsec;
     CHAR_SET CharSet;
-    std::string PicPath = "images/"+name+".png";
+    std::string PicPath = IMAGE_PATH+name+".png";
     /*-----------Initializing CONSOLEINFO-----------*/
     Con.FontSize.X = FontX;
     Con.FontSize.Y = FontY;

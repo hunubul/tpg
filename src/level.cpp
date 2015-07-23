@@ -90,32 +90,48 @@ void level::engine() {
     posY=MidY;
     most=UP;
     int lehet;
-    TCOD_key_t Choice;
+    int prevX=posX;
+    int prevY=posY;
+    TCOD_key_t key;
+    TCOD_mouse_t mouse;
+    TCOD_event_t event;
+    writeout();
     do {
-        writeout();
-        Choice = TCODConsole::root->waitForKeypress(true);
-        HarcGUI(enemies[0]);
-        switch(Choice.vk) { //Irány változó típusból adódik
-        case TCODK_LEFT:
-            lehet=(most+3)%4;
-            merre((IRANY)lehet);
-            break;
-        case TCODK_UP:
-            lehet=(most+0)%4;
-            merre((IRANY)lehet);
-            break;
-        case TCODK_RIGHT:
-            lehet=(most+1)%4;
-            merre((IRANY)lehet);
-            break;
-        case TCODK_DOWN:
-            lehet=(most+2)%4;
-            merre((IRANY)lehet);
-            break;
-        default:
-            break;
+        if(prevX!=posX||prevY!=posY) writeout();
+        prevX=posX;
+        prevY=posY;
+        event = TCODSystem::waitForEvent(TCOD_EVENT_ANY,&key,&mouse,true);
+        TCODSystem::sleepMilli(1000/FPS);
+        //HarcGUI(enemies[0]);
+        if(event==TCOD_EVENT_KEY_PRESS) {
+            switch(key.vk) { //Irány változó típusból adódik
+            case TCODK_LEFT:
+                lehet=(most+3)%4;
+                merre((IRANY)lehet);
+                break;
+            case TCODK_UP:
+                lehet=(most+0)%4;
+                merre((IRANY)lehet);
+                break;
+            case TCODK_RIGHT:
+                lehet=(most+1)%4;
+                merre((IRANY)lehet);
+                break;
+            case TCODK_DOWN:
+                lehet=(most+2)%4;
+                merre((IRANY)lehet);
+                break;
+            default:
+                break;
+            }
+        } else if(event==TCOD_EVENT_MOUSE_PRESS) {
+            if(mouse.lbutton) {
+
+            } else if(mouse.rbutton) {
+
+            }
         }
-    } while(!TCODConsole::isWindowClosed()&&Choice.vk!=TCODK_ESCAPE);
+    } while(!TCODConsole::isWindowClosed()&&key.vk!=TCODK_ESCAPE);
 }
 void level::merre(IRANY honnan) {
     switch(honnan) {
@@ -227,7 +243,8 @@ void level::RoomWriteout() {
     CharSetImporter(&CharSet,"8x8terminal.dat");
     CalculateWeights(&CharSet); /* Calculating charset weights... */
     PNG.ASCII_Color = NULL;
-    lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, "images/Room.png");
+    const string path=IMAGE_PATH+"Room.png";
+    lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, path.c_str());
     PNG.HeightTile = Con.CharAmount.Y;
     PNG.WidthTile = Con.CharAmount.X;
     subsec.height=(double)PNG.Height/PNG.HeightTile; /* Calculating SUBSECTION in pixels */
@@ -244,21 +261,37 @@ void level::WriteOutBoxes() {
     szoba aktSzoba = terkep[posX][posY];
     //*** Ceiling ***
     if(aktSzoba.c.size() == 0) {
-        TopLeft = (SIZES) {UpperBoxPos.X,UpperBoxPos.Y};
-        BoxSize = (SIZES) {UpperBoxSiz.X,UpperBoxSiz.Y};
+        TopLeft = (SIZES) {
+            UpperBoxPos.X,UpperBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            UpperBoxSiz.X,UpperBoxSiz.Y
+        };
         ClearBox(TopLeft,BoxSize);
     } else if(aktSzoba.c.size() == 1) {
-        TopLeft = (SIZES) {UpperBoxPos.X,UpperBoxPos.Y};
-        BoxSize = (SIZES) {UpperBoxSiz.X,UpperBoxSiz.Y};
+        TopLeft = (SIZES) {
+            UpperBoxPos.X,UpperBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            UpperBoxSiz.X,UpperBoxSiz.Y
+        };
         Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
     } else if(aktSzoba.c.size() == 2) {
         //Elso dolog
-        TopLeft = (SIZES) {UpperBoxPos.X  ,UpperBoxPos.Y};
-        BoxSize = (SIZES) {UpperBoxSiz.X/2,UpperBoxSiz.Y};
+        TopLeft = (SIZES) {
+            UpperBoxPos.X  ,UpperBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            UpperBoxSiz.X/2,UpperBoxSiz.Y
+        };
         Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
         //Masodik dolog
-        TopLeft = (SIZES) {UpperBoxPos.X+UpperBoxSiz.X/2,UpperBoxPos.Y};
-        BoxSize = (SIZES) {UpperBoxSiz.X/2,UpperBoxSiz.Y};
+        TopLeft = (SIZES) {
+            UpperBoxPos.X+UpperBoxSiz.X/2,UpperBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            UpperBoxSiz.X/2,UpperBoxSiz.Y
+        };
         Pic2ASCII(aktSzoba.c[1], TopLeft, BoxSize);
     }
     //*** Middle ***
@@ -293,55 +326,97 @@ void level::WriteOutBoxes() {
     }
     //*** Bottom ***
     if(aktSzoba.f.size() == 0) {
-        TopLeft = (SIZES) {BottomBoxPos.X,BottomBoxPos.Y};
-        BoxSize = (SIZES) {BottomBoxSiz.X,BottomBoxSiz.Y};
+        TopLeft = (SIZES) {
+            BottomBoxPos.X,BottomBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            BottomBoxSiz.X,BottomBoxSiz.Y
+        };
         ClearBox(TopLeft,BoxSize);
     } else if(aktSzoba.f.size() == 1) {
-        TopLeft = (SIZES) {BottomBoxPos.X,BottomBoxPos.Y};
-        BoxSize = (SIZES) {BottomBoxSiz.X,BottomBoxSiz.Y};
+        TopLeft = (SIZES) {
+            BottomBoxPos.X,BottomBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            BottomBoxSiz.X,BottomBoxSiz.Y
+        };
         Pic2ASCII(aktSzoba.f[0], TopLeft, BoxSize);
     } else if(aktSzoba.f.size() == 2) {
         //Elso dolog
-        TopLeft = (SIZES) {BottomBoxPos.X  ,BottomBoxPos.Y};
-        BoxSize = (SIZES) {BottomBoxSiz.X/2,BottomBoxSiz.Y};
+        TopLeft = (SIZES) {
+            BottomBoxPos.X  ,BottomBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            BottomBoxSiz.X/2,BottomBoxSiz.Y
+        };
         Pic2ASCII(aktSzoba.f[0], TopLeft, BoxSize);
         //Masodik dolog
-        TopLeft = (SIZES) {BottomBoxPos.X+BottomBoxSiz.X/2,BottomBoxPos.Y};
-        BoxSize = (SIZES) {BottomBoxSiz.X/2,BottomBoxSiz.Y};
+        TopLeft = (SIZES) {
+            BottomBoxPos.X+BottomBoxSiz.X/2,BottomBoxPos.Y
+        };
+        BoxSize = (SIZES) {
+            BottomBoxSiz.X/2,BottomBoxSiz.Y
+        };
         Pic2ASCII(aktSzoba.f[1], TopLeft, BoxSize);
     }
 }
 void level::WriteMiddleBox(vector<string> aktFal) {
-    SIZES TopLeft = (SIZES) {MiddleBoxPos.X,MiddleBoxPos.Y};
-    SIZES BoxSize = (SIZES) {MiddleBoxSiz.X,MiddleBoxSiz.Y};
+    SIZES TopLeft = (SIZES) {
+        MiddleBoxPos.X,MiddleBoxPos.Y
+    };
+    SIZES BoxSize = (SIZES) {
+        MiddleBoxSiz.X,MiddleBoxSiz.Y
+    };
     switch(aktFal.size()) {
     case 1:
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
         break;
     case 2:
-        BoxSize = (SIZES) {MiddleBoxSiz.X/2,MiddleBoxSiz.Y};
+        BoxSize = (SIZES) {
+            MiddleBoxSiz.X/2,MiddleBoxSiz.Y
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        TopLeft = (SIZES) {MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y};
+        TopLeft = (SIZES) {
+            MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
         break;
     case 3:
-        BoxSize = (SIZES) {MiddleBoxSiz.X/2,MiddleBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            MiddleBoxSiz.X/2,MiddleBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        BoxSize = (SIZES) {MiddleBoxSiz.X/2,MiddleBoxSiz.Y};
-        TopLeft = (SIZES) {MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y};
+        BoxSize = (SIZES) {
+            MiddleBoxSiz.X/2,MiddleBoxSiz.Y
+        };
+        TopLeft = (SIZES) {
+            MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-        BoxSize = (SIZES) {MiddleBoxSiz.X/2,MiddleBoxSiz.Y/2};
-        TopLeft = (SIZES) {MiddleBoxPos.X,MiddleBoxPos.Y+MiddleBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            MiddleBoxSiz.X/2,MiddleBoxSiz.Y/2
+        };
+        TopLeft = (SIZES) {
+            MiddleBoxPos.X,MiddleBoxPos.Y+MiddleBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[2], TopLeft, BoxSize);
         break;
     case 4:
-        BoxSize = (SIZES) {MiddleBoxSiz.X/2,MiddleBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            MiddleBoxSiz.X/2,MiddleBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        TopLeft = (SIZES) {MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y};
+        TopLeft = (SIZES) {
+            MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-        TopLeft = (SIZES) {MiddleBoxPos.X,MiddleBoxPos.Y+MiddleBoxSiz.Y/2};
+        TopLeft = (SIZES) {
+            MiddleBoxPos.X,MiddleBoxPos.Y+MiddleBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[2], TopLeft, BoxSize);
-        TopLeft = (SIZES) {MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y+MiddleBoxSiz.Y/2};
+        TopLeft = (SIZES) {
+            MiddleBoxPos.X+MiddleBoxSiz.X/2,MiddleBoxPos.Y+MiddleBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[3], TopLeft, BoxSize);
         break;
     default:
@@ -350,36 +425,62 @@ void level::WriteMiddleBox(vector<string> aktFal) {
     }
 }
 void level::WriteLeftBox(vector<string> aktFal) {
-    SIZES TopLeft = (SIZES) {SideBoxPosLeft.X,SideBoxPosLeft.Y};
-    SIZES BoxSize = (SIZES) {SideBoxSiz.X,SideBoxSiz.Y};
+    SIZES TopLeft = (SIZES) {
+        SideBoxPosLeft.X,SideBoxPosLeft.Y
+    };
+    SIZES BoxSize = (SIZES) {
+        SideBoxSiz.X,SideBoxSiz.Y
+    };
     switch(aktFal.size()) {
     case 1:
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
         break;
     case 2:
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y};
+        TopLeft = (SIZES) {
+            SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
         break;
     case 3:
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y};
-        TopLeft = (SIZES) {SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y
+        };
+        TopLeft = (SIZES) {
+            SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y/2};
-        TopLeft = (SIZES) {SideBoxPosLeft.X,SideBoxPosLeft.Y+SideBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y/2
+        };
+        TopLeft = (SIZES) {
+            SideBoxPosLeft.X,SideBoxPosLeft.Y+SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[2], TopLeft, BoxSize);
         break;
     case 4:
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y};
+        TopLeft = (SIZES) {
+            SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosLeft.X,SideBoxPosLeft.Y+SideBoxSiz.Y/2};
+        TopLeft = (SIZES) {
+            SideBoxPosLeft.X,SideBoxPosLeft.Y+SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[2], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y+SideBoxSiz.Y/2};
+        TopLeft = (SIZES) {
+            SideBoxPosLeft.X+SideBoxSiz.X/2,SideBoxPosLeft.Y+SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[3], TopLeft, BoxSize);
         break;
     default:
@@ -388,36 +489,62 @@ void level::WriteLeftBox(vector<string> aktFal) {
     }
 }
 void level::WriteRightBox(vector<string> aktFal) {
-    SIZES TopLeft = (SIZES) {SideBoxPosRight.X,SideBoxPosRight.Y};
-    SIZES BoxSize = (SIZES) {SideBoxSiz.X,SideBoxSiz.Y};
+    SIZES TopLeft = (SIZES) {
+        SideBoxPosRight.X,SideBoxPosRight.Y
+    };
+    SIZES BoxSize = (SIZES) {
+        SideBoxSiz.X,SideBoxSiz.Y
+    };
     switch(aktFal.size()) {
     case 1:
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
         break;
     case 2:
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y};
+        TopLeft = (SIZES) {
+            SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
         break;
     case 3:
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y};
-        TopLeft = (SIZES) {SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y
+        };
+        TopLeft = (SIZES) {
+            SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y/2};
-        TopLeft = (SIZES) {SideBoxPosRight.X,SideBoxPosRight.Y+SideBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y/2
+        };
+        TopLeft = (SIZES) {
+            SideBoxPosRight.X,SideBoxPosRight.Y+SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[2], TopLeft, BoxSize);
         break;
     case 4:
-        BoxSize = (SIZES) {SideBoxSiz.X/2,SideBoxSiz.Y/2};
+        BoxSize = (SIZES) {
+            SideBoxSiz.X/2,SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y};
+        TopLeft = (SIZES) {
+            SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y
+        };
         Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosRight.X,SideBoxPosRight.Y+SideBoxSiz.Y/2};
+        TopLeft = (SIZES) {
+            SideBoxPosRight.X,SideBoxPosRight.Y+SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[2], TopLeft, BoxSize);
-        TopLeft = (SIZES) {SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y+SideBoxSiz.Y/2};
+        TopLeft = (SIZES) {
+            SideBoxPosRight.X+SideBoxSiz.X/2,SideBoxPosRight.Y+SideBoxSiz.Y/2
+        };
         Pic2ASCII(aktFal[3], TopLeft, BoxSize);
         break;
     default:
@@ -430,7 +557,7 @@ void level::Pic2ASCII(string PicName,SIZES TopLeft,SIZES BoxSize) {
     IMAGE PNG;
     SUBSECTION subsec;
     CHAR_SET CharSet;
-    string PicPath = "images/"+PicName+".png";
+    string PicPath = IMAGE_PATH+PicName+".png";
     /*-----------Initializing CONSOLEINFO-----------*/
     Con.FontSize.X = FontX;
     Con.FontSize.Y = FontY;
@@ -473,7 +600,7 @@ void level::WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize) {
         for (j=0; j<PNG.WidthTile; j++) {
             if(PNG.ASCII_Color!=NULL) TCODConsole::root->setDefaultForeground(PNG.ASCII_Color[j+i*PNG.WidthTile]);
             if((TCODConsole::root->getChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i)=='.' || TCODConsole::root->getChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i)==' ')
-               )
+              )
                 TCODConsole::root->putChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i,PNG.ASCII_Image[j+i*PNG.WidthTile]);
         }
     }

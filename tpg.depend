@@ -1,0 +1,223 @@
+# depslib dependency file v1.0
+1437650961 source:c:\users\hunubul\documents\github\tpg\src\character.cpp
+	"main.h"
+
+1437655385 c:\users\hunubul\documents\github\tpg\src\main.h
+	"Image2ASCIIcolors.h"
+	"libtcod.hpp"
+	<string>
+	<iostream>
+	<vector>
+	<fstream>
+	<ctime>
+	<stdio.h>
+	<stdlib.h>
+	"szoba.h"
+	"itemek.h"
+	"level.h"
+	"character.h"
+	"harc.h"
+
+1437648220 c:\users\hunubul\documents\github\tpg\includes\image2asciicolors.h
+	"libtcod.hpp"
+	"lodepng.h"
+	<string>
+	<math.h>
+	<dirent.h>
+	<stdlib.h>
+	<stdio.h>
+	"LibtcodFunctions.h"
+	"Functions.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\libtcod.hpp
+	"libtcod.h"
+	"list.hpp"
+	"color.hpp"
+	"console.hpp"
+	"image.hpp"
+	"sys.hpp"
+	"mersenne.hpp"
+	"mouse.hpp"
+	"bresenham.hpp"
+	"noise.hpp"
+	"fov.hpp"
+	"path.hpp"
+	"lex.hpp"
+	"parser.hpp"
+	"tree.hpp"
+	"bsp.hpp"
+	"heightmap.hpp"
+	"zip.hpp"
+	"namegen.hpp"
+	"txtfield.hpp"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\libtcod.h
+	<wchar.h>
+	"SDL/SDL.h"
+	"list.h"
+	"color.h"
+	"console.h"
+	"image.h"
+	"mouse.h"
+	"sys.h"
+	"mersenne.h"
+	"bresenham.h"
+	"noise.h"
+	"fov.h"
+	"path.h"
+	"lex.h"
+	"parser.h"
+	"tree.h"
+	"bsp.h"
+	"heightmap.h"
+	"zip.h"
+	"namegen.h"
+	"txtfield.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\list.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\color.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\console.h
+	"console_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\console_types.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\image.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\mouse.h
+	"mouse_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\mouse_types.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\sys.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\mersenne.h
+	"mersenne_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\mersenne_types.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\bresenham.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\noise.h
+	"noise_defaults.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\noise_defaults.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\fov.h
+	"fov_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\fov_types.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\path.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\lex.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\parser.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\tree.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\bsp.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\heightmap.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\zip.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\namegen.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\txtfield.h
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\list.hpp
+	<string.h>
+	<stdlib.h>
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\color.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\console.hpp
+	"console_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\image.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\sys.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\mersenne.hpp
+	"mersenne_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\mouse.hpp
+	"mouse_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\bresenham.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\noise.hpp
+	"noise_defaults.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\fov.hpp
+	"fov_types.h"
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\path.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\lex.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\parser.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\tree.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\bsp.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\heightmap.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\zip.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\namegen.hpp
+
+1405866706 c:\users\hunubul\documents\github\tpg\libtcod\include\txtfield.hpp
+	"color.hpp"
+
+1437648115 c:\users\hunubul\documents\github\tpg\includes\lodepng.h
+	<string.h>
+	<vector>
+	<string>
+	"lodepng.h"
+	<iostream>
+	"lodepng.h"
+
+1437648115 c:\users\hunubul\documents\github\tpg\includes\libtcodfunctions.h
+
+1437648220 c:\users\hunubul\documents\github\tpg\includes\functions.h
+
+1437648220 c:\users\hunubul\documents\github\tpg\src\szoba.h
+
+1437648220 c:\users\hunubul\documents\github\tpg\src\itemek.h
+
+1437648220 c:\users\hunubul\documents\github\tpg\src\level.h
+
+1437648220 c:\users\hunubul\documents\github\tpg\src\character.h
+
+1437648220 c:\users\hunubul\documents\github\tpg\src\harc.h
+
+1437648220 source:c:\users\hunubul\documents\github\tpg\src\effects.cpp
+
+1437648220 source:c:\users\hunubul\documents\github\tpg\src\harc.cpp
+	"main.h"
+
+1437648220 source:c:\users\hunubul\documents\github\tpg\src\itemek.cpp
+	"main.h"
+
+1437654944 source:c:\users\hunubul\documents\github\tpg\src\main.cpp
+	"main.h"
+
+1437648115 source:c:\users\hunubul\documents\github\tpg\src\selectionmenu.cpp
+	"SelectionMenu.h"
+
+1437648115 c:\users\hunubul\documents\github\tpg\src\selectionmenu.h
+	<stdio.h>
+	<iostream>
+	<vector>
+	<windows.h>
+
+1437648220 source:c:\users\hunubul\documents\github\tpg\src\szoba.cpp
+	"main.h"
+
+1437655962 source:c:\users\hunubul\documents\github\tpg\src\level.cpp
+	"main.h"
+

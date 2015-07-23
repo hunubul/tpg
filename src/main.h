@@ -38,6 +38,8 @@ typedef enum {LEFT=3,UP=0,RIGHT=1,DOWN=2} IRANY;
 
 extern player p1;
 extern std::vector<enemy> enemies;
+const std::string IMAGE_PATH="C:/!!DOLGOK/!!!PROG/asd/tpg-master/images/";
+const int FPS=60;
 
 void BeolvasEnemyk();
 

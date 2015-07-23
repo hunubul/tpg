@@ -31,30 +31,33 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
-			<Add directory="$(#libtcod.include)" />
+			<Add directory="libtcod/include" />
 			<Add directory="includes" />
 		</Compiler>
+		<ResourceCompiler>
+			<Add directory="bin" />
+		</ResourceCompiler>
 		<Linker>
-			<Add library="$(#libtcod.lib)\libtcod-mingw.a" />
+			<Add library="libtcod\lib\libtcod-mingw.a" />
 			<Add library="includes\libImage2ASCIIcolors.a" />
-			<Add directory="$(#libtcod.bin)" />
+			<Add directory="bin" />
 		</Linker>
-		<Unit filename="character.cpp" />
-		<Unit filename="character.h" />
-		<Unit filename="effects.cpp" />
-		<Unit filename="effects.h" />
-		<Unit filename="harc.cpp" />
-		<Unit filename="harc.h" />
-		<Unit filename="itemek.cpp" />
-		<Unit filename="itemek.h" />
-		<Unit filename="level.cpp" />
-		<Unit filename="level.h" />
-		<Unit filename="main.cpp" />
-		<Unit filename="main.h" />
-		<Unit filename="szoba.cpp" />
-		<Unit filename="szoba.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="src/SelectionMenu.cpp" />
+		<Unit filename="src/SelectionMenu.h" />
+		<Unit filename="src/character.cpp" />
+		<Unit filename="src/character.h" />
+		<Unit filename="src/effects.cpp" />
+		<Unit filename="src/effects.h" />
+		<Unit filename="src/harc.cpp" />
+		<Unit filename="src/harc.h" />
+		<Unit filename="src/itemek.cpp" />
+		<Unit filename="src/itemek.h" />
+		<Unit filename="src/level.cpp" />
+		<Unit filename="src/level.h" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/main.h" />
+		<Unit filename="src/szoba.cpp" />
+		<Unit filename="src/szoba.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -221,3 +221,288 @@
 1437655962 source:c:\users\hunubul\documents\github\tpg\src\level.cpp
 	"main.h"
 
+1439847241 source:h:\work\c++\tpg\src\character.cpp
+	"Image2ASCIIcolors.h"
+	"lodepng.h"
+	"settings.h"
+	"character.h"
+	"level.h"
+	"logging.h"
+
+1439822868 h:\work\c++\tpg\src\main.h
+	"Image2ASCIIcolors.h"
+	"libtcod.hpp"
+	<string>
+	<iostream>
+	<vector>
+	<fstream>
+	<ctime>
+	<stdio.h>
+	<stdlib.h>
+	"szoba.h"
+	"itemek.h"
+	"level.h"
+	"character.h"
+	"harc.h"
+
+1424637122 h:\work\c++\tpg\includes\image2asciicolors.h
+	"libtcod.hpp"
+	"lodepng.h"
+	<string>
+	<math.h>
+	<dirent.h>
+	<stdlib.h>
+	<stdio.h>
+	"LibtcodFunctions.h"
+	"Functions.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\libtcod.hpp
+	"libtcod.h"
+	"list.hpp"
+	"color.hpp"
+	"console.hpp"
+	"image.hpp"
+	"sys.hpp"
+	"mersenne.hpp"
+	"mouse.hpp"
+	"bresenham.hpp"
+	"noise.hpp"
+	"fov.hpp"
+	"path.hpp"
+	"lex.hpp"
+	"parser.hpp"
+	"tree.hpp"
+	"bsp.hpp"
+	"heightmap.hpp"
+	"zip.hpp"
+	"namegen.hpp"
+	"txtfield.hpp"
+
+1439822431 h:\work\c++\tpg\libtcod\include\libtcod.h
+	<wchar.h>
+	"SDL/SDL.h"
+	"list.h"
+	"color.h"
+	"console.h"
+	"image.h"
+	"mouse.h"
+	"sys.h"
+	"mersenne.h"
+	"bresenham.h"
+	"noise.h"
+	"fov.h"
+	"path.h"
+	"lex.h"
+	"parser.h"
+	"tree.h"
+	"bsp.h"
+	"heightmap.h"
+	"zip.h"
+	"namegen.h"
+	"txtfield.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\list.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\color.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\console.h
+	"console_types.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\console_types.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\image.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\mouse.h
+	"mouse_types.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\mouse_types.h
+
+1439822432 h:\work\c++\tpg\libtcod\include\sys.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\mersenne.h
+	"mersenne_types.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\mersenne_types.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\bresenham.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\noise.h
+	"noise_defaults.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\noise_defaults.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\fov.h
+	"fov_types.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\fov_types.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\path.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\lex.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\parser.h
+
+1439822432 h:\work\c++\tpg\libtcod\include\tree.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\bsp.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\heightmap.h
+
+1439822432 h:\work\c++\tpg\libtcod\include\zip.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\namegen.h
+
+1439822432 h:\work\c++\tpg\libtcod\include\txtfield.h
+
+1439822431 h:\work\c++\tpg\libtcod\include\list.hpp
+	<string.h>
+	<stdlib.h>
+
+1439822431 h:\work\c++\tpg\libtcod\include\color.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\console.hpp
+	"console_types.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\image.hpp
+
+1439822432 h:\work\c++\tpg\libtcod\include\sys.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\mersenne.hpp
+	"mersenne_types.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\mouse.hpp
+	"mouse_types.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\bresenham.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\noise.hpp
+	"noise_defaults.h"
+
+1439822431 h:\work\c++\tpg\libtcod\include\fov.hpp
+	"fov_types.h"
+
+1439822432 h:\work\c++\tpg\libtcod\include\path.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\lex.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\parser.hpp
+
+1439822432 h:\work\c++\tpg\libtcod\include\tree.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\bsp.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\heightmap.hpp
+
+1439822432 h:\work\c++\tpg\libtcod\include\zip.hpp
+
+1439822431 h:\work\c++\tpg\libtcod\include\namegen.hpp
+
+1439822432 h:\work\c++\tpg\libtcod\include\txtfield.hpp
+	"color.hpp"
+
+1422635581 h:\work\c++\tpg\includes\lodepng.h
+	<string.h>
+	<vector>
+	<string>
+	"lodepng.h"
+	<iostream>
+	"lodepng.h"
+
+1419449176 h:\work\c++\tpg\includes\libtcodfunctions.h
+
+1424387445 h:\work\c++\tpg\includes\functions.h
+
+1439830342 h:\work\c++\tpg\src\szoba.h
+	<vector>
+	<string>
+
+1439830255 h:\work\c++\tpg\src\itemek.h
+	<string>
+	<vector>
+
+1439843422 h:\work\c++\tpg\src\level.h
+	"Image2ASCIIcolors.h"
+	"szoba.h"
+
+1439825106 h:\work\c++\tpg\src\character.h
+	<vector>
+	"Image2ASCIIcolors.h"
+	"itemek.h"
+
+1439825057 h:\work\c++\tpg\src\harc.h
+	"libtcod.hpp"
+	"character.h"
+
+1439822432 source:h:\work\c++\tpg\src\effects.cpp
+
+1439843342 source:h:\work\c++\tpg\src\harc.cpp
+	<string>
+	"harc.h"
+	"level.h"
+
+1439830306 source:h:\work\c++\tpg\src\itemek.cpp
+	<fstream>
+	<stdlib.h>
+	"itemek.h"
+
+1439847201 source:h:\work\c++\tpg\src\level.cpp
+	<stdexcept>
+	"lodepng.h"
+	"level.h"
+	"settings.h"
+	"logging.h"
+
+1439846838 source:h:\work\c++\tpg\src\main.cpp
+	<fstream>
+	<time.h>
+	"Image2ASCIIcolors.h"
+	"character.h"
+	"level.h"
+	"settings.h"
+	"logging.h"
+
+1439822432 source:h:\work\c++\tpg\src\selectionmenu.cpp
+	"SelectionMenu.h"
+
+1439822432 h:\work\c++\tpg\src\selectionmenu.h
+	<stdio.h>
+	<iostream>
+	<vector>
+	<windows.h>
+
+1439831297 source:h:\work\c++\tpg\src\szoba.cpp
+	<stdlib.h>
+	<stdio.h>
+	<fstream>
+	"szoba.h"
+
+1439831925 h:\work\c++\tpg\src\settings.h
+
+1439833303 source:h:\work\c++\tpg\src\globals.cpp
+	"Image2ASCIIcolors.h"
+	"character.h"
+
+1439843429 h:\work\c++\tpg\src\image2asciicolors.h
+	"libtcod.hpp"
+
+1412965384 h:\work\c++\tpg\lodepng\lodepng.h
+	<string.h>
+	<vector>
+	<string>
+	"lodepng.h"
+	<iostream>
+	"lodepng.h"
+
+1439843429 source:h:\work\c++\tpg\src\image2asciicolors.cpp
+	"Image2ASCIIcolors.h"
+	<stdio.h>
+
+1439846980 h:\work\c++\tpg\src\logging.h
+
+1439847070 source:h:\work\c++\tpg\src\logging.cpp
+	<string>
+	<fstream>
+	<time.h>
+	"libtcod.hpp"
+	"logging.h"
+

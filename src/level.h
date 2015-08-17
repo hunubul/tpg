@@ -1,6 +1,9 @@
 #ifndef LEVEL_H_INCLUDED
 #define LEVEL_H_INCLUDED
 
+#include "Image2ASCIIcolors.h"
+#include "szoba.h"
+
 class level {
 private:
     int MaxRoomX,MaxRoomY;
@@ -26,7 +29,5 @@ public:
     void WriteRightBox(std::vector<std::string> aktFal);
     void ClearBox(SIZES TopLeft,SIZES BoxSize);
     void Pic2ASCII(std::string PicName,SIZES TopLeft,SIZES BoxSize);
-    static void WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize);
-    static void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 };
 #endif

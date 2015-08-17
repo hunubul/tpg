@@ -2,7 +2,14 @@
  * @file szoba.cpp
  * @brief fõ implementációk
  */
-#include "main.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
+#include "szoba.h"
+
+extern const int MAX_RARITY;
+
 /*ELVILEG MINDEN FELÜLET MEGVAN, DE CSAK A SZEMBE MEG PADLÓ VAN BERAKVA, A BEOLVASANDÓ FÁJLOKAT MÉG BUHERÁLNI KÉNE*/
 using namespace std;
 

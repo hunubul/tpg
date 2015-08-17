@@ -5,6 +5,11 @@
 #ifndef SZOBA_H_INCLUDED
 #define SZOBA_H_INCLUDED
 
+#include <vector>
+#include <string>
+
+/** @brief enum az iránynak */
+typedef enum {LEFT=3,UP=0,RIGHT=1,DOWN=2} IRANY;
 /** @brief flagek arra hogy a szobából merrre nyílik ajtó */
 typedef enum {DOOR_NONE=0b0000,DOOR_LEFT=0b1000,DOOR_UP=0b0100,DOOR_RIGHT=0b0010,DOOR_DOWN=0b0001} DOOR_DIRECTION;
 /** @brief enum a mob típusoknak */

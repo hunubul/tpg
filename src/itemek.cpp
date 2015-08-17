@@ -1,4 +1,7 @@
-#include "main.h"
+#include <fstream>
+#include <stdlib.h>
+#include "itemek.h"
+
 using namespace std;
 
 /*--------------Konstruktorok kezdete--------------*/

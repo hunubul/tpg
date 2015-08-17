@@ -1,4 +1,13 @@
-#include "main.h"
+#include "Image2ASCIIcolors.h"
+#include "lodepng.h"
+#include "settings.h"
+#include "character.h"
+#include "level.h"
+#include "logging.h"
+
+extern int ConsoleWidth,ConsoleHeight;
+extern const int FontX,FontY;
+extern const std::string IMAGE_PATH;
 
 SIZES enemy::BoxSize;
 SIZES enemy::TopLeft;
@@ -51,12 +60,13 @@ enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     /*----------------------------------------------*/
     CharSetImporter(&CharSet,"8x8terminal.dat");
     CalculateWeights(&CharSet); /* Calculating charset weights... */
-    PNG.ASCII_Color = NULL;
     int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
     if(!err) {
-        level::CalculatePNGSizes(&PNG,&subsec,Con);
+        CalculatePNGSizes(&PNG,&subsec,Con);
         PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-    }
+        free(PNG.Image);
+        PNG.Image=NULL;
+    } else ErrorOccured("Enemy: "+name+".png was not found");
 }
 
 enemy::~enemy() {

@@ -1,6 +1,10 @@
 #ifndef CHARACTER_H_INCLUDED
 #define CHARACTER_H_INCLUDED
 
+#include <vector>
+#include "Image2ASCIIcolors.h"
+#include "itemek.h"
+
 typedef enum {ALEFT=4,AMID=0,AUP=1,ARIGHT=2,ADOWN=3,ANONE=-1} ADIR; //preferált támadási irány
 
 typedef struct {

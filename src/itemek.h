@@ -1,6 +1,9 @@
 #ifndef ITEMEK_H_INCLUDED
 #define ITEMEK_H_INCLUDED
 
+#include <string>
+#include <vector>
+
 /** @brief enum kinek lehet ilyen iteme */
 //typedef enum {CHEST,ENEMY,PLAYER} ITEM_OWNER;
 /** @brief enum az item típusoknak */

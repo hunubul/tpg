@@ -1,4 +1,17 @@
-#include "main.h"
+#include <stdexcept>
+#include "lodepng.h"
+#include "level.h"
+#include "settings.h"
+#include "logging.h"
+
+extern const int FPS;
+extern int ConsoleWidth,ConsoleHeight;
+extern const int FontX,FontY;
+extern const std::string IMAGE_PATH;
+extern SIZES UpperBoxSiz, UpperBoxPos;
+extern SIZES SideBoxSiz,  SideBoxPosLeft, SideBoxPosRight;
+extern SIZES BottomBoxSiz,BottomBoxPos;
+extern SIZES MiddleBoxSiz,MiddleBoxPos;
 
 using namespace std;
 
@@ -26,8 +39,8 @@ level::level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter) : MidX(MidX),
         FOV.push_back(temp);
     }
     counter=2;
-    Map[posX][posY]=1;
-    Map[posX][posY+1]=1;
+    Map[posX][posY]=1; //Középső szoba lesz
+    Map[posX][posY+1]=1; //Középső szoba lesz
     //Ez úgy mûködik, hogy az eddig átjárható szobákból próbál új szobákat létrehozni
     while(counter!=MaxCounter) {
         allow=false;
@@ -242,18 +255,22 @@ void level::RoomWriteout() {
     /*----------------------------------------------*/
     CharSetImporter(&CharSet,"8x8terminal.dat");
     CalculateWeights(&CharSet); /* Calculating charset weights... */
-    PNG.ASCII_Color = NULL;
     const string path=IMAGE_PATH+"Room.png";
-    lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, path.c_str());
+    int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, path.c_str());
     PNG.HeightTile = Con.CharAmount.Y;
     PNG.WidthTile = Con.CharAmount.X;
     subsec.height=(double)PNG.Height/PNG.HeightTile; /* Calculating SUBSECTION in pixels */
     subsec.width =(double)PNG.Width/PNG.WidthTile; /* Calculating SUBSECTION in pixels */
-    PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-    WriteOutPic(PNG,TopLeft,BoxSize);
-    free(PNG.Image);
-    free(PNG.ASCII_Image);
-    free(PNG.Weight);
+    if(!err) {
+        PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+        WriteOutPic(&PNG,TopLeft,BoxSize);
+        free(PNG.Image);
+        free(PNG.ASCII_Image);
+        free(PNG.ASCII_Color);
+    } else {
+        string ErrorText="/"+IMAGE_PATH+"Room.png was not found!";
+        throw runtime_error(ErrorText);
+    }
 }
 void level::WriteOutBoxes() {
     SIZES TopLeft;
@@ -568,17 +585,16 @@ void level::Pic2ASCII(string PicName,SIZES TopLeft,SIZES BoxSize) {
     /*----------------------------------------------*/
     CharSetImporter(&CharSet,"8x8terminal.dat");
     CalculateWeights(&CharSet); /* Calculating charset weights... */
-    PNG.ASCII_Color = NULL;
     int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
     ClearBox(TopLeft,BoxSize);
     if(!err) {
         CalculatePNGSizes(&PNG,&subsec,Con);
         PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-        WriteOutPic(PNG, TopLeft, BoxSize);
+        WriteOutPic(&PNG, TopLeft, BoxSize);
         free(PNG.Image);
         free(PNG.ASCII_Image);
-        free(PNG.Weight);
-    }
+        free(PNG.ASCII_Color);
+    } else ErrorOccured(PicName+".png was not found");
 }
 void level::ClearBox(SIZES TopLeft,SIZES BoxSize) {
 #ifdef DEBUG
@@ -591,38 +607,4 @@ void level::ClearBox(SIZES TopLeft,SIZES BoxSize) {
     }
     TCODConsole::root->setDefaultForeground(TCODColor::white);
 #endif // DEBUG
-}
-void level::WriteOutPic(IMAGE PNG,SIZES TopLeft,SIZES BoxSize) {
-    unsigned i,j;
-    unsigned VerLeftover = (BoxSize.Y-PNG.HeightTile)/2; //Függőleges maradék amennyit fent és lent kihagy
-    unsigned HorLeftover = (BoxSize.X-PNG.WidthTile)/2; //Vízszintes maradék amennyit balra és jobbra kihagy
-    for (i=0; i<PNG.HeightTile; i++) {
-        for (j=0; j<PNG.WidthTile; j++) {
-            if(PNG.ASCII_Color!=NULL) TCODConsole::root->setDefaultForeground(PNG.ASCII_Color[j+i*PNG.WidthTile]);
-            if((TCODConsole::root->getChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i)=='.' || TCODConsole::root->getChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i)==' ')
-              )
-                TCODConsole::root->putChar(TopLeft.X+HorLeftover+j,TopLeft.Y+VerLeftover+i,PNG.ASCII_Image[j+i*PNG.WidthTile]);
-        }
-    }
-    TCODConsole::root->setDefaultForeground(TCODColor::white);
-}
-void level::CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con) {
-    /* FONTSIZE.Y*subsection_scale*height_tile=height ; FONTSIZE.X*subsection_scale*width_tile=width */
-    if((double)PNG->Height/PNG->Width >= (double)(Con.Size.Y)/Con.Size.X) {
-        /* then height_tile is fixed = ConsoleHeight-2 (to fit in console screen) */
-        PNG->HeightTile = Con.CharAmount.Y;
-        subsec->scale=(double)PNG->Height/(PNG->HeightTile*Con.FontSize.Y);
-        PNG->WidthTile=PNG->Width/(Con.FontSize.X*subsec->scale);
-    } else {
-        /* then width_tile is fixed = ConsoleHeight-1 (to fit in console screen) */
-        PNG->WidthTile = Con.CharAmount.X;
-        subsec->scale=(double)PNG->Width/(PNG->WidthTile*Con.FontSize.X);
-        PNG->HeightTile=PNG->Height/(Con.FontSize.Y*subsec->scale);
-    }
-
-    subsec->height=Con.FontSize.Y*subsec->scale; /* Calculating SUBSECTION in pixels */
-    subsec->width =Con.FontSize.X*subsec->scale; /* Calculating SUBSECTION in pixels */
-
-    /*        height_tile = height/14; unsigned subsection_height=14;
-     *        width_tile = width/8;    unsigned subsection_height=8; */
 }

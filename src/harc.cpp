@@ -1,16 +1,19 @@
-#include "main.h"
+#include <string>
+#include "harc.h"
+#include "level.h"
 
-const int menu_height=10; //Menü magassága
-const int menu_ch_sel_width=20; //Kijelölés szélessége
-const int menu_harc_size=3; //Size of menu_choices
-std::string harc_menu_choices[]= {"Attack","Use item","Rest"};
-const int menu_attack_size=5;
-std::string attack_choices[]= {"from left","from above","from right","from below","frontal attack"};
-const int menu_defense_size=5;
-std::string defense_choices[]= {"block from left","block from above","block from right","block from below","block frontal attack"};
-const int menu_useitem_size=3;
-std::string useitem_choices[]= {"???","???","???"};
-const int con_log_StartingPos=4*menu_ch_sel_width;
+extern const int menu_height,menu_ch_sel_width,menu_harc_size;
+extern std::string harc_menu_choices[];
+extern const int menu_attack_size;
+extern std::string attack_choices[];
+extern const int menu_defense_size;
+extern std::string defense_choices[];
+extern const int menu_useitem_size;
+extern std::string useitem_choices[];
+extern const int con_log_StartingPos;
+
+extern int ConsoleWidth,ConsoleHeight;
+extern player p1;
 
 void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
     p1.subStamina(5);
@@ -135,7 +138,7 @@ void HarcGUI(enemy e,ROUND most) {
 
     TCODConsole::root->clear();
 
-    level::WriteOutPic(e.PNG, enemy::TopLeft, enemy::BoxSize);
+    WriteOutPic(&e.PNG, enemy::TopLeft, enemy::BoxSize);
 
     int selIndx=0;
     int sub_selIndx=0;

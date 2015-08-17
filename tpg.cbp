@@ -32,30 +32,31 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="libtcod/include" />
-			<Add directory="includes" />
+			<Add directory="lodepng" />
 		</Compiler>
-		<ResourceCompiler>
-			<Add directory="bin" />
-		</ResourceCompiler>
 		<Linker>
 			<Add library="libtcod\lib\libtcod-mingw.a" />
-			<Add library="includes\libImage2ASCIIcolors.a" />
-			<Add directory="bin" />
+			<Add library="lodepng\liblodepng.a" />
 		</Linker>
+		<Unit filename="src/Image2ASCIIcolors.cpp" />
+		<Unit filename="src/Image2ASCIIcolors.h" />
 		<Unit filename="src/SelectionMenu.cpp" />
 		<Unit filename="src/SelectionMenu.h" />
 		<Unit filename="src/character.cpp" />
 		<Unit filename="src/character.h" />
 		<Unit filename="src/effects.cpp" />
 		<Unit filename="src/effects.h" />
+		<Unit filename="src/globals.cpp" />
 		<Unit filename="src/harc.cpp" />
 		<Unit filename="src/harc.h" />
 		<Unit filename="src/itemek.cpp" />
 		<Unit filename="src/itemek.h" />
 		<Unit filename="src/level.cpp" />
 		<Unit filename="src/level.h" />
+		<Unit filename="src/logging.cpp" />
+		<Unit filename="src/logging.h" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/main.h" />
+		<Unit filename="src/settings.h" />
 		<Unit filename="src/szoba.cpp" />
 		<Unit filename="src/szoba.h" />
 		<Extensions>

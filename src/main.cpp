@@ -2,18 +2,28 @@
  * @file main.cpp
  * @brief main függvény
  */
-#include "main.h"
+
+#include <fstream>
+#include <time.h>
+#include "Image2ASCIIcolors.h"
+#include "character.h"
+#include "level.h"
+#include "settings.h"
+#include "logging.h"
 
 using namespace std;
-int ConsoleWidth,ConsoleHeight;
-int FontX=8;
-int FontY=8;
-SIZES UpperBoxSiz, UpperBoxPos;
-SIZES SideBoxSiz,  SideBoxPosLeft, SideBoxPosRight;
-SIZES BottomBoxSiz,BottomBoxPos;
-SIZES MiddleBoxSiz,MiddleBoxPos;
-player p1;
-std::vector<enemy> enemies;
+
+extern const int FPS;
+extern int ConsoleWidth,ConsoleHeight;
+extern const int FontX,FontY;
+extern SIZES UpperBoxSiz, UpperBoxPos;
+extern SIZES SideBoxSiz,  SideBoxPosLeft, SideBoxPosRight;
+extern SIZES BottomBoxSiz,BottomBoxPos;
+extern SIZES MiddleBoxSiz,MiddleBoxPos;
+extern player p1;
+extern std::vector<enemy> enemies;
+
+void BeolvasEnemyk();
 
 //4:3  - 1024x768
 //16:9 - 1280x720
@@ -45,17 +55,20 @@ int main() {
 #ifndef DEBUG
     TCODConsole::setFullscreen(true);
 #endif // DEBUG
-    BeolvasEnemyk();
-    level asd(17,17,8,8,80); /* A pálya inicializálása */
-    chest Chest; /* Chest inicializálás */
-    asd.engine(); /* A fõ loop */
+    try {
+        BeolvasEnemyk();
+        level asd(17,17,8,8,80); /* A pálya inicializálása */
+        chest Chest; /* Chest inicializálás */
+        asd.engine(); /* A fõ loop */
+    } catch(const exception& ex) { FatalError(ex.what()); }
+    Exitting();
     return 0;
 }
 
 void BeolvasEnemyk() {
     char c;
-    ADIR defdir;
-    ADIR atcdir;
+    ADIR defdir=ANONE;
+    ADIR atcdir=ANONE;
     string dir="";
     ifstream in("dolgok/enemy.txt");
     while(in.good()) {

@@ -452,7 +452,7 @@
 	"settings.h"
 	"logging.h"
 
-1439846838 source:h:\work\c++\tpg\src\main.cpp
+1439850579 source:h:\work\c++\tpg\src\main.cpp
 	<fstream>
 	<time.h>
 	"Image2ASCIIcolors.h"
@@ -478,7 +478,7 @@
 
 1439831925 h:\work\c++\tpg\src\settings.h
 
-1439833303 source:h:\work\c++\tpg\src\globals.cpp
+1439909879 source:h:\work\c++\tpg\src\globals.cpp
 	"Image2ASCIIcolors.h"
 	"character.h"
 
@@ -499,7 +499,7 @@
 
 1439846980 h:\work\c++\tpg\src\logging.h
 
-1439847070 source:h:\work\c++\tpg\src\logging.cpp
+1439908964 source:h:\work\c++\tpg\src\logging.cpp
 	<string>
 	<fstream>
 	<time.h>

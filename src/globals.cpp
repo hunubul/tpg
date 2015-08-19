@@ -3,6 +3,7 @@
 
 /* Globals */
 extern const std::string IMAGE_PATH="images/";
+extern const std::string DOLGOK_PATH="dolgok/";
 extern const int FPS=60;
 extern const std::string ERR_LOG="error.log";
 

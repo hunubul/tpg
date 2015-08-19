@@ -21,6 +21,6 @@ doxygen:
 
 clean:
 	@rm -f -r doxygen/html obj/Debug obj/Release bin/Debug bin/Release
-	@rm -f obj/*.o bin/main.exe error.log
+	@rm -f obj/*.o bin/main.exe bin/error.log
 
 .PHONY: doxygen clean

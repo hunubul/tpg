@@ -71,6 +71,7 @@ void BeolvasEnemyk() {
     ADIR atcdir=ANONE;
     string dir="";
     ifstream in("dolgok/enemy.txt");
+    if(in.fail()) FatalError("dolgok/enemy.txt was not found!");
     while(in.good()) {
         string name="";
         getline(in,name,',');

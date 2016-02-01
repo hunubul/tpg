@@ -10,6 +10,7 @@
 #include "level.h"
 #include "settings.h"
 #include "logging.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 using namespace std;
 
@@ -23,12 +24,15 @@ extern SIZES MiddleBoxSiz,MiddleBoxPos;
 extern player p1;
 extern std::vector<enemy> enemies;
 
+boost::posix_time::ptime StartTimeStartup;
+
 void BeolvasEnemyk();
 
 //4:3  - 1024x768
 //16:9 - 1280x720
 
 int main() {
+    StartTimeStartup=boost::posix_time::microsec_clock::local_time();
     srand(time(NULL));
     TCODSystem::getCurrentResolution(&ConsoleWidth,&ConsoleHeight);
 //    ConsoleWidth = 1024;

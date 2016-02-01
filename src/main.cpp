@@ -57,7 +57,7 @@ int main() {
 #endif // DEBUG
     try {
         BeolvasEnemyk();
-        level asd(17,17,8,8,80); /* A pálya inicializálása */
+        level asd(17,17,8,16,80); /* A pálya inicializálása */
         chest Chest; /* Chest inicializálás */
         asd.engine(); /* A fõ loop */
     } catch(const exception& ex) { FatalError(ex.what()); }

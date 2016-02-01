@@ -35,6 +35,7 @@
 			<Add option="-fexceptions" />
 			<Add directory="libtcod/include" />
 			<Add directory="lodepng" />
+			<Add directory="." />
 		</Compiler>
 		<Linker>
 			<Add library="libtcod\lib\libtcod-mingw.a" />

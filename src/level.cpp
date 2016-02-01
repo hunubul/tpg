@@ -3,6 +3,7 @@
 #include "level.h"
 #include "settings.h"
 #include "logging.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 extern const int FPS;
 extern int ConsoleWidth,ConsoleHeight;
@@ -12,6 +13,9 @@ extern SIZES UpperBoxSiz, UpperBoxPos;
 extern SIZES SideBoxSiz,  SideBoxPosLeft, SideBoxPosRight;
 extern SIZES BottomBoxSiz,BottomBoxPos;
 extern SIZES MiddleBoxSiz,MiddleBoxPos;
+
+boost::posix_time::time_duration GenTimeSzobaFeltoltes;
+extern boost::posix_time::ptime StartTimeStartup;
 
 using namespace std;
 
@@ -80,6 +84,7 @@ level::level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter) : MidX(MidX),
             counter++;
         }
     }
+    boost::posix_time::ptime timetmp=boost::posix_time::microsec_clock::local_time();
     int direction; //Flagek használatával, a szoba kostruktorában meghatározhatjuk hogy melyik falra kell ajtó
     for (int i=0; i<MaxRoomX; i++) { //tényleges, követhetõ térkép csinálása
         vector<szoba> temp;
@@ -94,6 +99,7 @@ level::level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter) : MidX(MidX),
         }
         terkep.push_back(temp);
     }
+    GenTimeSzobaFeltoltes = boost::posix_time::microsec_clock::local_time() - timetmp;
 }
 /**
  * @brief a fõ loop, nyíl input kezelés
@@ -179,9 +185,13 @@ void level::merre(IRANY honnan) {
  */
 void level::writeout() {
     TCODConsole::root->clear();
+    boost::posix_time::ptime timetmp=boost::posix_time::microsec_clock::local_time();
     RoomWriteout();
     WriteOutBoxes();
     WriteOutMiniMap();
+#ifdef DEBUG
+    WriteOutGenTime(timetmp);
+#endif // DEBUG
     //terkep[posX][posY].writeout((IRANY)most);
     TCODConsole::root->flush();
 }
@@ -607,4 +617,15 @@ void level::ClearBox(SIZES TopLeft,SIZES BoxSize) {
     }
     TCODConsole::root->setDefaultForeground(TCODColor::white);
 #endif // DEBUG
+}
+
+void level::WriteOutGenTime(boost::posix_time::ptime starttimeimg) {
+    boost::posix_time::time_duration dur;
+    dur = boost::posix_time::microsec_clock::local_time() - starttimeimg;
+    long GenTimeImg=dur.total_milliseconds();
+    dur = boost::posix_time::microsec_clock::local_time() - StartTimeStartup;
+    long GenTimeStartup=dur.total_milliseconds();
+    TCODConsole::root->print(MaxRoomX+6,0,"Szoba felt gen time: %ldms",GenTimeSzobaFeltoltes.total_milliseconds());
+    TCODConsole::root->print(MaxRoomX+6,1,"Room       gen time: %ldms",GenTimeImg);
+    TCODConsole::root->print(MaxRoomX+6,2,"Startup    gen time: %ldms",GenTimeStartup);
 }

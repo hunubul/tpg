@@ -1,6 +1,6 @@
 /*
-* libtcod 1.6.0
-* Copyright (c) 2008,2009,2010,2012,2013 Jice & Mingos
+* libtcod 1.5.1
+* Copyright (c) 2008,2009,2010,2012 Jice & Mingos
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -94,17 +94,13 @@ typedef enum {
 	TCODK_NUMLOCK,
 	TCODK_SCROLLLOCK,
 	TCODK_SPACE,
-	TCODK_CHAR,
-	TCODK_TEXT
+	TCODK_CHAR
 } TCOD_keycode_t;
 
-#define TCOD_KEY_TEXT_SIZE 32
-
-/* key data : special code or character or text */
+/* key data : special code or character */
 typedef struct {
 	TCOD_keycode_t vk; /*  key code */
 	char c; /* character if vk == TCODK_CHAR else 0 */
-	char text[TCOD_KEY_TEXT_SIZE]; /* text if vk == TCODK_TEXT else text[0] == '\0' */
 	bool pressed ; /* does this correspond to a key press or key release event ? */
 	bool lalt ;
 	bool lctrl ;

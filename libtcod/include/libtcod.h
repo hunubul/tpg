@@ -1,6 +1,6 @@
 /*
-* libtcod 1.6.0
-* Copyright (c) 2008,2009,2010,2012,2013 Jice & Mingos
+* libtcod 1.5.1
+* Copyright (c) 2008,2009,2010,2012 Jice & Mingos
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -25,8 +25,8 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _LIBTCOD_H
-#define _LIBTCOD_H
+#ifndef _TCODLIB_H
+#define _TCODLIB_H
 
 /* uncomment to disable unicode support */
 /*#define NO_UNICODE */
@@ -50,9 +50,7 @@
    TCOD_WIN64 : 64 bits Windows
    TCOD_WIN32 : 32 bits Windows
    TCOD_LINUX64 : 64 bits Linux
-   TCOD_LINUX32 : 32 bits Linux
-   TCOD_FREEBSD64 : 64 bits FreeBSD
-   TCOD_FREEBSD32 : 32 bits FreeBSD */
+   TCOD_LINUX32 : 32 bits Linux */
 
 #if defined( _MSC_VER )
 #  define TCOD_VISUAL_STUDIO
@@ -67,15 +65,6 @@
 #  define TCOD_WINDOWS
 #  define TCOD_MINGW32
 #  define TCOD_WIN32
-#elif defined( __MINGW64__ )
-#  define TCOD_WINDOWS
-#  define TCOD_MINGW32
-#  ifdef _WIN64
-#    define TCOD_WIN64
-#    define TCOD_64BITS
-#  else
-#    define TCOD_WIN32
-#  endif   
 #elif defined( __HAIKU__ )
 #  define TCOD_HAIKU
 #  define TCOD_GCC
@@ -119,26 +108,19 @@
 #endif
 
 /* base types */
-#ifndef TCOD_NOBASETYPES
 typedef unsigned char uint8;
 typedef char int8;
 typedef unsigned short uint16;
 typedef short int16;
 typedef unsigned int uint32;
 typedef int int32;
-#endif
 /* int with the same size as a pointer (32 or 64 depending on OS) */
-#ifdef TCOD_WIN64
-typedef long long intptr;
-typedef unsigned long long uintptr;
-#else
 typedef long intptr;
 typedef unsigned long uintptr;
-#endif
 
-#define TCOD_HEXVERSION 0x010600
-#define TCOD_STRVERSION "1.6.0"
-#define TCOD_TECHVERSION 0x01060000
+#define TCOD_HEXVERSION 0x010501
+#define TCOD_STRVERSION "1.5.1"
+#define TCOD_TECHVERSION 0x01050103
 
 /* bool support for C */
 #ifndef __cplusplus
@@ -189,7 +171,7 @@ char *strcasestr (const char *haystack, const char *needle);
 #define MIN(a,b) ((a)>(b)?(b):(a))
 #define ABS(a) ((a)<0?-(a):(a))
 #define CLAMP(a, b, x)		((x) < (a) ? (a) : ((x) > (b) ? (b) : (x)))
-#define LERP(a, b, x) ( (a) + (x) * ((b) - (a)) )
+#define LERP(a, b, x) ( a + x * (b - a) )
 
 #include "list.h"
 #include "color.h"

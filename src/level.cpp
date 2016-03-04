@@ -40,7 +40,7 @@ level::level(int Max_X, int Max_Y, int MidX, int MidY, int MaxCounter) : MidX(Mi
 	}
 	counter = 2;
 	Map[posX][posY] = 1; //Középső szoba lesz
-	Map[posX][posY + 1] = 1; //Középső szoba lesz
+	//Map[posX][posY + 1] = 1; //Középső szoba lesz
 	//Ez úgy mûködik, hogy az eddig átjárható szobákból próbál új szobákat létrehozni
 	while (counter != MaxCounter) {
 		allow = false;

@@ -3,7 +3,6 @@
 
 #include "Image2ASCIIcolors.h"
 #include "szoba.h"
-#include "boost/date_time/posix_time/posix_time.hpp"
 
 class level {
 private:
@@ -22,7 +21,7 @@ public:
     void engine();
     void writeout();
     void WriteOutMiniMap();
-    void WriteOutGenTime(boost::posix_time::ptime starttime);
+    //void WriteOutGenTime(boost::posix_time::ptime starttime);
 
     void RoomWriteout();
     void WriteOutBoxes();

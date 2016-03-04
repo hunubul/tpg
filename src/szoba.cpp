@@ -32,10 +32,10 @@ szoba::szoba(DOOR_DIRECTION direction) {
             asd=1+rand() % 4;   //hány tárgy legyen max választva, sorsolás
             while((int)west.size()!=asd) {
                 int bsd=rand() % westv.size();
-                char Name[westv[bsd].size()];
+                vector<char> Name( westv[bsd].size() );
                 sscanf(westv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
                 if(rand()%rarity<MAX_RARITY) {
-                    string temp = Name;
+                    string temp(Name.begin(),Name.end());
                     west.push_back(temp);
                     westv.erase(westv.begin()+bsd);
                 }
@@ -49,9 +49,9 @@ szoba::szoba(DOOR_DIRECTION direction) {
             asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
                 int bsd=rand() % northv.size();
-                char Name[northv[bsd].size()];
+				vector<char> Name( northv[bsd].size() );
                 sscanf(northv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
-                string temp = Name;
+                string temp(Name.begin(),Name.end());
                 north.push_back(temp);
                 northv.erase(northv.begin()+bsd);
             }
@@ -63,10 +63,10 @@ szoba::szoba(DOOR_DIRECTION direction) {
             vector<string> eastv=faltolt();
             asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
-                int bsd=rand() % eastv.size();
-                char Name[eastv[bsd].size()];
+                const int bsd=rand() % eastv.size();
+				vector<char> Name( eastv[bsd].size() );
                 sscanf(eastv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
-                string temp = Name;
+				string temp(Name.begin(), Name.end());
                 east.push_back(temp);
                 eastv.erase(eastv.begin()+bsd);
             }
@@ -78,10 +78,10 @@ szoba::szoba(DOOR_DIRECTION direction) {
             vector<string> southv=faltolt();
             asd=1+rand() % 4;   //hány tárgy legyen max választva
             for (int i=0; i<asd; i++) { //sorsolás
-                int bsd=rand() % southv.size();
-                char Name[southv[bsd].size()];
+                const int bsd=rand() % southv.size();
+				vector<char> Name( southv[bsd].size() );
                 sscanf(southv[bsd].c_str(),"%[^',']s %d",Name,&rarity);
-                string temp = Name;
+				string temp(Name.begin(), Name.end());
                 south.push_back(temp);
                 southv.erase(southv.begin()+bsd);
             }

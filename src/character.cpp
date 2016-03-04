@@ -44,8 +44,8 @@ player::player() : character(100,100,4,4) {
 
 enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     character(100,100,defense,offense),def(def),atc(atc),name(name) {
-    enemy::BoxSize=(SIZES){ConsoleWidth*911/1280,ConsoleHeight*666/720};
-    enemy::TopLeft=(SIZES){ConsoleWidth-enemy::BoxSize.X,0};
+    enemy::BoxSize={ConsoleWidth*911/1280,ConsoleHeight*666/720};
+    enemy::TopLeft={ConsoleWidth-enemy::BoxSize.X,0};
     CONSOLEINFO Con;
     SUBSECTION subsec;
     CHAR_SET CharSet;

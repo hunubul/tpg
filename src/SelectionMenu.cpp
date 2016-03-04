@@ -1,3 +1,4 @@
+#include <iostream>
 #include "SelectionMenu.h"
 
 using namespace std;
@@ -9,10 +10,10 @@ int SelectionMenu::SelectionMenuOut(vector<string> options)
     bool returnpressed = false;
     for (short i=0; i<N; i++)
     {
-        if (i==j)
-            cout << "->" << options[i] << endl;
-        else
-            cout << "  " << options[i] << endl;
+        //if (i==j)
+            //cout << "->" << options[i] << endl;
+        //else
+            //cout << "  " << options[i] << endl;
     }
     while (!returnpressed)
     {

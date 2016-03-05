@@ -20,6 +20,7 @@ x86/
 build/
 bld/
 [Bb]in/
+[Bb]in/images
 [Oo]bj/
 
 # Visual Studio 2015 cache/options directory

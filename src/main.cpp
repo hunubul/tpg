@@ -31,7 +31,7 @@ void BeolvasEnemyk();
 int main() {
 	//StartTimeStartup=boost::posix_time::microsec_clock::local_time();
 	srand(time(NULL));
-	//TCODSystem::getCurrentResolution(&ConsoleWidth, &ConsoleHeight);
+	TCODSystem::getCurrentResolution(&ConsoleWidth, &ConsoleHeight);
 	ConsoleWidth = 1024;
 	ConsoleHeight = 768;
 	ConsoleWidth /= FontX;

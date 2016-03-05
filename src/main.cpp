@@ -28,12 +28,11 @@ void BeolvasEnemyk();
 //4:3  - 1024x768
 //16:9 - 1280x720
 
-int main() {
-	//StartTimeStartup=boost::posix_time::microsec_clock::local_time();
+int main(int argc, char *argv[]) {
 	srand(time(NULL));
-	TCODSystem::getCurrentResolution(&ConsoleWidth, &ConsoleHeight);
-	ConsoleWidth = 1024;
-	ConsoleHeight = 768;
+	TCODSystem::getCurrentResolution(&ConsoleWidth,&ConsoleHeight);
+	// ConsoleWidth = 1024;
+	// ConsoleHeight = 768;
 	ConsoleWidth /= FontX;
 	ConsoleHeight /= FontY;
 #ifdef DEBUG

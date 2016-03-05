@@ -10,7 +10,7 @@
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="lodepng">
-      <UniqueIdentifier>{8971bfbc-936c-4ab4-872f-647bf3bf4cb9}</UniqueIdentifier>
+      <UniqueIdentifier>{e43bb6c8-466b-477e-b9ce-37668566cdbb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,11 +79,11 @@
     <ClInclude Include="src\szoba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\lodepng\lodepng.h">
-      <Filter>lodepng</Filter>
-    </ClInclude>
     <ClInclude Include="src\logging.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lodepng\lodepng.h">
+      <Filter>lodepng</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

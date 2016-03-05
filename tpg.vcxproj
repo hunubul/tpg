@@ -180,56 +180,6 @@
     <ClInclude Include="src\settings.h" />
     <ClInclude Include="src\szoba.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\Resources\images\BACK DOOR.png" />
-    <Image Include="..\..\Resources\images\carpet01.png" />
-    <Image Include="..\..\Resources\images\common_chest01.png" />
-    <Image Include="..\..\Resources\images\common_chest02.png" />
-    <Image Include="..\..\Resources\images\creepy_statue01.png" />
-    <Image Include="..\..\Resources\images\creepy_statue02.png" />
-    <Image Include="..\..\Resources\images\deposit_box01.png" />
-    <Image Include="..\..\Resources\images\Editing\Perspective Room.png" />
-    <Image Include="..\..\Resources\images\empty_armor.png" />
-    <Image Include="..\..\Resources\images\flag01.png" />
-    <Image Include="..\..\Resources\images\FRONT DOOR.png" />
-    <Image Include="..\..\Resources\images\golden_chest01.png" />
-    <Image Include="..\..\Resources\images\LEFT DOOR.png" />
-    <Image Include="..\..\Resources\images\locked_chest01.png" />
-    <Image Include="..\..\Resources\images\mirror01.png" />
-    <Image Include="..\..\Resources\images\obvious_trap01.png" />
-    <Image Include="..\..\Resources\images\obvious_walltrap02.png" />
-    <Image Include="..\..\Resources\images\painting01.png" />
-    <Image Include="..\..\Resources\images\painting02.png" />
-    <Image Include="..\..\Resources\images\painting03.png" />
-    <Image Include="..\..\Resources\images\painting04.png" />
-    <Image Include="..\..\Resources\images\painting05.png" />
-    <Image Include="..\..\Resources\images\painting06.png" />
-    <Image Include="..\..\Resources\images\painting07.png" />
-    <Image Include="..\..\Resources\images\painting08.png" />
-    <Image Include="..\..\Resources\images\painting09.png" />
-    <Image Include="..\..\Resources\images\painting10.png" />
-    <Image Include="..\..\Resources\images\painting11.png" />
-    <Image Include="..\..\Resources\images\painting12.png" />
-    <Image Include="..\..\Resources\images\painting13.png" />
-    <Image Include="..\..\Resources\images\RIGHT DOOR.png" />
-    <Image Include="..\..\Resources\images\Room.png" />
-    <Image Include="..\..\Resources\images\skeleton_on_chains01.png" />
-    <Image Include="..\..\Resources\images\skulls01.png" />
-    <Image Include="..\..\Resources\images\switch01.png" />
-    <Image Include="..\..\Resources\images\switch02.png" />
-    <Image Include="..\..\Resources\images\switch03.png" />
-    <Image Include="..\..\Resources\images\torch01.png" />
-    <Image Include="..\..\Resources\images\torch02.png" />
-    <Image Include="..\..\Resources\images\trap door - Copy.png" />
-    <Image Include="..\..\Resources\images\trap door.png" />
-    <Image Include="..\..\Resources\images\trap01.png" />
-    <Image Include="..\..\Resources\images\trap02.png" />
-    <Image Include="..\..\Resources\images\unknown_object01.png" />
-    <Image Include="..\..\Resources\images\vomit01.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\Resources\images\Editing\Meretek.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

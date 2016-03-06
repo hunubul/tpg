@@ -1,20 +1,9 @@
 #include <string>
 #include "harc.h"
 #include "level.h"
+#include "globals.h"
 
-extern const int menu_height,menu_ch_sel_width,menu_harc_size;
-extern std::string harc_menu_choices[];
-extern const int menu_attack_size;
-extern std::string attack_choices[];
-extern const int menu_defense_size;
-extern std::string defense_choices[];
-extern const int menu_useitem_size;
-extern std::string useitem_choices[];
-extern const int con_log_StartingPos;
-
-extern int ConsoleWidth,ConsoleHeight;
-extern player p1;
-
+using namespace globals;
 using namespace std;
 
 /*void BleedTrough(enemy &e, ADIR defdir, ADIR attdir, std::vector<CONLOG> &con_log) { //!!!!!!MÉG NINCS MEGHÍVVA
@@ -179,43 +168,43 @@ void HarcGUI(enemy e,ROUND most) {
     TCOD_key_t input;
     do {
         PrintPlayerStats();
-        if(most==PLAYER_KOR) {
-            for(int i=0; i<menu_harc_size; i++) TCODConsole::root->print(0,ConsoleHeight-menu_height+i,"%s",harc_menu_choices[i].c_str());
-            MenuSelection(0,selIndx,harc_menu_choices,input,con_log);
-        }
-        if(input.vk==TCODK_UP&&selIndx-1>=0) selIndx--;
-        if(input.vk==TCODK_DOWN&&selIndx+1<=menu_harc_size-1) selIndx++;
-        if(input.vk==TCODK_ENTER) {
-            if(harc_menu_choices[selIndx]=="Attack"&&p1.getStamina()>=10)  {
-                for(int i=0; i<menu_attack_size; i++) TCODConsole::root->print(menu_ch_sel_width,ConsoleHeight-menu_height+i,"%s",attack_choices[i].c_str());
-                do {
-                    MenuSelection(menu_ch_sel_width,sub_selIndx,attack_choices,input,con_log);
-                    if(input.vk==TCODK_UP&&sub_selIndx-1>=0) sub_selIndx--;
-                    if(input.vk==TCODK_DOWN&&sub_selIndx+1<=menu_attack_size-1) sub_selIndx++;
-                } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
-                PlayerAttack(e,sub_selIndx,con_log);
-                most=ENEMY_KOR;
-                sub_selIndx=0;
-                TCODConsole::root->rect(menu_ch_sel_width,ConsoleHeight-menu_height,menu_ch_sel_width,menu_height,true);
-            } else if (harc_menu_choices[selIndx]=="Attack") con_log.push_back( {"You are exhausted, you can't attack.",TCOD_white});
-            if(harc_menu_choices[selIndx]=="Use item") {
-                for(int i=0; i<menu_useitem_size; i++) TCODConsole::root->print(menu_ch_sel_width,ConsoleHeight-menu_height+i,"%s",useitem_choices[i].c_str());
-                do {
-                    MenuSelection(menu_ch_sel_width,sub_selIndx,useitem_choices,input,con_log);
-                    if(input.vk==TCODK_UP&&sub_selIndx-1>=0) sub_selIndx--;
-                    if(input.vk==TCODK_DOWN&&sub_selIndx+1<=menu_useitem_size-1) sub_selIndx++;
-                } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
-                most=ENEMY_KOR;
-                sub_selIndx=0;
-                TCODConsole::root->rect(menu_ch_sel_width,ConsoleHeight-menu_height,menu_ch_sel_width,menu_height,true);
-            }
-            if(harc_menu_choices[selIndx]=="Rest")    {
-                p1.addStamina(50);
-                con_log.push_back( {"You gathered your strength.",TCOD_green});
-                PrintPlayerStats();
-                most=ENEMY_KOR;
-            }
-        }
+		if (most == PLAYER_KOR) {
+			for (int i = 0; i < menu_harc_size; i++) TCODConsole::root->print(0, ConsoleHeight - menu_height + i, "%s", harc_menu_choices[i].c_str());
+			MenuSelection(0, selIndx, harc_menu_choices, input, con_log);
+			if (input.vk == TCODK_UP&&selIndx - 1 >= 0) selIndx--;
+			if (input.vk == TCODK_DOWN&&selIndx + 1 <= menu_harc_size - 1) selIndx++;
+			if (input.vk == TCODK_ENTER) {
+				if (harc_menu_choices[selIndx] == "Attack"&&p1.getStamina() >= 10) {
+					for (int i = 0; i < menu_attack_size; i++) TCODConsole::root->print(menu_ch_sel_width, ConsoleHeight - menu_height + i, "%s", attack_choices[i].c_str());
+					do {
+						MenuSelection(menu_ch_sel_width, sub_selIndx, attack_choices, input, con_log);
+						if (input.vk == TCODK_UP&&sub_selIndx - 1 >= 0) sub_selIndx--;
+						if (input.vk == TCODK_DOWN&&sub_selIndx + 1 <= menu_attack_size - 1) sub_selIndx++;
+					} while (input.vk != TCODK_ENTER&&input.vk != TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
+					PlayerAttack(e, sub_selIndx, con_log);
+					most = ENEMY_KOR;
+					sub_selIndx = 0;
+					TCODConsole::root->rect(menu_ch_sel_width, ConsoleHeight - menu_height, menu_ch_sel_width, menu_height, true);
+				} else if (harc_menu_choices[selIndx] == "Attack") con_log.push_back({ "You are exhausted, you can't attack.",TCOD_white });
+				if (harc_menu_choices[selIndx] == "Use item") {
+					for (int i = 0; i < menu_useitem_size; i++) TCODConsole::root->print(menu_ch_sel_width, ConsoleHeight - menu_height + i, "%s", useitem_choices[i].c_str());
+					do {
+						MenuSelection(menu_ch_sel_width, sub_selIndx, useitem_choices, input, con_log);
+						if (input.vk == TCODK_UP&&sub_selIndx - 1 >= 0) sub_selIndx--;
+						if (input.vk == TCODK_DOWN&&sub_selIndx + 1 <= menu_useitem_size - 1) sub_selIndx++;
+					} while (input.vk != TCODK_ENTER&&input.vk != TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
+					most = ENEMY_KOR;
+					sub_selIndx = 0;
+					TCODConsole::root->rect(menu_ch_sel_width, ConsoleHeight - menu_height, menu_ch_sel_width, menu_height, true);
+				}
+				if (harc_menu_choices[selIndx] == "Rest") {
+					p1.addStamina(50);
+					con_log.push_back({ "You gathered your strength.",TCOD_green });
+					PrintPlayerStats();
+					most = ENEMY_KOR;
+				}
+			}
+		}
         if(most==ENEMY_KOR) {
         switch(e.getHP()/10) {
         case 0:

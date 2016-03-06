@@ -5,7 +5,7 @@ using namespace std;
 
 int SelectionMenu::SelectionMenuOut(vector<string> options)
 {
-    short N=options.size();
+    int N=options.size();
     short j = 0;
     bool returnpressed = false;
     for (short i=0; i<N; i++)

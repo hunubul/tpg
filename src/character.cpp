@@ -4,10 +4,9 @@
 #include "character.h"
 #include "level.h"
 #include "logging.h"
+#include "globals.h"
 
-extern int ConsoleWidth,ConsoleHeight;
-extern const int FontX,FontY;
-extern const std::string IMAGE_PATH;
+using namespace globals;
 
 SIZES enemy::BoxSize;
 SIZES enemy::TopLeft;
@@ -17,7 +16,7 @@ character::character(int maxhp,int maxstam,int defense,int offense) :
 
 bool character::damage(int DMG) {
     double dmgMult=(rand()%80+81)/100.0;
-    hp-=(DMG/defense)*dmgMult;
+    hp-=(int)round((DMG/defense)*dmgMult);
     if(hp<0) hp=0;
     if(dmgMult>1.49999) return true;
     return false;

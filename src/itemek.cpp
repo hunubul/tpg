@@ -36,7 +36,7 @@ vector<ITEMS> chest::beolvas() {
         string temp="";
         chStream>>ws; //Összes WhiteSpace karaktert elvet az elsõ nem WS karakterig
         getline(chStream,temp,','); //mindenhova getline kell valszleg
-        while(temp[temp.length()-1]=='\t') /*Remove tabs*/ temp.erase(temp.length()-1);
+        while(temp.length() >= 1&&temp[temp.length()-1]=='\t') /*Remove tabs*/ temp.erase(temp.length()-1);
         pos++;
         if(pos == 1) {
             temp_items.name = temp;

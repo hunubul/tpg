@@ -35,6 +35,7 @@ public:
 
     //void print_f (std::ostream &out);
     void writeout(IRANY irany); /**< Vektor kiírató függvény cout-ra, [in] irany */
+	std::vector<std::string> split(const std::string &s, char delim); /**< Split string by tokens */
 };
 
 #endif // SZOBA_H_INCLUDED

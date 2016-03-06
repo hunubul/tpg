@@ -3,8 +3,9 @@
 #include <time.h>
 #include "libtcod.hpp"
 #include "logging.h"
+#include "globals.h"
 
-extern const std::string ERR_LOG;
+using namespace globals;
 
 // Get current date/time, format is YYYY-MM-DD.HH:mm:ss
 const std::string getCurrentDateTime() {

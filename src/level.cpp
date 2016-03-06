@@ -3,16 +3,9 @@
 #include "level.h"
 #include "settings.h"
 #include "logging.h"
+#include "globals.h"
 
-extern const int FPS;
-extern int ConsoleWidth, ConsoleHeight;
-extern const int FontX, FontY;
-extern const std::string IMAGE_PATH;
-extern SIZES UpperBoxSiz, UpperBoxPos;
-extern SIZES SideBoxSiz, SideBoxPosLeft, SideBoxPosRight;
-extern SIZES BottomBoxSiz, BottomBoxPos;
-extern SIZES MiddleBoxSiz, MiddleBoxPos;
-
+using namespace globals;
 using namespace std;
 
 /**
@@ -252,8 +245,8 @@ void level::RoomWriteout() {
 	IMAGE PNG;
 	SUBSECTION subsec;
 	CHAR_SET CharSet;
-	SIZES TopLeft = { 0,0 };
-	SIZES BoxSize = { ConsoleWidth,ConsoleHeight };
+	SIZES TopLeft = SIZES{ 0,0 };
+	SIZES BoxSize = SIZES{ ConsoleWidth,ConsoleHeight };
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
 	Con.FontSize.Y = FontY;
@@ -288,23 +281,23 @@ void level::WriteOutBoxes() {
 	szoba aktSzoba = terkep[posX][posY];
 	//*** Ceiling ***
 	if (aktSzoba.c.size() == 0) {
-		TopLeft = { UpperBoxPos.X, UpperBoxPos.Y };
-		BoxSize = { UpperBoxSiz.X, UpperBoxSiz.Y };
+		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
+		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
 		ClearBox(TopLeft, BoxSize);
 	}
 	else if (aktSzoba.c.size() == 1) {
-		TopLeft = { UpperBoxPos.X, UpperBoxPos.Y };
-		BoxSize = { UpperBoxSiz.X, UpperBoxSiz.Y };
+		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
+		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
 		Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
 	}
 	else if (aktSzoba.c.size() == 2) {
 		//Elso dolog
-		TopLeft = { UpperBoxPos.X  , UpperBoxPos.Y };
-		BoxSize = { UpperBoxSiz.X / 2, UpperBoxSiz.Y };
+		TopLeft = SIZES{ UpperBoxPos.X  , UpperBoxPos.Y };
+		BoxSize = SIZES{ UpperBoxSiz.X / 2, UpperBoxSiz.Y };
 		Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
 		//Masodik dolog
-		TopLeft = { UpperBoxPos.X + UpperBoxSiz.X / 2,UpperBoxPos.Y };
-		BoxSize = { UpperBoxSiz.X / 2,UpperBoxSiz.Y };
+		TopLeft = SIZES{ UpperBoxPos.X + UpperBoxSiz.X / 2,UpperBoxPos.Y };
+		BoxSize = SIZES{ UpperBoxSiz.X / 2,UpperBoxSiz.Y };
 		Pic2ASCII(aktSzoba.c[1], TopLeft, BoxSize);
 	}
 	//*** Middle ***
@@ -348,57 +341,57 @@ void level::WriteOutBoxes() {
 	}
 	//*** Bottom ***
 	if (aktSzoba.f.size() == 0) {
-		TopLeft = { BottomBoxPos.X,BottomBoxPos.Y };
-		BoxSize = { BottomBoxSiz.X,BottomBoxSiz.Y };
+		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
+		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
 		ClearBox(TopLeft, BoxSize);
 	}
 	else if (aktSzoba.f.size() == 1) {
-		TopLeft = { BottomBoxPos.X,BottomBoxPos.Y };
-		BoxSize = { BottomBoxSiz.X,BottomBoxSiz.Y };
+		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
+		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
 		Pic2ASCII(aktSzoba.f[0], TopLeft, BoxSize);
 	}
 	else if (aktSzoba.f.size() == 2) {
 		//Elso dolog
-		TopLeft = { BottomBoxPos.X, BottomBoxPos.Y };
-		BoxSize = { BottomBoxSiz.X / 2, BottomBoxSiz.Y };
+		TopLeft = SIZES{ BottomBoxPos.X, BottomBoxPos.Y };
+		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
 		Pic2ASCII(aktSzoba.f[0], TopLeft, BoxSize);
 		//Masodik dolog
-		TopLeft = { BottomBoxPos.X + BottomBoxSiz.X / 2, BottomBoxPos.Y };
-		BoxSize = { BottomBoxSiz.X / 2, BottomBoxSiz.Y };
+		TopLeft = SIZES{ BottomBoxPos.X + BottomBoxSiz.X / 2, BottomBoxPos.Y };
+		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
 		Pic2ASCII(aktSzoba.f[1], TopLeft, BoxSize);
 	}
 }
 void level::WriteMiddleBox(vector<string> aktFal) {
-	SIZES TopLeft = { MiddleBoxPos.X, MiddleBoxPos.Y };
-	SIZES BoxSize = { MiddleBoxSiz.X, MiddleBoxSiz.Y };
+	SIZES TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y };
+	SIZES BoxSize = SIZES{ MiddleBoxSiz.X, MiddleBoxSiz.Y };
 	switch (aktFal.size()) {
 	case 1:
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
 		break;
 	case 2:
-		BoxSize = { MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
+		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		TopLeft = { MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
+		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
 		break;
 	case 3:
-		BoxSize = { MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
+		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		BoxSize = { MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
-		TopLeft = { MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
+		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
+		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-		BoxSize = { MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
-		TopLeft = { MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
+		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
+		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
 		break;
 	case 4:
-		BoxSize = { MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
+		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		TopLeft = { MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
+		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-		TopLeft = { MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
+		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
-		TopLeft = { MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
+		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[3], TopLeft, BoxSize);
 		break;
 	default:
@@ -407,36 +400,36 @@ void level::WriteMiddleBox(vector<string> aktFal) {
 	}
 }
 void level::WriteLeftBox(vector<string> aktFal) {
-	SIZES TopLeft = { SideBoxPosLeft.X, SideBoxPosLeft.Y };
-	SIZES BoxSize = { SideBoxSiz.X, SideBoxSiz.Y };
+	SIZES TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y };
+	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
 	switch (aktFal.size()) {
 	case 1:
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
 		break;
 	case 2:
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
+		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
 		break;
 	case 3:
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y };
-		TopLeft = { SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
+		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		TopLeft = { SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
 		break;
 	case 4:
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
+		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
+		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
+		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[3], TopLeft, BoxSize);
 		break;
 	default:
@@ -445,36 +438,36 @@ void level::WriteLeftBox(vector<string> aktFal) {
 	}
 }
 void level::WriteRightBox(vector<string> aktFal) {
-	SIZES TopLeft = { SideBoxPosRight.X, SideBoxPosRight.Y };
-	SIZES BoxSize = { SideBoxSiz.X, SideBoxSiz.Y };
+	SIZES TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y };
+	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
 	switch (aktFal.size()) {
 	case 1:
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
 		break;
 	case 2:
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
+		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
 		break;
 	case 3:
 		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y };
-		TopLeft = { SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
+		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		TopLeft = { SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
 		break;
 	case 4:
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
+		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
 		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
+		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
-		TopLeft = { SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
+		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
 		Pic2ASCII(aktFal[3], TopLeft, BoxSize);
 		break;
 	default:

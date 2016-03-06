@@ -10,18 +10,18 @@
 #include "level.h"
 #include "settings.h"
 #include "logging.h"
+#include "globals.h"
 
+int    globals::ConsoleWidth, globals::ConsoleHeight;
+SIZES  globals::UpperBoxSiz,  globals::UpperBoxPos;
+SIZES  globals::SideBoxSiz,   globals::SideBoxPosLeft, globals::SideBoxPosRight;
+SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;
+SIZES  globals::MiddleBoxSiz, globals::MiddleBoxPos;
+player globals::p1;
+std::vector<enemy> globals::enemies;
+
+using namespace globals;
 using namespace std;
-
-extern const int FPS;
-extern int ConsoleWidth, ConsoleHeight;
-extern const int FontX, FontY;
-extern SIZES UpperBoxSiz, UpperBoxPos;
-extern SIZES SideBoxSiz, SideBoxPosLeft, SideBoxPosRight;
-extern SIZES BottomBoxSiz, BottomBoxPos;
-extern SIZES MiddleBoxSiz, MiddleBoxPos;
-extern player p1;
-extern std::vector<enemy> enemies;
 
 void BeolvasEnemyk();
 
@@ -29,7 +29,7 @@ void BeolvasEnemyk();
 //16:9 - 1280x720
 
 int main(int argc, char *argv[]) {
-	srand(time(NULL));
+	srand( (unsigned int)time(NULL) );
 	TCODSystem::getCurrentResolution(&ConsoleWidth,&ConsoleHeight);
 	// ConsoleWidth = 1024;
 	// ConsoleHeight = 768;
@@ -39,17 +39,17 @@ int main(int argc, char *argv[]) {
 	ConsoleHeight -= 10;
 #endif // DEBUG
 	//UpperBoxSiz  = (SIZES){ConsoleWidth*634/1280,ConsoleHeight*174/720};
-	SIZES UpperBoxSiz = { ConsoleWidth,ConsoleHeight * 174 / 720 };
+	UpperBoxSiz = SIZES{ ConsoleWidth,ConsoleHeight * 174 / 720 };
 	//SideBoxSiz   = (SIZES){ConsoleWidth*316/1280,ConsoleHeight*355/720};
-	SIZES SideBoxSiz = { ConsoleWidth * 316 / 1280,ConsoleHeight };
+	SideBoxSiz = SIZES{ ConsoleWidth * 316 / 1280,ConsoleHeight };
 	//BottomBoxSiz = (SIZES){ConsoleWidth*634/1280,ConsoleHeight*180/720};
-	SIZES BottomBoxSiz = { ConsoleWidth,ConsoleHeight * 180 / 720 };
-	SIZES MiddleBoxSiz = { ConsoleWidth * 628 / 1280,ConsoleHeight * 354 / 720 };
-	SIZES UpperBoxPos = { (ConsoleWidth - UpperBoxSiz.X) / 2,0 };
-	SIZES SideBoxPosLeft = { 0,(ConsoleHeight - SideBoxSiz.Y) / 2 };
-	SIZES SideBoxPosRight = { ConsoleWidth - SideBoxSiz.X,(ConsoleHeight - SideBoxSiz.Y) / 2 };
-	SIZES BottomBoxPos = { (ConsoleWidth - BottomBoxSiz.X) / 2,ConsoleHeight - BottomBoxSiz.Y };
-	SIZES MiddleBoxPos = { (ConsoleWidth - MiddleBoxSiz.X) / 2,(ConsoleHeight - MiddleBoxSiz.Y) / 2 };
+	BottomBoxSiz = SIZES{ ConsoleWidth,ConsoleHeight * 180 / 720 };
+	MiddleBoxSiz = SIZES{ ConsoleWidth * 628 / 1280,ConsoleHeight * 354 / 720 };
+	UpperBoxPos = SIZES{ (ConsoleWidth - UpperBoxSiz.X) / 2,0 };
+	SideBoxPosLeft = SIZES{ 0,(ConsoleHeight - SideBoxSiz.Y) / 2 };
+	SideBoxPosRight = SIZES{ ConsoleWidth - SideBoxSiz.X,(ConsoleHeight - SideBoxSiz.Y) / 2 };
+	BottomBoxPos = SIZES{ (ConsoleWidth - BottomBoxSiz.X) / 2,ConsoleHeight - BottomBoxSiz.Y };
+	MiddleBoxPos = SIZES{ (ConsoleWidth - MiddleBoxSiz.X) / 2,(ConsoleHeight - MiddleBoxSiz.Y) / 2 };
 	TCODConsole::initRoot(ConsoleWidth, ConsoleHeight, "TPG");
 	TCODSystem::setFps(FPS);
 #ifndef DEBUG

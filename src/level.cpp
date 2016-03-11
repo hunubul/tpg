@@ -101,6 +101,7 @@ void level::engine() {
 	TCOD_key_t key;
 	TCOD_mouse_t mouse;
 	TCOD_event_t event;
+	bool procNeighb=true; //Process Neighbours
 	writeout();
 	do {
 		if (prevX != posX || prevY != posY) writeout();
@@ -286,17 +287,17 @@ void level::WriteOutBoxes() {
 	else if (aktSzoba.c.size() == 1) {
 		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
 		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
-		Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
 	}
 	else if (aktSzoba.c.size() == 2) {
 		//Elso dolog
 		TopLeft = SIZES{ UpperBoxPos.X  , UpperBoxPos.Y };
 		BoxSize = SIZES{ UpperBoxSiz.X / 2, UpperBoxSiz.Y };
-		Pic2ASCII(aktSzoba.c[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
 		//Masodik dolog
 		TopLeft = SIZES{ UpperBoxPos.X + UpperBoxSiz.X / 2,UpperBoxPos.Y };
 		BoxSize = SIZES{ UpperBoxSiz.X / 2,UpperBoxSiz.Y };
-		Pic2ASCII(aktSzoba.c[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktSzoba.c[1], TopLeft, BoxSize);
 	}
 	//*** Middle ***
 	if (most == LEFT) {
@@ -346,17 +347,17 @@ void level::WriteOutBoxes() {
 	else if (aktSzoba.f.size() == 1) {
 		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
 		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
-		Pic2ASCII(aktSzoba.f[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
 	}
 	else if (aktSzoba.f.size() == 2) {
 		//Elso dolog
 		TopLeft = SIZES{ BottomBoxPos.X, BottomBoxPos.Y };
 		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
-		Pic2ASCII(aktSzoba.f[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
 		//Masodik dolog
 		TopLeft = SIZES{ BottomBoxPos.X + BottomBoxSiz.X / 2, BottomBoxPos.Y };
 		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
-		Pic2ASCII(aktSzoba.f[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktSzoba.f[1], TopLeft, BoxSize);
 	}
 }
 void level::WriteMiddleBox(vector<string> aktFal) {
@@ -364,33 +365,33 @@ void level::WriteMiddleBox(vector<string> aktFal) {
 	SIZES BoxSize = SIZES{ MiddleBoxSiz.X, MiddleBoxSiz.Y };
 	switch (aktFal.size()) {
 	case 1:
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		break;
 	case 2:
 		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		break;
 	case 3:
 		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
 		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
 		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
 		break;
 	case 4:
 		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
 		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[3], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
 		break;
 	default:
 		ClearBox(TopLeft, BoxSize);
@@ -402,33 +403,33 @@ void level::WriteLeftBox(vector<string> aktFal) {
 	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
 	switch (aktFal.size()) {
 	case 1:
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		break;
 	case 2:
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		break;
 	case 3:
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
 		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
 		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
 		break;
 	case 4:
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[3], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
 		break;
 	default:
 		ClearBox(TopLeft, BoxSize);
@@ -440,33 +441,33 @@ void level::WriteRightBox(vector<string> aktFal) {
 	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
 	switch (aktFal.size()) {
 	case 1:
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		break;
 	case 2:
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		break;
 	case 3:
 		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
 		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
 		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
 		break;
 	case 4:
 		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[0], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
-		Pic2ASCII(aktFal[1], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[2], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
 		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCII(aktFal[3], TopLeft, BoxSize);
+		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
 		break;
 	default:
 		ClearBox(TopLeft, BoxSize);

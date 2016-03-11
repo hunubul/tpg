@@ -59,6 +59,15 @@ typedef struct
     unsigned HeightTile;/**< height of raw images in characters */
 } IMAGE;
 
+/** @brief The struct for (.png .ppm) Images */
+typedef struct
+{
+	unsigned char *ASCII_Image; /**< the processed ascii image (contains characters) */
+	TCODColor *ASCII_Color;     /**< ascii image colors */
+	unsigned WidthTile; /**< width of raw images in characters */
+	unsigned HeightTile;/**< height of raw images in characters */
+} ASCII_IMAGE;
+
 /** @brief SIZES struct */
 typedef struct
 {

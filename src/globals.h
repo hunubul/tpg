@@ -43,7 +43,8 @@ namespace globals {
 	/* Global functions */
 	std::vector<std::string> split(const std::string &s, char delim); /**< Split string by tokens */
 	void ClearBox(SIZES TopLeft, SIZES BoxSize);
-	void Pic2ASCII(std::string PicName, SIZES TopLeft, SIZES BoxSize);
+	void Pic2ASCIIandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize);
+	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
 }
 
 #endif

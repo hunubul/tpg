@@ -47,6 +47,9 @@
     <ClCompile Include="src\lodepng\lodepng.cpp">
       <Filter>lodepng</Filter>
     </ClCompile>
+    <ClCompile Include="src\globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h">

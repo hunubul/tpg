@@ -36,6 +36,9 @@ namespace globals {
 
 	/* Szoba globals */
 	static const int MAX_RARITY = 10; //Max ritkasága egy itemnek
+
+	/* Global functions */
+	std::vector<std::string> split(const std::string &s, char delim); /**< Split string by tokens */
 }
 
 #endif

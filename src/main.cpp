@@ -12,25 +12,18 @@
 #include "logging.h"
 #include "globals.h"
 
-int    globals::ConsoleWidth, globals::ConsoleHeight;
-SIZES  globals::UpperBoxSiz,  globals::UpperBoxPos;
-SIZES  globals::SideBoxSiz,   globals::SideBoxPosLeft, globals::SideBoxPosRight;
-SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;
-SIZES  globals::MiddleBoxSiz, globals::MiddleBoxPos;
-player globals::p1;
-std::vector<enemy> globals::enemies;
-
 using namespace globals;
 using namespace std;
 
 void BeolvasEnemyk();
+void LoadingScreen();
 
 //4:3  - 1024x768
 //16:9 - 1280x720
 
 int main(int argc, char *argv[]) {
-	srand( (unsigned int)time(NULL) );
-	TCODSystem::getCurrentResolution(&ConsoleWidth,&ConsoleHeight);
+	srand((unsigned int)time(NULL));
+	TCODSystem::getCurrentResolution(&ConsoleWidth, &ConsoleHeight);
 	// ConsoleWidth = 1024;
 	// ConsoleHeight = 768;
 	ConsoleWidth /= FontX;
@@ -56,6 +49,7 @@ int main(int argc, char *argv[]) {
 	TCODConsole::setFullscreen(true);
 #endif // DEBUG
 	try {
+		LoadingScreen();
 		BeolvasEnemyk();
 		level asd(17, 17, 8, 16, 80); /* A pálya inicializálása */
 		chest Chest; /* Chest inicializálás */
@@ -99,4 +93,9 @@ void BeolvasEnemyk() {
 		enemy en(name, defense, offense, defdir, atcdir);
 		enemies.push_back(en);
 	}
+}
+
+void LoadingScreen() {
+	level::Pic2ASCII("Editing/loading", { 0, 0 }, { ConsoleWidth, ConsoleHeight });
+	TCODConsole::root->flush();
 }

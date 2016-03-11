@@ -157,6 +157,7 @@
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\effects.cpp" />
     <ClInclude Include="src\globals.h" />
+    <ClCompile Include="src\globals.cpp" />
     <ClCompile Include="src\harc.cpp" />
     <ClCompile Include="src\Image2ASCIIcolors.cpp" />
     <ClCompile Include="src\itemek.cpp" />

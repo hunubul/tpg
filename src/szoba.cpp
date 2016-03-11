@@ -157,22 +157,6 @@ vector<string> szoba::plafon() {
 
 /*--------------public fv-ek KEZDETE ------------*/
 
-/** Split string by tokens
-	@param s string to tokenize
-	@param delim char delimeter */
-vector<string> szoba::split(const string &s, char delim) {
-	vector<string> elems;
-	string temp;
-	for each (char var in s) {
-		if (var == delim) {
-			elems.push_back(temp);
-			temp.clear();
-		} else temp.push_back(var);
-	}
-	if (elems.size() == 0) return vector<string>(1,"Error");
-	return elems;
-}
-
 void szoba::writeout(IRANY irany) {
 	//    vector<string>::iterator it;
 	//    int y=1;

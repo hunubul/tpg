@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include "Image2ASCIIcolors.h"
 
 /** @brief enum az iránynak */
 typedef enum {LEFT=3,UP=0,RIGHT=1,DOWN=2} IRANY;

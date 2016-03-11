@@ -45,18 +45,21 @@ vector<item> weapon::beolvas() {
 	ifstream wStream("dolgok/weapon.txt");
 	vector<item> out;
 	while (wStream.good()) {
+		
 		string stemp;
 		item wtemp;
 		vector<string> vtemp;
 		getline(wStream,stemp,'\n');
-		vtemp = globals::split(stemp, ',');
-		wtemp.wtype = vtemp[0];
-		wtemp.name = vtemp[1];
-		wtemp.material = vtemp[2];
-		wtemp.stcons = stoi(vtemp[3]);
-		wtemp.durdmg = stoi(vtemp[4]);
-		wtemp.durability = stoi(vtemp[5]);
-		out.push_back(wtemp);
+		if (stemp != "") {
+			vtemp = globals::split(stemp, ',');
+			wtemp.wtype = vtemp[0];
+			wtemp.name = vtemp[1];
+			wtemp.material = vtemp[2];
+			wtemp.stcons = stoi(vtemp[3]);
+			wtemp.durdmg = stoi(vtemp[4]);
+			wtemp.durability = stoi(vtemp[5]);
+			out.push_back(wtemp);
+		}
 	}
 	return out;
 }

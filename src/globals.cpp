@@ -29,7 +29,39 @@ vector<string> globals::split(const string &s, char delim) {
 	return elems;
 }
 
-void globals::Pic2ASCII(string PicName, SIZES TopLeft, SIZES BoxSize) {
+void globals::Pic2ASCII(string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII) {
+	CONSOLEINFO Con;
+	IMAGE PNG;
+	SUBSECTION subsec;
+	CHAR_SET CharSet;
+	string PicPath = IMAGE_PATH + PicName + ".png";
+	/*-----------Initializing CONSOLEINFO-----------*/
+	Con.FontSize.X = FontX;
+	Con.FontSize.Y = FontY;
+	Con.CharAmount.X = BoxSize.X;
+	Con.CharAmount.Y = BoxSize.Y;
+	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+	/*----------------------------------------------*/
+	CharSetImporter(&CharSet, "8x8terminal.dat");
+	CalculateWeights(&CharSet); /* Calculating charset weights... */
+	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
+	//ClearBox(TopLeft, BoxSize);
+	if (!err) {
+		CalculatePNGSizes(&PNG, &subsec, Con);
+		PreciseProcessPNG(&PNG, subsec, CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+		//WriteOutPic(&PNG, TopLeft, BoxSize);
+		ASCII.HeightTile = PNG.HeightTile;
+		ASCII.WidthTile = PNG.WidthTile;
+		ASCII.ASCII_Color = PNG.ASCII_Color;
+		ASCII.ASCII_Image = PNG.ASCII_Image;
+		free(PNG.Image);
+		//free(PNG.ASCII_Image);
+		//free(PNG.ASCII_Color);
+	}
+	else ErrorOccured(PicName + ".png was not found");
+}
+void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	CONSOLEINFO Con;
 	IMAGE PNG;
 	SUBSECTION subsec;

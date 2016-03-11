@@ -8,7 +8,6 @@
 #include "Image2ASCIIcolors.h"
 #include "character.h"
 #include "level.h"
-#include "settings.h"
 #include "logging.h"
 #include "globals.h"
 
@@ -96,6 +95,6 @@ void BeolvasEnemyk() {
 }
 
 void LoadingScreen() {
-	level::Pic2ASCII("Editing/loading", { 0, 0 }, { ConsoleWidth, ConsoleHeight });
+	Pic2ASCII("Editing/loading", { 0, 0 }, { ConsoleWidth, ConsoleHeight });
 	TCODConsole::root->flush();
 }

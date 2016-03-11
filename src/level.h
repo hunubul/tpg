@@ -28,7 +28,5 @@ public:
     void WriteMiddleBox(std::vector<std::string> aktFal);
     void WriteLeftBox(std::vector<std::string> aktFal);
     void WriteRightBox(std::vector<std::string> aktFal);
-	static void ClearBox(SIZES TopLeft,SIZES BoxSize);
-    static void Pic2ASCII(std::string PicName,SIZES TopLeft,SIZES BoxSize);
 };
 #endif

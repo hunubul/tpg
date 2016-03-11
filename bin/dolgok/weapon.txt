@@ -3,4 +3,3 @@ club,frail massive,wooden,15,15,150,
 hammer,frail massive,wooden,20,65,300,
 rapier,old shiny,rusty iron,10,5,200,
 knife,jagged sharp,rusty iron,10,10,250,
-

@@ -46,7 +46,7 @@ vector<item> weapon::beolvas() {
 	vector<item> out;
 	while (wStream.good()) {
 		string stemp;
-		weapon wtemp;
+		item wtemp;
 		vector<string> vtemp;
 		getline(wStream,stemp,'\n');
 		vtemp = globals::split(stemp, ',');

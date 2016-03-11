@@ -29,13 +29,13 @@ weapon::weapon() {
 	else asd = (rand() % 16) + 10; dmgx = asd / 10; harmad = (asd - 10) / 3;
 	switch (harmad){
 	case 0:
-		name = temp[1] + " " + material + " " + wtype;
+		name = temp[0] + " " + material + " " + wtype;
 		break;
 	case 1:
 		name = material + " " + wtype;
 		break;
 	case 2:
-		name = temp[2] + " " + material + " " + wtype;
+		name = temp[1] + " " + material + " " + wtype;
 		break;
 	}
 

@@ -37,8 +37,8 @@ weapon::weapon() {
 		temp[0] = "";
 		break;
 	case 2:
-		//name = temp[1] + " " + material + " " + wtype;
-		//temp[0] = temp[1] + " ";
+		name = temp[1] + " " + material + " " + wtype;
+		temp[0] = temp[1] + " ";
 		break;
 	}
 	asd = rand() % 100;
@@ -61,7 +61,8 @@ vector<item> weapon::beolvas() {
 	ifstream wStream("dolgok/weapon.txt");
 	vector<item> out;
 	while (wStream.good()) {
-		string stemp;
+		string stemp="";
+		wStream >> ws;
 		item wtemp;
 		vector<string> vtemp;
 		getline(wStream,stemp,'\n');

@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 		LoadingScreen();
 		BeolvasEnemyk();
 		level asd(17, 17, 8, 16, 80); /* A pálya inicializálása */
-		chest Chest; /* Chest inicializálás */
+		//chest Chest; /* Chest inicializálás */
 		asd.engine(); /* A fõ loop */
 	}
 	catch (const exception& ex) { FatalError(ex.what()); }

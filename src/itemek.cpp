@@ -13,10 +13,10 @@ weapon::weapon() {
 	vector<item> all = beolvas();
 	item gen;
 	vector<string> temp;
-	temp = globals::split(gen.name, ' ');
 	int asd;
 	asd = rand() % all.size();
 	gen = all[asd];
+	temp = globals::split(gen.name, ' ');
 	wtype = gen.wtype;
 	stcons = gen.stcons;
 	durability = gen.durability;
@@ -24,9 +24,9 @@ weapon::weapon() {
 	asd = rand() % 2;
 	if (asd == 0) { material = gen.material; durability += rand() % 100; durdmg += rand() % 10; }
 	else material = "iron"; durability += (rand() % 200) + 100; durdmg += (rand() % 20) + 10;
-	int harmad;
-	if (material == "iron") { asd = (rand() % 16) + 20; dmgx = asd / 10; harmad = (asd - 20) / 3; }
-	else asd = (rand() % 16) + 10; dmgx = asd / 10; harmad = (asd - 10) / 3;
+	/*int harmad;
+	if (material == "iron") { asd = (rand() % 15) + 20; dmgx = asd / 10; harmad = (int) (asd - 20) / 5; }
+	else asd = (rand() % 15) + 10; dmgx = asd / 10; harmad = (int) (asd - 10) / 5;
 	switch (harmad){
 	case 0:
 		name = temp[0] + " " + material + " " + wtype;
@@ -48,7 +48,7 @@ weapon::weapon() {
 		dmgx = dmgx*1.1;
 		durability = durability*1.3;
 		durdmg = durdmg*1.2;
-	}
+	}*/
 }
 //------------------fegyverek beolvasása
 //fegyver típus
@@ -81,7 +81,7 @@ vector<item> weapon::beolvas() {
 //------------------shieldek generálása, nincs beolvasás hozzá
 //az stcons itt sikeres védésnél használt staminát jelent
 shield::shield() {
-	int asd = rand() % 3;
+	/*int asd = rand() % 3;
 	switch (asd)
 	{
 	case 0:
@@ -128,7 +128,7 @@ shield::shield() {
 		durability = durability*1.5;
 		break;
 	}
-	durability += (rand() % 5) * 10;
+	durability += (rand() % 5) * 10;*/
 }
 headpiece::headpiece() {
 

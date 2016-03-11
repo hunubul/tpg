@@ -12,6 +12,16 @@ typedef struct {
     int roundsleft; //mennyi körig van még fent az effect
 } STATUS;
 
+typedef struct {
+	weapon weapon;
+	shield shield;
+	headpiece headpiece;
+	chestpiece chestpiece;
+	gloves gloves;
+	pants pants;
+	legs legs;
+} INVENTORY;
+
 class character {
 protected:
     int maxhp; //egyértelmű
@@ -21,7 +31,7 @@ protected:
     std::vector<STATUS> cstatus; //blind bleed etc ide, struktúra feljebb
 public:
     std::vector<item> inventory; //táska tartalma
-    std::vector<item> wearing; //amit hord, ez külön kezelendő inventorytól
+    INVENTORY wearing; //amit hord, ez külön kezelendő inventorytól
     int defense; //védelmi érték
     int offense; //támadó érték
     character(int maxhp,int maxstam,int defense,int offense); //konstruktor, jelenleg üres

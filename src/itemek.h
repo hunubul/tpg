@@ -56,9 +56,9 @@ public:
 	pants();
 };
 
-class boots:public armor {
+class legs:public armor {
 public:
-	boots();
+	legs();
 };
 
 ///** @brief enum kinek lehet ilyen iteme */

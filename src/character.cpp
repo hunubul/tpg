@@ -37,7 +37,7 @@ void character::subStamina(int pStam) {
 }
 
 player::player() : character(100,100,4,4) {
-
+	wearing.weapon;
 }
 
 enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :

@@ -78,7 +78,7 @@ pants::pants() {
 
 
 }
-boots::boots() {
+legs::legs() {
 
 
 }

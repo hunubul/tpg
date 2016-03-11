@@ -23,7 +23,6 @@ public:
 class weapon:public item {
 public:
 	weapon();
-private:
 	std::vector<item> beolvas();
 };
 

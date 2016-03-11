@@ -1,6 +1,9 @@
 #ifndef GLOBALS_H_INCLUDED
 #define GLOBALS_H_INCLUDED
 
+/* Define this to enable DEBUG MODE */
+#define DEBUG
+
 #include "Image2ASCIIcolors.h"
 #include "character.h"
 
@@ -39,6 +42,8 @@ namespace globals {
 
 	/* Global functions */
 	std::vector<std::string> split(const std::string &s, char delim); /**< Split string by tokens */
+	void ClearBox(SIZES TopLeft, SIZES BoxSize);
+	void Pic2ASCII(std::string PicName, SIZES TopLeft, SIZES BoxSize);
 }
 
 #endif

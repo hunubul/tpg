@@ -1,6 +1,5 @@
 #include "Image2ASCIIcolors.h"
 #include "lodepng.h"
-#include "settings.h"
 #include "character.h"
 #include "level.h"
 #include "logging.h"

@@ -178,7 +178,6 @@
     <ClInclude Include="src\lodepng\lodepng.h" />
     <ClInclude Include="src\logging.h" />
     <ClInclude Include="src\SelectionMenu.h" />
-    <ClInclude Include="src\settings.h" />
     <ClInclude Include="src\szoba.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

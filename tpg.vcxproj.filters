@@ -73,9 +73,6 @@
     <ClInclude Include="src\SelectionMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\szoba.h">
       <Filter>Header Files</Filter>
     </ClInclude>

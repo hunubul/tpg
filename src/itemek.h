@@ -4,31 +4,88 @@
 #include <string>
 #include <vector>
 
-/** @brief enum kinek lehet ilyen iteme */
-//typedef enum {CHEST,ENEMY,PLAYER} ITEM_OWNER;
-/** @brief enum az item típusoknak */
-typedef enum {CONSUMABLE,RING,NECKLACE,HELMET,ARMOR,GLOVES,PANTS,BOOTS,WEAPON,UNKNOWN} ITEM_TYPE;
 
-/** @brief struktúra az itemeknek */
-typedef struct {
-    std::string name; /**< Az item neve */
-    //ITEM_OWNER owner; /**< Az item gazdája */
-    std::string type;   /**< Az item típusa */
-    std::string pickupDescr; /**< Felvételkor az item leírás */
-    std::string dmgType;   /**< Helpben az item leírása */
-    int multiplier;
-} ITEMS;
-
-/** @brief chest class beolvassa az adatokat és vektorban tárolja õket */
-class chest {
-private:
-    std::vector<ITEMS> beolvas(); /**< Itemek beolvasása */
-    //ITEM_TYPE type_id(std::string input); /**< Itemek beazonosítása */
-protected:
-    std::vector<ITEMS> items; /**< Összes itemek a fájlból */
+class item {
 public:
-    chest();  /**< Konstruktor */
-    ~chest(); /**< Destruktor */
+		std::string name; //item neve
+		std::string material; //item anyaga, pl fa, fém etc., fegyver és shield mindenképp, talán armornál is
+		std::string wtype; //weapon type, névhez is kell, meg speciális effektekhez, támadáshoz
+		double dmgx; //dmg multiplier, sebzés szorzó, fegyver+shield egyaránt
+		double defx; //armornál védelmi szorzó
+		int stcons; //stamina consumption, stamina fogyasztás ütésenként/védekezésenként, fegyver+shield
+		int durability; //egyértelmű, mindennek van
+		int durdmg; //fegyvernél sebzés a durabilityre
+		item();
+
 };
 
+class weapon:public item {
+public:
+	weapon();
+private:
+	std::vector<item> beolvas();
+};
+
+class shield:public item {
+public:
+	shield();
+};
+
+class armor:public item {
+public:
+	armor();
+};
+
+class headpiece:public armor {
+public:
+	headpiece();
+};
+
+class chestpiece:public armor {
+public:
+	chestpiece();
+};
+
+class gloves:public armor {
+public:
+	gloves();
+};
+
+class pants:public armor {
+public:
+	pants();
+};
+
+class boots:public armor {
+public:
+	boots();
+};
+
+///** @brief enum kinek lehet ilyen iteme */
+////typedef enum {CHEST,ENEMY,PLAYER} ITEM_OWNER;
+///** @brief enum az item típusoknak */
+//typedef enum {CONSUMABLE,RING,NECKLACE,HELMET,ARMOR,GLOVES,PANTS,BOOTS,WEAPON,UNKNOWN} ITEM_TYPE;
+//
+///** @brief struktúra az itemeknek */
+//typedef struct {
+//    std::string name; /**< Az item neve */
+//    //ITEM_OWNER owner; /**< Az item gazdája */
+//    std::string type;   /**< Az item típusa */
+//    std::string pickupDescr; /**< Felvételkor az item leírás */
+//    std::string dmgType;   /**< Helpben az item leírása */
+//    int multiplier;
+//} ITEMS;
+//
+///** @brief chest class beolvassa az adatokat és vektorban tárolja õket */
+//class chest {
+//private:
+//    std::vector<ITEMS> beolvas(); /**< Itemek beolvasása */
+//    //ITEM_TYPE type_id(std::string input); /**< Itemek beazonosítása */
+//protected:
+//    std::vector<ITEMS> items; /**< Összes itemek a fájlból */
+//public:
+//    chest();  /**< Konstruktor */
+//    ~chest(); /**< Destruktor */
+//};
+//
 #endif // ITEMEK_H_INCLUDED

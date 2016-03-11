@@ -20,8 +20,8 @@ protected:
     int stam; //jelenlegi stamina
     std::vector<STATUS> cstatus; //blind bleed etc ide, struktúra feljebb
 public:
-    std::vector<ITEMS> inventory; //táska tartalma
-    std::vector<ITEMS> wearing; //amit hord, ez külön kezelendő inventorytól
+    std::vector<item> inventory; //táska tartalma
+    std::vector<item> wearing; //amit hord, ez külön kezelendő inventorytól
     int defense; //védelmi érték
     int offense; //támadó érték
     character(int maxhp,int maxstam,int defense,int offense); //konstruktor, jelenleg üres

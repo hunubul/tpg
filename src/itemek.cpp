@@ -30,22 +30,37 @@ weapon::weapon() {
 	switch (harmad){
 	case 0:
 		name = temp[0] + " " + material + " " + wtype;
+		temp[0] += " ";
 		break;
 	case 1:
 		name = material + " " + wtype;
+		temp[0] = "";
 		break;
 	case 2:
 		name = temp[1] + " " + material + " " + wtype;
+		temp[0] = temp[1]+" ";
 		break;
 	}
-
+	asd = rand() % 100;
+	if (asd == 99) {
+		material = "steel";
+		name = temp[0] + material + " " + wtype;
+		dmgx = dmgx*1.1;
+		durability = durability*1.3;
+		durdmg = durdmg*1.2;
+	}
 }
 //------------------fegyverek beolvasása
+//fegyver típus
+//legrosszabb és legjobb állapot
+//ha gagyi, akkor miből van
+//mennyi staminát fogyaszt 1 ütés
+//mennyit sebez páncél durabilityjére, shield, vagy shield hiányában a fegyver durabilitijére sikeres védés esetén
+//durability, sikeres védéskor megy le, talán ütésenként is sebződjön ez az érték, de szerintem ne
 vector<item> weapon::beolvas() {
 	ifstream wStream("dolgok/weapon.txt");
 	vector<item> out;
 	while (wStream.good()) {
-		
 		string stemp;
 		item wtemp;
 		vector<string> vtemp;
@@ -63,7 +78,57 @@ vector<item> weapon::beolvas() {
 	}
 	return out;
 }
+//------------------shieldek generálása, nincs beolvasás hozzá
+//az stcons itt sikeres védésnél használt staminát jelent
 shield::shield() {
+	int asd = rand() % 3;
+	switch (asd)
+	{
+	case 0:
+		stype = "parry";
+		name = "parry shield";
+		dmgx = ((rand()%11)+90)/100;
+		stcons = 5;
+		durability = 80;
+		break;
+	case 1:
+		stype = "shield";
+		name = stype;
+		dmgx = ((rand() % 21) + 85) / 100;
+		stcons = 10;
+		durability = 160;
+		break;
+	case 2:
+		stype = "tower";
+		name = "tower shield";
+		dmgx = ((rand() % 21) + 60) / 100;
+		stcons = 1;
+		durability = 320;
+		break;
+	}
+	asd = rand() % 3;
+	switch (asd)
+	{
+	case 0:
+		material = "wooden";
+		name = material + " " + name;
+		break;
+	case 1:
+		material = "iron";
+		name = material + " " + name;
+		dmgx = dmgx*0.9;
+		stcons += 3;
+		durability = durability*1.25;
+		break;
+	case 2:
+		material = "steel";
+		name = material + " " + name;
+		dmgx = dmgx*0.9;
+		stcons += 5;
+		durability = durability*1.5;
+		break;
+	}
+	durability += (rand() % 5) * 10;
 }
 headpiece::headpiece() {
 

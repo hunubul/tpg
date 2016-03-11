@@ -10,6 +10,7 @@ public:
 		std::string name; //item neve
 		std::string material; //item anyaga, pl fa, fém etc., fegyver és shield mindenképp, talán armornál is
 		std::string wtype; //weapon type, névhez is kell, meg speciális effektekhez, támadáshoz
+		std::string stype; //shield type, névhez is kell, meg speciális effektekhez, támadáshoz, parry, normál és nagy shieldek vannak
 		double dmgx; //dmg multiplier, sebzés szorzó, fegyver+shield egyaránt
 		double defx; //armornál védelmi szorzó
 		int stcons; //stamina consumption, stamina fogyasztás ütésenként/védekezésenként, fegyver+shield

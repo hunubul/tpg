@@ -26,6 +26,7 @@ vector<string> globals::split(const string &s, char delim) {
 		else temp.push_back(var);
 	}
 	if (elems.size() == 0) return vector<string>(1, "Error");
+	elems.push_back(temp);
 	return elems;
 }
 

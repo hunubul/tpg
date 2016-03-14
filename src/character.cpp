@@ -38,12 +38,16 @@ void character::subStamina(int pStam) {
 
 player::player() : character(100,100,4,4) {
 	wearing.weapon;
+	wearing.shield;
 }
 
 enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     character(100,100,defense,offense),def(def),atc(atc),name(name) {
     enemy::BoxSize={ConsoleWidth*911/1280,ConsoleHeight*666/720};
     enemy::TopLeft={ConsoleWidth-enemy::BoxSize.X,0};
+	int asd = rand() % 5;
+	if (asd == 0) wearing.weapon;
+	if (asd == 1) wearing.shield;
     CONSOLEINFO Con;
     SUBSECTION subsec;
     CHAR_SET CharSet;

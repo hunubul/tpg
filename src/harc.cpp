@@ -6,37 +6,9 @@
 using namespace globals;
 using namespace std;
 
-/*void BleedTrough(enemy &e, ADIR defdir, ADIR attdir, std::vector<CONLOG> &con_log) { //!!!!!!MÉG NINCS MEGHÍVVA
-    //Ha a fegyver speciális, akkor bizonyos irányokba extra sebzést adhat, illetve védekezésen is keresztülmegy egy kis sebzés, ellenfélnél NINCS ilyen, a preferált irány már ezt teszi
-    string wtype="UNKNOWN";
-	for (int i = 0; i < p1.wearing.size(); i++) {
-        if(p1.wearing[i].type==WEAPON){wtype=p1.wearing[i].dmgType; i=p1.wearing.size();}
-    }
-    if (attdir==LEFT || attdir==RIGHT && wtype=="slash") {
-        if (attdir==defdir){
-            con_log.push_back((CONLOG) {"But you still managed to get a cut.",TCOD_pink};
-            //kell sebzést adni                 <---- HIÁNY
-        }else{
-            //adjon bónusz %-ot sebzéshez!!     <-----HIÁNY
-        }
-    }
-    if (attdir==UP && wtype=="crush") {
-        if (attdir==defdir){
-            con_log.push_back((CONLOG) {"But you definetly did some damage.",TCOD_pink};
-            //kell sebzést adni                 <---- HIÁNY
-        }else{
-            //adjon bónusz %-ot sebzéshez!!     <-----HIÁNY
-        }
-    }
-    if (attdir==MID && wtype=="thrust") {
-        if (attdir==defdir){
-            con_log.push_back((CONLOG) {"But you still managed to stab your enemy.",TCOD_pink};
-            //kell sebzést adni                 <---- HIÁNY
-        }else{
-            //adjon bónusz %-ot sebzéshez!!     <-----HIÁNY
-        }
-    }
-}*/
+//TODO ha enemynek van shieldje, akkor ahhoz képest védekezzen: normál shield: 2 helyen, nagy shield: közép + 1 hely, az lesz a könyebb
+//TODO fegyverekhez (+nagyshieldhez) különleges támadás, effektek, effektekhez meg eleve az egész effektek részt meg kell írni
+
 
 void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
     p1.subStamina(5);

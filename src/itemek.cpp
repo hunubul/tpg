@@ -25,8 +25,8 @@ weapon::weapon() {
 	if (asd == 0) { material = gen.material; durability += rand() % 100; durdmg += rand() % 10; }
 	else material = "iron"; durability += (rand() % 200) + 100; durdmg += (rand() % 20) + 10;
 	int harmad;
-	if (material == "iron") { asd = (rand() % 15) + 20; dmgx = asd / 10; harmad = (int) (asd - 20) / 5; }
-	else asd = (rand() % 15) + 10; dmgx = asd / 10; harmad = (int) (asd - 10) / 5;
+	if (material == "iron") { asd = (rand() % 15) + 25; dmgx = asd / 10; harmad = (int) (asd - 25) / 5; }
+	else asd = (rand() % 15) + 15; dmgx = asd / 10; harmad = (int) (asd - 15) / 5;
 	switch (harmad){
 	case 0:
 		name = temp[0] + " " + material + " " + wtype;

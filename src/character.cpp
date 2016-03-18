@@ -68,7 +68,16 @@ enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
         PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
         free(PNG.Image);
         PNG.Image=NULL;
-    } else ErrorOccured("Enemy: "+name+".png was not found");
+	} else {
+		std::string PicPath = IMAGE_PATH + "Editing/missing_enemy.png";
+		err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
+		if (!err) {
+			CalculatePNGSizes(&PNG, &subsec, Con);
+			PreciseProcessPNG(&PNG, subsec, CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+			free(PNG.Image);
+			PNG.Image = NULL;
+		} else FatalError("Missing missing_enemy");
+	}
 }
 
 enemy::~enemy() {

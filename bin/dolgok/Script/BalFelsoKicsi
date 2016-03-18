@@ -1,0 +1,3 @@
+
+> (gimp-drawable-transform-perspective (car (gimp-image-get-active-drawable (aref (cadr (gimp-image-list)) 0))) 0 0 192 71 0 358 192 358 0 2 FALSE 3 0)
+(8)

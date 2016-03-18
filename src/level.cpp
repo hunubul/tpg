@@ -2,6 +2,7 @@
 #include "level.h"
 #include "lodepng\lodepng.h"
 #include "globals.h"
+#include "harc.h"
 
 using namespace globals;
 using namespace std;
@@ -131,7 +132,13 @@ void level::engine() {
 			default:
 				break;
 			}
+#ifdef DEBUG
+			if (key.c=='d') {
+				HarcGUI(enemies[0]);
+			}
+#endif
 		}
+		
 		else if (event == TCOD_EVENT_MOUSE_PRESS) {
 			if (mouse.lbutton) {
 

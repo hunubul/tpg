@@ -14,10 +14,10 @@ character::character(int maxhp,int maxstam,int defense,int offense) :
     maxhp(maxhp),hp(maxhp),maxstam(maxstam),stam(maxstam),defense(defense),offense(offense) {}
 
 bool character::damage(double DMG) {
-    double dmgMult=(rand()%80+81)/100.0;
-    hp-=(int)round((DMG/getDefValue())*dmgMult);
+    double asd=(rand()%80+81)/100.0;
+    hp-=(int)round((asd/getDefValue())*DMG);
     if(hp<0) hp=0;
-    if(dmgMult>1.49999) return true;
+    if(asd>1.49999) return true;
     return false;
 }
 

@@ -13,9 +13,9 @@ SIZES enemy::TopLeft;
 character::character(int maxhp,int maxstam,int defense,int offense) :
     maxhp(maxhp),hp(maxhp),maxstam(maxstam),stam(maxstam),defense(defense),offense(offense) {}
 
-bool character::damage(int DMG) {
+bool character::damage(double DMG) {
     double dmgMult=(rand()%80+81)/100.0;
-    hp-=(int)round((DMG/defense)*dmgMult);
+    hp-=(int)round((DMG/getDefValue())*dmgMult);
     if(hp<0) hp=0;
     if(dmgMult>1.49999) return true;
     return false;
@@ -36,15 +36,31 @@ void character::subStamina(int pStam) {
     if(stam<0) stam=0;
 }
 
+double character::getDefValue() {
+	return wearing.chestpiece->defx * wearing.gloves->defx * wearing.headpiece->defx * wearing.legs->defx * wearing.pants->defx;
+}
+
 player::player() : character(100,100,4,4) {
-	wearing.weapon;
-	wearing.shield;
+	wearing.weapon = new weapon();
+	wearing.shield = new shield();
+	wearing.chestpiece = new ures();
+	wearing.gloves = new ures();
+	wearing.pants = new ures();
+	wearing.legs = new ures();
+	wearing.headpiece = new ures();
 }
 
 enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     character(100,100,defense,offense),def(def),atc(atc),name(name) {
     enemy::BoxSize={ConsoleWidth*911/1280,ConsoleHeight*666/720};
     enemy::TopLeft={ConsoleWidth-enemy::BoxSize.X,0};
+	wearing.weapon = new ures();
+	wearing.shield = new ures();
+	wearing.chestpiece = new ures();
+	wearing.gloves = new ures();
+	wearing.pants = new ures();
+	wearing.legs = new ures();
+	wearing.headpiece = new ures();
 	int asd = rand() % 5;
 	if (asd == 0) wearing.weapon;
 	if (asd == 1) wearing.shield;

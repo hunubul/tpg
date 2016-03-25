@@ -35,7 +35,7 @@ void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
     else if(attack_choices[selIndx]=="frontal attack"&&local_def==AMID&&e.getStamina()>=5) { con_log.push_back( {"Your frontal attack got blocked.",TCOD_cyan}); e.subStamina(5); }
     else {
         p1.subStamina(5);
-        bool Critical=e.damage(p1.offense*10);
+        bool Critical=e.damage(p1.wearing.weapon->dmgx);
         con_log.push_back( {"Your attack was successful.",TCOD_pink});
         if(Critical) con_log.push_back( {"Critical damage!",TCOD_flame});
     }
@@ -84,7 +84,7 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
     else if(defense_choices[selIndx]=="block frontal attack"&&local_atc==AMID&&p1.getStamina()>=5) { con_log.push_back( {"You successfuly blocked a frontal attack!",TCOD_gold}); p1.subStamina(5); }
     else {
         e.subStamina(5);
-        bool Critical=p1.damage(e.offense*10);
+        bool Critical=p1.damage(e.wearing.weapon->dmgx * e.offense);
         if     (local_atc==ALEFT) con_log.push_back( {"The enemy successfuly hit you from left.",TCOD_purple});
         else if(local_atc==AUP)   con_log.push_back( {"The enemy successfuly hit you from above.",TCOD_purple});
         else if(local_atc==ARIGHT)con_log.push_back( {"The enemy successfuly hit you from right.",TCOD_purple});

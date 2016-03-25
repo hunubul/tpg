@@ -13,13 +13,13 @@ typedef struct {
 } STATUS;
 
 typedef struct {
-	weapon weapon;
-	shield shield;
-	headpiece headpiece;
-	chestpiece chestpiece;
-	gloves gloves;
-	pants pants;
-	legs legs;
+	item* weapon;
+	item* shield;
+	item* headpiece;
+	item* chestpiece;
+	item* gloves;
+	item* pants;
+	item* legs;
 } INVENTORY;
 
 class character {
@@ -40,7 +40,8 @@ public:
     void subStamina(int pStam);
     int getHP(){return hp;}
     void addHP(int pHp);
-    bool damage(int DMG);
+    bool damage(double DMG);
+	double getDefValue();
 };
 
 class player : public character {

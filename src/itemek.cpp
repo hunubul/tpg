@@ -5,9 +5,16 @@
 
 using namespace std;
 
-
 item::item(){}
-armor::armor(){}
+
+ures::ures() {
+	name = "EMPTY";
+	dmgx = 1;
+	defx = 1;
+	stcons = 10;
+	defstam = 5;
+	durdmg = 0;
+}
 //------------------fegyverek generálása
 weapon::weapon() {
 	vector<item> all = beolvas();
@@ -50,6 +57,8 @@ weapon::weapon() {
 		durdmg = durdmg*1.2;
 	}
 }
+
+
 //------------------fegyverek beolvasása
 //fegyver típus
 //legrosszabb és legjobb állapot
@@ -89,21 +98,21 @@ shield::shield() {
 		stype = "parry";
 		name = "parry shield";
 		dmgx = ((rand()%11)+90)/100;
-		stcons = 5;
+		defstam = 5;
 		durability = 80;
 		break;
 	case 1:
 		stype = "shield";
 		name = stype;
 		dmgx = ((rand() % 21) + 85) / 100;
-		stcons = 10;
+		defstam = 10;
 		durability = 160;
 		break;
 	case 2:
 		stype = "tower";
 		name = "tower shield";
 		dmgx = ((rand() % 21) + 60) / 100;
-		stcons = 1;
+		defstam = 1;
 		durability = 320;
 		break;
 	}
@@ -118,18 +127,22 @@ shield::shield() {
 		material = "iron";
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
-		stcons += 3;
+		defstam += 3;
 		durability = durability*1.25;
 		break;
 	case 2:
 		material = "steel";
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
-		stcons += 5;
+		defstam += 5;
 		durability = durability*1.5;
 		break;
 	}
 	durability += (rand() % 5) * 10;
+}
+armor::armor() {
+
+
 }
 headpiece::headpiece() {
 

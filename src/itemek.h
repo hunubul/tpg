@@ -5,6 +5,7 @@
 #include <vector>
 
 
+
 class item {
 public:
 		std::string name; //item neve
@@ -13,11 +14,17 @@ public:
 		std::string stype; //shield type, névhez is kell, meg speciális effektekhez, támadáshoz, parry, normál és nagy shieldek vannak
 		double dmgx; //dmg multiplier, sebzés szorzó, fegyver+shield egyaránt
 		double defx; //armornál védelmi szorzó
-		int stcons; //stamina consumption, stamina fogyasztás ütésenként/védekezésenként, fegyver+shield
+		int stcons; //stamina consumption, stamina fogyasztás ütésenként, fegyver
+		int defstam; //stamina consumption, stamina fogyasztás védekezésenként, shield
 		int durability; //egyértelmű, mindennek van
 		int durdmg; //fegyvernél sebzés a durabilityre
 		item();
 
+};
+
+class ures :public item {
+public:
+	ures();
 };
 
 class weapon:public item {

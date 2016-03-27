@@ -96,6 +96,7 @@ void BeolvasEnemyk() {
 
 void LoadingScreen() {
 	TCODConsole::root->clear();
+	TCODConsole::root->flush();
 	Pic2ASCIIandWrite("Editing/loading", { 0, 0 }, { ConsoleWidth, ConsoleHeight });
 	TCODConsole::root->flush();
 }

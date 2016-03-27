@@ -7,6 +7,7 @@
 #define IMAGE2ASCIICOLORS_H_INCLUDED
 
 #include "libtcod.hpp"
+#include <opencv2/opencv.hpp>
 
 /*-----------------------SETTINGS-----------------------------*/
 //#define ChangeBlackWhite
@@ -95,5 +96,16 @@ void CalculateWeights(CHAR_SET*CharSet);
 void Indexer(CHAR_SET* CharSet,int char_index);
 void WriteOutPic(IMAGE* PNG,SIZES TopLeft,SIZES BoxSize);
 void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
+
+cv::Mat OpenWarpPerspective(const cv::Mat& _image
+	, const cv::Point2f& _lu
+	, const cv::Point2f& _ru
+	, const cv::Point2f& _rd
+	, const cv::Point2f& _ld
+	, const cv::Point2f& _lu_result
+	, const cv::Point2f& _ru_result
+	, const cv::Point2f& _rd_result
+	, const cv::Point2f& _ld_result
+	, cv::Mat& _transform_matrix);
 
 #endif // IMAGE2ASCIICOLORS_H_INCLUDED

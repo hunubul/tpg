@@ -7,6 +7,7 @@
 
 #include "Image2ASCIIcolors.h"
 #include <stdio.h>
+#include <opencv2/opencv.hpp>
 #include "math.h"
 
 /**
@@ -218,4 +219,37 @@ void CalculatePNGSizes(IMAGE* PNG, SUBSECTION* subsec, CONSOLEINFO Con) {
 
 	/*        height_tile = height/14; unsigned subsection_height=14;
 	 *        width_tile = width/8;    unsigned subsection_height=8; */
+}
+cv::Mat OpenWarpPerspective(const cv::Mat& _image
+	, const cv::Point2f& _lu
+	, const cv::Point2f& _ru
+	, const cv::Point2f& _rd
+	, const cv::Point2f& _ld
+	, const cv::Point2f& _lu_result
+	, const cv::Point2f& _ru_result
+	, const cv::Point2f& _rd_result
+	, const cv::Point2f& _ld_result
+	, cv::Mat& _transform_matrix)
+{
+	// todo do some checks on input.
+
+	cv::Point2f source_points[4];
+	cv::Point2f dest_points[4];
+
+
+	source_points[0] = _lu;
+	source_points[1] = _ru;
+	source_points[2] = _rd;
+	source_points[3] = _ld;
+
+	dest_points[0] = _lu_result;
+	dest_points[1] = _ru_result;
+	dest_points[2] = _rd_result;
+	dest_points[3] = _ld_result;
+
+	cv::Mat dst;
+	_transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
+	cv::warpPerspective(_image, dst, _transform_matrix, dst.size());
+
+	return dst;
 }

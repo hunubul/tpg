@@ -24,24 +24,27 @@ typedef struct {
 
 class character {
 protected:
-    int maxhp; //egyértelmű
-    int hp; //jelenlegi hp
-    int maxstam; //maximum stamina
-    int stam; //jelenlegi stamina
-    std::vector<STATUS> cstatus; //blind bleed etc ide, struktúra feljebb
+	int maxhp; //egyértelmű
+	int hp; //jelenlegi hp
+	int maxstam; //maximum stamina
+	int stam; //jelenlegi stamina
+	std::vector<STATUS> cstatus; //blind bleed etc ide, struktúra feljebb
 public:
-    std::vector<item> inventory; //táska tartalma
-    INVENTORY wearing; //amit hord, ez külön kezelendő inventorytól
-    int defense; //védelmi érték
-    int offense; //támadó érték
-    character(int maxhp,int maxstam,int defense,int offense); //konstruktor, jelenleg üres
-    int getStamina(){return stam;}
-    void addStamina(int pStam);
-    void subStamina(int pStam);
-    int getHP(){return hp;}
-    void addHP(int pHp);
-    bool damage(double DMG);
+	std::vector<item> inventory; //táska tartalma
+	INVENTORY wearing; //amit hord, ez külön kezelendő inventorytól
+	int defense; //védelmi érték
+	int offense; //támadó érték
+	character(int maxhp, int maxstam, int defense, int offense); //konstruktor, jelenleg üres
+	int getStamina() { return stam; }
+	void addStamina(int pStam);
+	void subStamina(int pStam);
+	int getHP() { return hp; }
+	void addHP(int pHp);
+	bool damage(double DMG);
 	double getDefValue();
+	int wsc() { return wearing.weapon.getWeaponStaminaConsumption(); };
+	int ssc() { return wearing.shield.getShieldStaminaConsumption(); };
+	int gdx() { return wearing.weapon.getDamageX(); };
 };
 
 class player : public character {

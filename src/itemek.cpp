@@ -140,6 +140,7 @@ shield::shield() {
 	}
 	durability += (rand() % 5) * 10;
 }
+
 armor::armor() {
 
 

@@ -1,5 +1,5 @@
-sword,jagged sharp ,rusty iron,15,20,400,
-club,frail massive ,wooden,15,15,150,
+sword,jagged sharp ,rusty iron,14,20,400,
+club,frail massive ,wooden,14,15,150,
 hammer,frail massive ,wooden,20,65,300,
 rapier,old shiny ,rusty iron,10,5,200,
 knife,jagged sharp ,rusty iron,10,10,250,

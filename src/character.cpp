@@ -13,6 +13,7 @@ SIZES enemy::TopLeft;
 character::character(int maxhp,int maxstam,int defense,int offense) :
     maxhp(maxhp),hp(maxhp),maxstam(maxstam),stam(maxstam),defense(defense),offense(offense) {}
 
+
 bool character::damage(double DMG) {
     double asd=(rand()%80+81)/100.0;
     hp-=(int)round((asd/getDefValue())*DMG);

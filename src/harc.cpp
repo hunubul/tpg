@@ -8,10 +8,21 @@ using namespace std;
 
 //TODO ha enemynek van shieldje, akkor ahhoz képest védekezzen: normál shield: 2 helyen, nagy shield: közép + 1 hely, az lesz a könyebb
 //TODO fegyverekhez (+nagyshieldhez) különleges támadás, effektek, effektekhez meg eleve az egész effektek részt meg kell írni
+//Ezt úgy, hogy fegyvertípust azonosítani, hozzáadni a különleges támadás nevét az attack choices-hoz, ehhez tárolni kell globálisan a neveket
+//TODO durability management
 
+
+void SetSpecial() {
+	if (p1.wearing.weapon.wtype.find("wor",0)) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("lu",0)) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("amme",0)) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("apie",0)) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("nif",0)) { WeaponArtName = "Double Slash"; }
+	attack_choices.push_back(WeaponArtName);
+}
 
 void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
-    p1.subStamina(5);
+    p1.subStamina(p1.wsc()/2);
     int dice=rand()%100;
     ADIR local_def=e.def;
     if(e.def!=ANONE) {
@@ -28,21 +39,26 @@ void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
         if(dice>=80) local_def=(ADIR)(local_def+1);
         local_def=(ADIR)(local_def%5);
     }
-    if     (attack_choices[selIndx]=="from left"&&local_def==ALEFT&&e.getStamina()>=5) { con_log.push_back( {"You attacked from left, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
-    else if(attack_choices[selIndx]=="from above"&&local_def==AUP&&e.getStamina()>=5) { con_log.push_back( {"You attacked from above, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
-    else if(attack_choices[selIndx]=="from right"&&local_def==ARIGHT&&e.getStamina()>=5) { con_log.push_back( {"You attacked from right, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
-    else if(attack_choices[selIndx]=="from below"&&local_def==ADOWN&&e.getStamina()>=5) { con_log.push_back( {"You attacked from below, but it got blocked.",TCOD_cyan}); e.subStamina(5); }
-    else if(attack_choices[selIndx]=="frontal attack"&&local_def==AMID&&e.getStamina()>=5) { con_log.push_back( {"Your frontal attack got blocked.",TCOD_cyan}); e.subStamina(5); }
+    if     (attack_choices[selIndx]=="from left"&&local_def==ALEFT&&e.getStamina()>=e.ssc()) {
+		con_log.push_back( {"You attacked from left, but it got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
+    else if(attack_choices[selIndx]=="from above"&&local_def==AUP&&e.getStamina()>= e.ssc()) {
+		con_log.push_back( {"You attacked from above, but it got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
+    else if(attack_choices[selIndx]=="from right"&&local_def==ARIGHT&&e.getStamina()>= e.ssc()) {
+		con_log.push_back( {"You attacked from right, but it got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
+    else if(attack_choices[selIndx]=="from below"&&local_def==ADOWN&&e.getStamina()>= e.ssc()) {
+		con_log.push_back( {"You attacked from below, but it got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
+    else if(attack_choices[selIndx]=="frontal attack"&&local_def==AMID&&e.getStamina()>= e.ssc()) {
+		con_log.push_back( {"Your frontal attack got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
     else {
-        p1.subStamina(5);
-        bool Critical=e.damage(p1.wearing.weapon.dmgx);
+        p1.subStamina(p1.wsc()/2);
+        bool Critical=e.damage(p1.gdx());
         con_log.push_back( {"Your attack was successful.",TCOD_pink});
         if(Critical) con_log.push_back( {"Critical damage!",TCOD_flame});
     }
 }
 
 void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
-    e.subStamina(5);
+    e.subStamina(e.wsc()/2);
     int dice=rand()%100;
     ADIR local_atc=e.atc;
     if(e.atc!=ANONE) {
@@ -62,7 +78,7 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
     int selIndx=0;
     TCOD_key_t input;
     TCODConsole::root->rect(0,ConsoleHeight-menu_height,menu_ch_sel_width,menu_height,true);
-    if(p1.getStamina()>5) {
+    if(p1.getStamina()>= p1.ssc()) {
         for(int i=0; i<menu_attack_size; i++) TCODConsole::root->print(0,ConsoleHeight-menu_height+i,"%s",defense_choices[i].c_str());
         do {
             MenuSelection(0,selIndx,defense_choices,input,con_log);
@@ -77,14 +93,19 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
         } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
     }
     TCODConsole::root->rect(0,ConsoleHeight-menu_height,menu_ch_sel_width*2,menu_height,true);
-    if     (defense_choices[selIndx]=="block from left"&&local_atc==ALEFT&&p1.getStamina()>=5) { con_log.push_back( {"You successfuly blocked an attack from left!",TCOD_gold}); p1.subStamina(5); }
-    else if(defense_choices[selIndx]=="block from above"&&local_atc==AUP&&p1.getStamina()>=5) { con_log.push_back( {"You successfuly blocked an attack from above!",TCOD_gold}); p1.subStamina(5); }
-    else if(defense_choices[selIndx]=="block from right"&&local_atc==ARIGHT&&p1.getStamina()>=5) { con_log.push_back( {"You successfuly blocked an attack from right!",TCOD_gold}); p1.subStamina(5); }
-    else if(defense_choices[selIndx]=="block from below"&&local_atc==ADOWN&&p1.getStamina()>=5) { con_log.push_back( {"You successfuly blocked an attack from below!",TCOD_gold}); p1.subStamina(5); }
-    else if(defense_choices[selIndx]=="block frontal attack"&&local_atc==AMID&&p1.getStamina()>=5) { con_log.push_back( {"You successfuly blocked a frontal attack!",TCOD_gold}); p1.subStamina(5); }
+    if     (defense_choices[selIndx]=="block from left"&&local_atc==ALEFT&&p1.getStamina()>= p1.ssc()) {
+		con_log.push_back( {"You successfuly blocked an attack from left!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+    else if(defense_choices[selIndx]=="block from above"&&local_atc==AUP&&p1.getStamina()>= p1.ssc()) {
+		con_log.push_back( {"You successfuly blocked an attack from above!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+    else if(defense_choices[selIndx]=="block from right"&&local_atc==ARIGHT&&p1.getStamina()>= p1.ssc()) {
+		con_log.push_back( {"You successfuly blocked an attack from right!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+    else if(defense_choices[selIndx]=="block from below"&&local_atc==ADOWN&&p1.getStamina()>= p1.ssc()) {
+		con_log.push_back( {"You successfuly blocked an attack from below!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+    else if(defense_choices[selIndx]=="block frontal attack"&&local_atc==AMID&&p1.getStamina()>= p1.ssc()) {
+		con_log.push_back( {"You successfuly blocked a frontal attack!",TCOD_gold}); p1.subStamina(p1.ssc()); }
     else {
-        e.subStamina(5);
-        bool Critical=p1.damage(e.wearing.weapon.dmgx * e.offense);
+        e.subStamina(e.wsc()/2);
+        bool Critical=p1.damage(e.gdx() * e.offense);
         if     (local_atc==ALEFT) con_log.push_back( {"The enemy successfuly hit you from left.",TCOD_purple});
         else if(local_atc==AUP)   con_log.push_back( {"The enemy successfuly hit you from above.",TCOD_purple});
         else if(local_atc==ARIGHT)con_log.push_back( {"The enemy successfuly hit you from right.",TCOD_purple});
@@ -141,6 +162,8 @@ void HarcGUI(enemy e,ROUND most) {
     do {
         PrintPlayerStats();
 		if (most == PLAYER_KOR) {
+			attack_choices = { "from left","from above","from right","from below","frontal attack" };
+			SetSpecial();
 			for (int i = 0; i < menu_harc_size; i++) TCODConsole::root->print(0, ConsoleHeight - menu_height + i, "%s", harc_menu_choices[i].c_str());
 			MenuSelection(0, selIndx, harc_menu_choices, input, con_log);
 			if (input.vk == TCODK_UP&&selIndx - 1 >= 0) selIndx--;
@@ -149,7 +172,7 @@ void HarcGUI(enemy e,ROUND most) {
 				if (harc_menu_choices[selIndx] == "Attack"&&p1.getStamina() >= 10) {
 					for (int i = 0; i < menu_attack_size; i++) TCODConsole::root->print(menu_ch_sel_width, ConsoleHeight - menu_height + i, "%s", attack_choices[i].c_str());
 					do {
-						MenuSelection(menu_ch_sel_width, sub_selIndx, attack_choices, input, con_log);
+						MenuSelection(menu_ch_sel_width, sub_selIndx, attack_choices.data(), input, con_log);
 						if (input.vk == TCODK_UP&&sub_selIndx - 1 >= 0) sub_selIndx--;
 						if (input.vk == TCODK_DOWN&&sub_selIndx + 1 <= menu_attack_size - 1) sub_selIndx++;
 					} while (input.vk != TCODK_ENTER&&input.vk != TCODK_ESCAPE&&!TCODConsole::isWindowClosed());

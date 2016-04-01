@@ -26,11 +26,14 @@ class weapon:public item {
 public:
 	weapon();
 	std::vector<item> beolvas();
+	int getWeaponStaminaConsumption() { return stcons; };
+	int getDamageX() { return dmgx; };
 };
 
 class shield:public item {
 public:
 	shield();
+	int getShieldStaminaConsumption() { return defstam; };
 };
 
 

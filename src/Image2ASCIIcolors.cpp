@@ -220,6 +220,8 @@ void CalculatePNGSizes(IMAGE* PNG, SUBSECTION* subsec, CONSOLEINFO Con) {
 	/*        height_tile = height/14; unsigned subsection_height=14;
 	 *        width_tile = width/8;    unsigned subsection_height=8; */
 }
+
+//TODO OpenCV tisztítás
 cv::Mat OpenWarpPerspective(const cv::Mat& _image
 	, const cv::Point2f& _lu
 	, const cv::Point2f& _ru
@@ -231,11 +233,8 @@ cv::Mat OpenWarpPerspective(const cv::Mat& _image
 	, const cv::Point2f& _ld_result
 	, cv::Mat& _transform_matrix)
 {
-	// todo do some checks on input.
-
 	cv::Point2f source_points[4];
 	cv::Point2f dest_points[4];
-
 
 	source_points[0] = _lu;
 	source_points[1] = _ru;

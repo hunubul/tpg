@@ -6,6 +6,7 @@
 
 #include "Image2ASCIIcolors.h"
 #include "character.h"
+#include <vector>
 
 namespace globals {
 	/* Globals */
@@ -39,6 +40,33 @@ namespace globals {
 
 	/* Szoba globals */
 	static const int MAX_RARITY = 10; //Max ritkasága egy itemnek
+	// Szoba Függõleges pontok
+	static std::vector<std::vector<POINTS>> POINTS_LEFT = {
+		{      {0,0},   {0, 180},   {0, 360},   {0, 540},   {0, 720} },
+		{ {190, 106}, {190, 230}, {190, 360}, {190, 483}, {190, 611} },
+		{ {316, 180}, {316, 268}, {316, 360}, {316, 450}, {316, 537} }
+	};
+	static std::vector<std::vector<POINTS>> POINTS_MIDDLE = {
+		{ {316,180}, {316,268}, {316,360}, {316,450}, {316,537 } },
+		{ {638,180}, {638,268}, {638,360}, {638,450}, {638,537 } },
+		{ {958,180}, {958,268}, {958,360}, {958,450}, {958,537 } }
+	};
+	static std::vector<std::vector<POINTS>> POINTS_RIGHT = {
+		{ { 958,180 }, { 958,268 }, { 958,360}, { 958,450 }, { 958,537 } },
+		{ {1090,106 }, {1090,230 }, {1090,360}, {1090,483 }, {1090,611 } },
+		{ {1280,  0 }, {1280,180 }, {1280,360}, {1280,540 }, {1280,720 } }
+	};
+	// Szoba Vízszintes pontok
+	static std::vector<std::vector<POINTS>> POINTS_TOP = {
+		{ {   0, 0   },{ 638, 0   },{1028, 0   } },
+		{ { 190, 106 },{ 638, 106 },{1090, 106 } },
+		{ { 316, 180 },{ 638, 180 },{ 958, 180 } }
+	};
+	static const std::vector<std::vector<POINTS>> POINTS_BOTTOM = {
+		{ { 316, 537 },{ 638, 537 },{1028, 537 } },
+		{ { 190, 611 },{ 638, 611 },{1090, 611 } },
+		{ {   0, 720 },{ 638, 720 },{1280, 720 } }
+	};
 
 	/* Global functions */
 	std::vector<std::string> split(const std::string &s, char delim); /**< Split string by tokens */

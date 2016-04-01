@@ -75,6 +75,12 @@ typedef struct
     int X; /**< X: width */
     int Y; /**< Y: Height */
 } SIZES;
+/** @brief POINTS struct */
+typedef struct
+{
+	double X; /**< X: coord */
+	double Y; /**< Y: coord */
+} POINTS;
 /** @brief the size of one subsection in IMAGE which will be converted to chars */
 typedef struct
 {

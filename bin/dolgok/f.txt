@@ -1,5 +1,6 @@
 unknown object
 unknown object
+table
 carpet
 vomit
 skulls

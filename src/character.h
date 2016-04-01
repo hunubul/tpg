@@ -13,13 +13,13 @@ typedef struct {
 } STATUS;
 
 typedef struct {
-	item* weapon;
-	item* shield;
-	item* headpiece;
-	item* chestpiece;
-	item* gloves;
-	item* pants;
-	item* legs;
+	weapon weapon;
+	shield shield;
+	headpiece headpiece;
+	chestpiece chestpiece;
+	gloves gloves;
+	pants pants;
+	legs legs;
 } INVENTORY;
 
 class character {

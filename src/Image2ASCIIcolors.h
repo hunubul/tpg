@@ -8,6 +8,7 @@
 
 #include "libtcod.hpp"
 #include <opencv2/opencv.hpp>
+#include <vector>
 
 /*-----------------------SETTINGS-----------------------------*/
 //#define ChangeBlackWhite
@@ -63,7 +64,7 @@ typedef struct
 /** @brief The struct for (.png .ppm) Images */
 typedef struct
 {
-	unsigned char *ASCII_Image; /**< the processed ascii image (contains characters) */
+	std::vector<unsigned char> ASCII_Image; /**< the processed ascii image (contains characters) */
 	TCODColor *ASCII_Color;     /**< ascii image colors */
 	unsigned WidthTile; /**< width of raw images in characters */
 	unsigned HeightTile;/**< height of raw images in characters */
@@ -103,15 +104,14 @@ void Indexer(CHAR_SET* CharSet,int char_index);
 void WriteOutPic(IMAGE* PNG,SIZES TopLeft,SIZES BoxSize);
 void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 
-cv::Mat OpenWarpPerspective(const cv::Mat& _image
-	, const cv::Point2f& _lu
-	, const cv::Point2f& _ru
-	, const cv::Point2f& _rd
-	, const cv::Point2f& _ld
-	, const cv::Point2f& _lu_result
-	, const cv::Point2f& _ru_result
-	, const cv::Point2f& _rd_result
-	, const cv::Point2f& _ld_result
-	, cv::Mat& _transform_matrix);
+void OpenWarpPerspective(const std::vector<unsigned char>& _image
+	, const POINTS& _lu
+	, const POINTS& _ru
+	, const POINTS& _rd
+	, const POINTS& _ld
+	, const POINTS& _lu_result
+	, const POINTS& _ru_result
+	, const POINTS& _rd_result
+	, const POINTS& _ld_result);
 
 #endif // IMAGE2ASCIICOLORS_H_INCLUDED

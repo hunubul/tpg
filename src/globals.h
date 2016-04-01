@@ -62,7 +62,7 @@ namespace globals {
 		{ { 190, 106 },{ 638, 106 },{1090, 106 } },
 		{ { 316, 180 },{ 638, 180 },{ 958, 180 } }
 	};
-	static const std::vector<std::vector<POINTS>> POINTS_BOTTOM = {
+	static std::vector<std::vector<POINTS>> POINTS_BOTTOM = {
 		{ { 316, 537 },{ 638, 537 },{1028, 537 } },
 		{ { 190, 611 },{ 638, 611 },{1090, 611 } },
 		{ {   0, 720 },{ 638, 720 },{1280, 720 } }
@@ -71,7 +71,10 @@ namespace globals {
 	/* Global functions */
 	std::vector<std::string> split(const std::string &s, char delim); /**< Split string by tokens */
 	void ClearBox(SIZES TopLeft, SIZES BoxSize);
+	/**< Clear Polygon Box @param lu left-upper @param ru right-upper @param rl right-lower @param ll left-lower*/
+	void ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll);
 	void Pic2ASCIIandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize);
+	void Pic2ASCIIWarpandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize, std::vector<POINTS>& PointsFrom, std::vector<POINTS>& PointsTo);
 	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
 }
 

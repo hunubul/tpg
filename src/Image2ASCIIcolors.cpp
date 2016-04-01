@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include "math.h"
+#include <string>
+#include <vector>
 
 /**
  * @brief Imports and arranges each ASCII CHAR
@@ -222,19 +224,18 @@ void CalculatePNGSizes(IMAGE* PNG, SUBSECTION* subsec, CONSOLEINFO Con) {
 }
 
 //TODO OpenCV tisztítás
-cv::Mat OpenWarpPerspective(const cv::Mat& _image
-	, const cv::Point2f& _lu
-	, const cv::Point2f& _ru
-	, const cv::Point2f& _rd
-	, const cv::Point2f& _ld
-	, const cv::Point2f& _lu_result
-	, const cv::Point2f& _ru_result
-	, const cv::Point2f& _rd_result
-	, const cv::Point2f& _ld_result
-	, cv::Mat& _transform_matrix)
+void OpenWarpPerspective(const std::vector<unsigned char>& _image
+	, const POINTS& _lu
+	, const POINTS& _ru
+	, const POINTS& _rd
+	, const POINTS& _ld
+	, const POINTS& _lu_result
+	, const POINTS& _ru_result
+	, const POINTS& _rd_result
+	, const POINTS& _ld_result)
 {
-	cv::Point2f source_points[4];
-	cv::Point2f dest_points[4];
+	std::vector<POINTS> source_points(4);
+	std::vector<POINTS> dest_points(4);
 
 	source_points[0] = _lu;
 	source_points[1] = _ru;
@@ -247,8 +248,6 @@ cv::Mat OpenWarpPerspective(const cv::Mat& _image
 	dest_points[3] = _ld_result;
 
 	cv::Mat dst;
-	_transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
+	cv::Mat _transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
 	cv::warpPerspective(_image, dst, _transform_matrix, dst.size());
-
-	return dst;
 }

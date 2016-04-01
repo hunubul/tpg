@@ -53,8 +53,8 @@ weapon::weapon() {
 		material = "steel";
 		name = temp[0] + material + " " + wtype;
 		dmgx = dmgx*1.1;
-		durability = durability*1.3;
-		durdmg = durdmg*1.2;
+		durability = (int)(durability*1.3);
+		durdmg = (int)(durdmg*1.2);
 	}
 }
 
@@ -128,14 +128,14 @@ shield::shield() {
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
 		defstam += 3;
-		durability = durability*1.25;
+		durability = (int)(durability*1.25);
 		break;
 	case 2:
 		material = "steel";
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
 		defstam += 5;
-		durability = durability*1.5;
+		durability = (int)(durability*1.5);
 		break;
 	}
 	durability += (rand() % 5) * 10;

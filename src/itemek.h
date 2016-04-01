@@ -19,12 +19,7 @@ public:
 		int durability; //egyértelmű, mindennek van
 		int durdmg; //fegyvernél sebzés a durabilityre
 		item();
-
-};
-
-class ures :public item {
-public:
-	ures();
+		void ures();
 };
 
 class weapon:public item {
@@ -37,6 +32,7 @@ class shield:public item {
 public:
 	shield();
 };
+
 
 class armor:public item {
 public:
@@ -66,6 +62,41 @@ public:
 class legs:public armor {
 public:
 	legs();
+};
+
+//---------------------ÜRES ITEMEK--------------------
+class emptyweapon :public weapon {
+public:
+	emptyweapon();
+};
+class emptyshield :public shield {
+public:
+	emptyshield();
+};
+
+class emptyheadpiece :public headpiece {
+public:
+	emptyheadpiece();
+};
+
+class emptychestpiece :public chestpiece {
+public:
+	emptychestpiece();
+};
+
+class emptygloves :public gloves {
+public:
+	emptygloves();
+};
+
+class emptypants :public pants {
+public:
+	emptypants();
+};
+
+class emptylegs :public legs {
+public:
+	emptylegs();
 };
 
 ///** @brief enum kinek lehet ilyen iteme */

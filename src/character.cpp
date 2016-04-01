@@ -37,30 +37,30 @@ void character::subStamina(int pStam) {
 }
 
 double character::getDefValue() {
-	return wearing.chestpiece->defx * wearing.gloves->defx * wearing.headpiece->defx * wearing.legs->defx * wearing.pants->defx;
+	return wearing.chestpiece.defx * wearing.gloves.defx * wearing.headpiece.defx * wearing.legs.defx * wearing.pants.defx;
 }
 
 player::player() : character(100,100,4,4) {
-	wearing.weapon = new weapon();
-	wearing.shield = new shield();
-	wearing.chestpiece = new ures();
-	wearing.gloves = new ures();
-	wearing.pants = new ures();
-	wearing.legs = new ures();
-	wearing.headpiece = new ures();
+	wearing.weapon;
+	wearing.shield;
+	wearing.chestpiece = (chestpiece)emptychestpiece();
+	wearing.gloves = (gloves)emptygloves();
+	wearing.pants = (pants)emptypants();
+	wearing.legs = (legs)emptylegs();
+	wearing.headpiece = (headpiece)emptyheadpiece();
 }
 
 enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     character(100,100,defense,offense),def(def),atc(atc),name(name) {
     enemy::BoxSize={ConsoleWidth*911/1280,ConsoleHeight*666/720};
     enemy::TopLeft={ConsoleWidth-enemy::BoxSize.X,0};
-	wearing.weapon = new ures();
-	wearing.shield = new ures();
-	wearing.chestpiece = new ures();
-	wearing.gloves = new ures();
-	wearing.pants = new ures();
-	wearing.legs = new ures();
-	wearing.headpiece = new ures();
+	wearing.weapon = (weapon)emptyweapon();
+	wearing.shield = (shield)emptyshield();
+	wearing.chestpiece = (chestpiece)emptychestpiece();
+	wearing.gloves = (gloves)emptygloves();
+	wearing.pants = (pants)emptypants();
+	wearing.legs = (legs)emptylegs();
+	wearing.headpiece = (headpiece)emptyheadpiece();
 	int asd = rand() % 5;
 	if (asd == 0) wearing.weapon;
 	if (asd == 1) wearing.shield;

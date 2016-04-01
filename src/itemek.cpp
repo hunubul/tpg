@@ -7,7 +7,7 @@ using namespace std;
 
 item::item(){}
 
-ures::ures() {
+void item::ures() {
 	name = "EMPTY";
 	dmgx = 1;
 	defx = 1;
@@ -164,6 +164,15 @@ legs::legs() {
 
 
 }
+
+//---------------------ÜRES ITEMEK--------------------
+emptyweapon::emptyweapon() {ures();}
+emptyshield::emptyshield() {ures();}
+emptyheadpiece::emptyheadpiece() {ures();}
+emptychestpiece::emptychestpiece(){ures();}
+emptygloves::emptygloves() {ures();}
+emptypants::emptypants() {ures();}
+emptylegs::emptylegs() {ures();}
 ///*--------------Konstruktorok kezdete--------------*/
 //chest::chest() {
 //    items=beolvas();

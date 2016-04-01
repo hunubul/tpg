@@ -79,5 +79,4 @@ namespace globals {
 	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
 }
 
-
 #endif

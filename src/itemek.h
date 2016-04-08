@@ -27,7 +27,7 @@ public:
 	weapon();
 	std::vector<item> beolvas();
 	int getWeaponStaminaConsumption() { return stcons; };
-	int getDamageX() { return dmgx; };
+	int getDamageX() { int ret=(int)dmgx; return ret; };
 };
 
 class shield:public item {

@@ -1,7 +1,7 @@
 #include "globals.h"
 #include "logging.h"
 #include "lodepng\lodepng.h"
-#include <math.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,6 +14,37 @@ player globals::p1;
 std::vector<enemy> globals::enemies;
 int globals::menu_attack_size = 5;
 std::vector< std::string> globals::attack_choices = { "from left","from above","from right","from below","frontal attack" };
+std::vector<std::vector<POINTS>> globals::POINTS_LEFT = {
+	{ { 0, 0   },{ 190, 106 },{ 316, 180 } },
+	{ { 0, 180 },{ 190, 230 },{ 316, 268 } },
+	{ { 0, 360 },{ 190, 360 },{ 316, 360 } },
+	{ { 0, 540 },{ 190, 483 },{ 316, 450 } },
+	{ { 0, 720 },{ 190, 611 },{ 316, 537 } }
+};
+std::vector<std::vector<POINTS>> globals::POINTS_MIDDLE = {
+	{ { 316,180 },{ 638,180 },{ 958,180 } },
+	{ { 316,268 },{ 638,268 },{ 958,268 } },
+	{ { 316,360 },{ 638,360 },{ 958,360 } },
+	{ { 316,450 },{ 638,450 },{ 958,450 } },
+	{ { 316,537 },{ 638,537 },{ 958,537 } }
+};
+std::vector<std::vector<POINTS>> globals::POINTS_RIGHT = {
+	{ { 958,180 },{ 1090,106 },{ 1280,  0 } },
+	{ { 958,268 },{ 1090,230 },{ 1280,180 } },
+	{ { 958,360 },{ 1090,360 },{ 1280,360 } },
+	{ { 958,450 },{ 1090,483 },{ 1280,540 } },
+	{ { 958,537 },{ 1090,611 },{ 1280,720 } }
+};
+std::vector<std::vector<POINTS>> globals::POINTS_TOP = {
+	{ {   0, 0   },{ 638, 0   },{ 1028, 0   } },
+	{ { 190, 106 },{ 638, 106 },{ 1090, 106 } },
+	{ { 316, 180 },{ 638, 180 },{  958, 180 } }
+};
+std::vector<std::vector<POINTS>> globals::POINTS_BOTTOM = {
+	{ { 316, 537 },{ 638, 537 },{ 1028, 537 } },
+	{ { 190, 611 },{ 638, 611 },{ 1090, 611 } },
+	{ {   0, 720 },{ 638, 720 },{ 1280, 720 } }
+};
 
 /** Split string by tokens
 @param s string to tokenize
@@ -102,15 +133,16 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 	string PicPath = IMAGE_PATH + PicName + ".png";
 	SIZES BoxSize;
 	vector<double> Xpoints = { PointsTo[0].X,PointsTo[1].X,PointsTo[2].X,PointsTo[3].X };
-	vector<double> Ypoints = { PointsTo[0].X,PointsTo[1].X,PointsTo[2].X,PointsTo[3].X };
-	SIZES TopLeft = { min(PointsTo[0].X,PointsTo[3].X), max(PointsTo[0].Y,PointsTo[1].Y) };
+	vector<double> Ypoints = { PointsTo[0].Y,PointsTo[1].Y,PointsTo[2].Y,PointsTo[3].Y };
+	SIZES TopLeft = { static_cast<int>(min(PointsTo[0].X,PointsTo[3].X)), static_cast<int>(min(PointsTo[0].Y,PointsTo[1].Y)) };
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
 	Con.FontSize.Y = FontY;
-    Con.CharAmount.X = BoxSize.X = *max_element(Xpoints.begin(), Xpoints.end()) - TopLeft.X;
-	Con.CharAmount.Y = BoxSize.Y = *max_element(Ypoints.begin(), Ypoints.end()) - TopLeft.Y;
-	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
-	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+	Con.Size.X = (int)(*max_element(Xpoints.begin(), Xpoints.end()) - TopLeft.X);
+	Con.Size.Y = (int)(*max_element(Ypoints.begin(), Ypoints.end()) - TopLeft.Y);
+    Con.CharAmount.X = BoxSize.X = Con.Size.X / FontX;
+	Con.CharAmount.Y = BoxSize.Y = Con.Size.X / FontY;
+	TopLeft = { TopLeft.X / FontX, TopLeft.Y / FontY };
 	/*----------------------------------------------*/
 	CharSetImporter(&CharSet, "8x8terminal.dat");
 	CalculateWeights(&CharSet); /* Calculating charset weights... */
@@ -140,8 +172,8 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 		PreciseProcessPNG(&PNG, subsec, CharSet);
 		WriteOutPic(&PNG, TopLeft, BoxSize);
 		//free(PNG.Image);
-		//free(PNG.ASCII_Image);
-		//free(PNG.ASCII_Color);
+		free(PNG.ASCII_Image);
+		free(PNG.ASCII_Color);
 	}
 	else ErrorOccured(PicName + ".png was not found");
 }

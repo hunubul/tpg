@@ -13,11 +13,11 @@ using namespace std;
 
 
 void SetSpecial() {
-	if (p1.wearing.weapon.wtype.find("sword",0)) { WeaponArtName = "Double Slash"; }
-	if (p1.wearing.weapon.wtype.find("club",0)) { WeaponArtName = "Double Slash"; }
-	if (p1.wearing.weapon.wtype.find("hammer",0)) { WeaponArtName = "Double Slash"; }
-	if (p1.wearing.weapon.wtype.find("rapier",0)) { WeaponArtName = "Double Slash"; }
-	if (p1.wearing.weapon.wtype.find("knife",0)) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("sword")) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("club")) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("hammer")) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("rapier")) { WeaponArtName = "Double Slash"; }
+	if (p1.wearing.weapon.wtype.find("knife")) { WeaponArtName = "Double Slash"; }
 	attack_choices.push_back(WeaponArtName);
 }
 

@@ -37,7 +37,7 @@ namespace globals {
 	static const int menu_useitem_size = 3;
 	static std::string useitem_choices[] = { "???","???","???" };
 	static const int con_log_StartingPos = 4 * menu_ch_sel_width;
-	static std::string WeaponArtName;
+	std::string WeaponArtName;
 
 	/* Szoba globals */
 	static const int MAX_RARITY = 10; //Max ritkasága egy itemnek

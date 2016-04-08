@@ -102,13 +102,13 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS>& PointsFrom, 
 	Con.FontSize.Y = FontY;
 	//Con.CharAmount.X = BoxSize.X;
 	//Con.CharAmount.Y = BoxSize.Y;
-	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
-	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+	//Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+	//Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
 	/*----------------------------------------------*/
 	CharSetImporter(&CharSet, "8x8terminal.dat");
 	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
-	ClearBox(TopLeft, BoxSize);
+	//ClearBox(TopLeft, BoxSize);
 	if (!err) {
 		CalculatePNGSizes(&PNG, &subsec, Con);
 		/*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
@@ -120,7 +120,7 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS>& PointsFrom, 
 			PointsFrom[0], PointsFrom[1], PointsFrom[2], PointsFrom[3],
 			PointsTo[0], PointsTo[1], PointsTo[2], PointsTo[3]
 			);
-		WriteOutPic(&PNG, TopLeft, BoxSize);
+		//WriteOutPic(&PNG, TopLeft, BoxSize);
 		free(PNG.Image);
 		free(PNG.ASCII_Image);
 		free(PNG.ASCII_Color);

@@ -133,14 +133,14 @@ shield::shield() {
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
 		defstam += 3;
-		durability = (durability*1.25);
+		durability = (int)(durability*1.25);
 		break;
 	case 2:
 		material = "steel";
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
 		defstam += 5;
-		durability = (durability*1.5);
+		durability = (int)(durability*1.5);
 		break;
 	}
 	durability += (rand() % 5) * (rand() % 10);
@@ -160,12 +160,12 @@ headpiece::headpiece() {
 		break;
 	case 1:
 		name = "Mail hood";
-		durability = (durability*1.75);
+		durability = (int)(durability*1.75);
 		defx = 1.3;
 		break;
 	case 2:
 		name = "Steel helmet";
-		durability = (durability*2.25);
+		durability = (int)(durability*2.25);
 		defx = 1.5;
 		break;
 	}
@@ -182,12 +182,12 @@ chestpiece::chestpiece() {
 		break;
 	case 1:
 		name = "Chainmail";
-		durability = (durability*1.75);
+		durability = (int)(durability*1.75);
 		defx = 1.5;
 		break;
 	case 2:
 		name = "Steel plate armor";
-		durability = (durability*2.25);
+		durability = (int)(durability*2.25);
 		defx = 1.75;
 		break;
 	}
@@ -204,12 +204,12 @@ gloves::gloves() {
 		break;
 	case 1:
 		name = "Chain gloves";
-		durability = (durability*1.5);
+		durability = (int)(durability*1.5);
 		defx = 1.25;
 		break;
 	case 2:
 		name = "Steel gauntlets";
-		durability = (durability*1.75);
+		durability = (int)(durability*1.75);
 		defx = 1.4;
 		break;
 	}
@@ -226,12 +226,12 @@ pants::pants() {
 		break;
 	case 1:
 		name = "Chain leggings";
-		durability = (durability*1.25);
+		durability = (int)(durability*1.25);
 		defx = 1.35;
 		break;
 	case 2:
 		name = "Steel plate leggings";
-		durability = (durability*1.5);
+		durability = (int)(durability*1.5);
 		defx = 1.6;
 		break;
 	}
@@ -249,12 +249,12 @@ legs::legs() {
 		break;
 	case 1:
 		name = "Chain boots";
-		durability = (durability*1.5);
+		durability = (int)(durability*1.5);
 		defx = 1.15;
 		break;
 	case 2:
 		name = "Steel boots";
-		durability = (durability*1.75);
+		durability = (int)(durability*1.75);
 		defx = 1.25;
 		break;
 	}

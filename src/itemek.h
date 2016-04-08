@@ -27,7 +27,7 @@ public:
 	weapon();
 	std::vector<item> beolvas();
 	int getWeaponStaminaConsumption() { return stcons; };
-	int getDamageX() { return dmgx; };
+	double getDamageX() { return dmgx; };
 	void SubWeaponDur(int subdur);
 };
 

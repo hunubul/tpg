@@ -90,7 +90,7 @@ void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	}
 	else ErrorOccured(PicName + ".png was not found");
 }
-void globals::Pic2ASCIIWarpandWrite(string PicName, SIZES TopLeft, SIZES BoxSize, vector<POINTS>& PointsFrom, vector<POINTS>& PointsTo) {
+void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS>& PointsFrom, vector<POINTS>& PointsTo) {
 	if (PointsFrom.size() < 4 || PointsTo.size() < 4) FatalError("Not enough Points to warp!!");
 	CONSOLEINFO Con;
 	IMAGE PNG;
@@ -100,8 +100,8 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, SIZES TopLeft, SIZES BoxSize
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
 	Con.FontSize.Y = FontY;
-	Con.CharAmount.X = BoxSize.X;
-	Con.CharAmount.Y = BoxSize.Y;
+	//Con.CharAmount.X = BoxSize.X;
+	//Con.CharAmount.Y = BoxSize.Y;
 	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
 	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
 	/*----------------------------------------------*/

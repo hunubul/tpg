@@ -75,7 +75,7 @@ namespace globals {
 	/**< Clear Polygon Box @param lu left-upper @param ru right-upper @param rl right-lower @param ll left-lower*/
 	void ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll);
 	void Pic2ASCIIandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize);
-	void Pic2ASCIIWarpandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize, std::vector<POINTS>& PointsFrom, std::vector<POINTS>& PointsTo);
+	void Pic2ASCIIWarpandWrite(std::string PicName, std::vector<POINTS>& PointsFrom, std::vector<POINTS>& PointsTo);
 	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
 }
 

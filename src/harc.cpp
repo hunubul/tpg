@@ -11,14 +11,17 @@ using namespace std;
 //Ezt úgy, hogy fegyvertípust azonosítani, hozzáadni a különleges támadás nevét az attack choices-hoz, ehhez tárolni kell globálisan a neveket
 //TODO durability management
 
+std::string WeaponArtName;
 
 void SetSpecial() {
+	WeaponArtName = "";
 	if (p1.wearing.weapon.wtype.find("sword",0)) { WeaponArtName = "Double Slash"; }
 	if (p1.wearing.weapon.wtype.find("club",0)) { WeaponArtName = "Double Slash"; }
 	if (p1.wearing.weapon.wtype.find("hammer",0)) { WeaponArtName = "Double Slash"; }
 	if (p1.wearing.weapon.wtype.find("rapier",0)) { WeaponArtName = "Double Slash"; }
 	if (p1.wearing.weapon.wtype.find("knife",0)) { WeaponArtName = "Double Slash"; }
 	attack_choices.push_back(WeaponArtName);
+	if (WeaponArtName!=""){ globals::menu_attack_size++; }
 }
 
 void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
@@ -163,6 +166,7 @@ void HarcGUI(enemy e,ROUND most) {
         PrintPlayerStats();
 		if (most == PLAYER_KOR) {
 			attack_choices = { "from left","from above","from right","from below","frontal attack" };
+			globals::menu_attack_size = 5;
 			SetSpecial();
 			for (int i = 0; i < menu_harc_size; i++) TCODConsole::root->print(0, ConsoleHeight - menu_height + i, "%s", harc_menu_choices[i].c_str());
 			MenuSelection(0, selIndx, harc_menu_choices, input, con_log);

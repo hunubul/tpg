@@ -11,6 +11,8 @@ SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;
 SIZES  globals::MiddleBoxSiz, globals::MiddleBoxPos;
 player globals::p1;
 std::vector<enemy> globals::enemies;
+int globals::menu_attack_size = 5;
+std::vector< std::string> globals::attack_choices = { "from left","from above","from right","from below","frontal attack" };
 
 /** Split string by tokens
 @param s string to tokenize

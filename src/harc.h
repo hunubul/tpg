@@ -11,6 +11,8 @@ typedef struct {
     TCOD_color_t color;
 } CONLOG;
 
+extern std::string WeaponArtName;
+
 //void BleedTrough(enemy &e, ADIR defdir, ADIR attdir, std::vector<CONLOG> &con_log);
 void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log);
 void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log);

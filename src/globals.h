@@ -30,14 +30,13 @@ namespace globals {
 	static const int menu_ch_sel_width = 20; //Kijelölés szélessége
 	static const int menu_harc_size = 3; //Size of menu_choices
 	static std::string harc_menu_choices[] = { "Attack","Use item","Rest" };
-	static const int menu_attack_size = 5;
-	static std::vector< std::string> attack_choices = { "from left","from above","from right","from below","frontal attack" };
+	extern int menu_attack_size;
+	extern std::vector< std::string> attack_choices;
 	static const int menu_defense_size = 5;
 	static std::string defense_choices[] = { "block from left","block from above","block from right","block from below","block frontal attack" };
 	static const int menu_useitem_size = 3;
 	static std::string useitem_choices[] = { "???","???","???" };
 	static const int con_log_StartingPos = 4 * menu_ch_sel_width;
-	static std::string WeaponArtName;
 
 	/* Szoba globals */
 	static const int MAX_RARITY = 10; //Max ritkasága egy itemnek

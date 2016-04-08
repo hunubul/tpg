@@ -289,7 +289,7 @@ void level::WriteOutBoxes() {
 	if (aktSzoba.c.size() == 0) {
 		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
 		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
-		ClearBox(TopLeft, BoxSize);
+		//ClearBox(TopLeft, BoxSize);
 	}
 	else if (aktSzoba.c.size() == 1) {
 		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
@@ -301,11 +301,13 @@ void level::WriteOutBoxes() {
 		//Elso dolog
 		TopLeft = SIZES{ UpperBoxPos.X  , UpperBoxPos.Y };
 		BoxSize = SIZES{ UpperBoxSiz.X / 2, UpperBoxSiz.Y };
-		Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
+		//Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
+		Pic2ASCIIWarpandWrite(aktSzoba.c[0], { POINTS_TOP[0][0],POINTS_TOP[1][0],POINTS_TOP[1][2],POINTS_TOP[0][2] });
 		//Masodik dolog
 		TopLeft = SIZES{ UpperBoxPos.X + UpperBoxSiz.X / 2,UpperBoxPos.Y };
 		BoxSize = SIZES{ UpperBoxSiz.X / 2,UpperBoxSiz.Y };
-		Pic2ASCIIandWrite(aktSzoba.c[1], TopLeft, BoxSize);
+		//Pic2ASCIIandWrite(aktSzoba.c[1], TopLeft, BoxSize);
+		Pic2ASCIIWarpandWrite(aktSzoba.c[1], { POINTS_TOP[1][0],POINTS_TOP[2][0],POINTS_TOP[2][2],POINTS_TOP[1][2] });
 	}
 	//*** Middle ***
 	if (most == LEFT) {
@@ -350,22 +352,25 @@ void level::WriteOutBoxes() {
 	if (aktSzoba.f.size() == 0) {
 		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
 		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
-		ClearBox(TopLeft, BoxSize);
+		//ClearBox(TopLeft, BoxSize);
 	}
 	else if (aktSzoba.f.size() == 1) {
 		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
 		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
-		Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
+		//Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
+		Pic2ASCIIWarpandWrite(aktSzoba.f[0], { POINTS_BOTTOM[0][0],POINTS_BOTTOM[2][0],POINTS_BOTTOM[2][2],POINTS_BOTTOM[0][2] });
 	}
 	else if (aktSzoba.f.size() == 2) {
 		//Elso dolog
 		TopLeft = SIZES{ BottomBoxPos.X, BottomBoxPos.Y };
 		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
-		Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
+		//Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
+		Pic2ASCIIWarpandWrite(aktSzoba.f[0], { POINTS_BOTTOM[0][0],POINTS_BOTTOM[1][0],POINTS_BOTTOM[1][2],POINTS_BOTTOM[0][2] });
 		//Masodik dolog
 		TopLeft = SIZES{ BottomBoxPos.X + BottomBoxSiz.X / 2, BottomBoxPos.Y };
 		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
-		Pic2ASCIIandWrite(aktSzoba.f[1], TopLeft, BoxSize);
+		//Pic2ASCIIandWrite(aktSzoba.f[1], TopLeft, BoxSize);
+		Pic2ASCIIWarpandWrite(aktSzoba.f[1], { POINTS_BOTTOM[1][0],POINTS_BOTTOM[2][0],POINTS_BOTTOM[2][2],POINTS_BOTTOM[1][2] });
 	}
 }
 void level::WriteMiddleBox(vector<string> aktFal) {
@@ -492,18 +497,18 @@ void level::WriteWarpMiddleBox(vector<string> aktFal) {
 		break;
 	case 2:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
 		break;
 	case 3:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
+		Pic2ASCIIWarpandWrite(aktFal[2], { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
 		break;
 	case 4:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][2],POINTS_MIDDLE[0][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[0][2],POINTS_MIDDLE[1][2],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_MIDDLE[0][2],POINTS_MIDDLE[1][2],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
+		Pic2ASCIIWarpandWrite(aktFal[2], { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
+		Pic2ASCIIWarpandWrite(aktFal[3], { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
 		break;
 	default:
 		ClearBox(TopLeft, BoxSize);
@@ -519,18 +524,18 @@ void level::WriteWarpLeftBox(vector<string> aktFal) {
 		break;
 	case 2:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
 		break;
 	case 3:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
+		Pic2ASCIIWarpandWrite(aktFal[2], { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
 		break;
 	case 4:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][2],POINTS_LEFT[0][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[0][2],POINTS_LEFT[1][2],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_LEFT[0][2],POINTS_LEFT[1][2],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
+		Pic2ASCIIWarpandWrite(aktFal[2], { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
+		Pic2ASCIIWarpandWrite(aktFal[3], { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
 		break;
 	default:
 		ClearBox(TopLeft, BoxSize);
@@ -546,18 +551,18 @@ void level::WriteWarpRightBox(vector<string> aktFal) {
 		break;
 	case 2:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
 		break;
 	case 3:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
+		Pic2ASCIIWarpandWrite(aktFal[2], { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
 		break;
 	case 4:
 		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][2],POINTS_RIGHT[0][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[0][2],POINTS_RIGHT[1][2],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[0], { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
+		Pic2ASCIIWarpandWrite(aktFal[1], { POINTS_RIGHT[0][2],POINTS_RIGHT[1][2],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
+		Pic2ASCIIWarpandWrite(aktFal[2], { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
+		Pic2ASCIIWarpandWrite(aktFal[3], { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
 		break;
 	default:
 		ClearBox(TopLeft, BoxSize);

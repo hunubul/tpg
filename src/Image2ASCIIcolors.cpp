@@ -251,7 +251,7 @@ cv::Mat OpenWarpPerspective(const std::vector<unsigned char>& _image
 	cv::Mat dst;
 	cv::Mat asd(_img_size, CV_8UC4, (void*)_image.data());
 	cv::Mat _transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
-	cv::warpPerspective(asd, dst, _transform_matrix, dst.size());
+	cv::warpPerspective(asd, dst, _transform_matrix, _img_size);
 
 	return dst;
 }

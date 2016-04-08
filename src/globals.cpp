@@ -15,35 +15,29 @@ std::vector<enemy> globals::enemies;
 int globals::menu_attack_size = 5;
 std::vector< std::string> globals::attack_choices = { "from left","from above","from right","from below","frontal attack" };
 std::vector<std::vector<POINTS>> globals::POINTS_LEFT = {
-	{ { 0, 0   },{ 190, 106 },{ 316, 180 } },
-	{ { 0, 180 },{ 190, 230 },{ 316, 268 } },
-	{ { 0, 360 },{ 190, 360 },{ 316, 360 } },
-	{ { 0, 540 },{ 190, 483 },{ 316, 450 } },
-	{ { 0, 720 },{ 190, 611 },{ 316, 537 } }
+	{ {  0, 0   },{   0, 180 },{   0, 360 },{   0, 540 },{   0, 720 } },
+	{ {190, 106 },{ 190, 230 },{ 190, 360 },{ 190, 483 },{ 190, 611 } },
+	{ {316, 180 },{ 316, 268 },{ 316, 360 },{ 316, 450 },{ 316, 537 } }
 };
 std::vector<std::vector<POINTS>> globals::POINTS_MIDDLE = {
-	{ { 316,180 },{ 638,180 },{ 958,180 } },
-	{ { 316,268 },{ 638,268 },{ 958,268 } },
-	{ { 316,360 },{ 638,360 },{ 958,360 } },
-	{ { 316,450 },{ 638,450 },{ 958,450 } },
-	{ { 316,537 },{ 638,537 },{ 958,537 } }
+	{ { 316,180 },{ 316,268 },{ 316,360 },{ 316,450 },{ 316,537 } },
+	{ { 638,180 },{ 638,268 },{ 638,360 },{ 638,450 },{ 638,537 } },
+	{ { 958,180 },{ 958,268 },{ 958,360 },{ 958,450 },{ 958,537 } }
 };
 std::vector<std::vector<POINTS>> globals::POINTS_RIGHT = {
-	{ { 958,180 },{ 1090,106 },{ 1280,  0 } },
-	{ { 958,268 },{ 1090,230 },{ 1280,180 } },
-	{ { 958,360 },{ 1090,360 },{ 1280,360 } },
-	{ { 958,450 },{ 1090,483 },{ 1280,540 } },
-	{ { 958,537 },{ 1090,611 },{ 1280,720 } }
+	{ {  958,180 },{  958,268 },{  958,360 },{  958,450 },{  958,537 } },
+	{ { 1090,106 },{ 1090,230 },{ 1090,360 },{ 1090,483 },{ 1090,611 } },
+	{ { 1280,0   },{ 1280,180 },{ 1280,360 },{ 1280,540 },{ 1280,720 } }
 };
 std::vector<std::vector<POINTS>> globals::POINTS_TOP = {
-	{ {   0, 0   },{ 638, 0   },{ 1028, 0   } },
-	{ { 190, 106 },{ 638, 106 },{ 1090, 106 } },
-	{ { 316, 180 },{ 638, 180 },{  958, 180 } }
+	{ {   0, 0   },{  190, 106 },{ 316, 180 } },
+	{ { 638, 0   },{  638, 106 },{ 638, 180 } },
+	{ {1028, 0   },{ 1090, 106 },{ 958, 180 } }
 };
 std::vector<std::vector<POINTS>> globals::POINTS_BOTTOM = {
-	{ { 316, 537 },{ 638, 537 },{ 1028, 537 } },
-	{ { 190, 611 },{ 638, 611 },{ 1090, 611 } },
-	{ {   0, 720 },{ 638, 720 },{ 1280, 720 } }
+	{ {  316, 537 },{  190, 611 },{    0, 720 } },
+	{ {  638, 537 },{  638, 611 },{  638, 720 } },
+	{ { 1028, 537 },{ 1090, 611 },{ 1280, 720 } }
 };
 
 /** Split string by tokens
@@ -141,13 +135,12 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 	Con.Size.X = (int)(*max_element(Xpoints.begin(), Xpoints.end()) - TopLeft.X);
 	Con.Size.Y = (int)(*max_element(Ypoints.begin(), Ypoints.end()) - TopLeft.Y);
     Con.CharAmount.X = BoxSize.X = Con.Size.X / FontX;
-	Con.CharAmount.Y = BoxSize.Y = Con.Size.X / FontY;
-	TopLeft = { TopLeft.X / FontX, TopLeft.Y / FontY };
+	Con.CharAmount.Y = BoxSize.Y = Con.Size.Y / FontY;
 	/*----------------------------------------------*/
 	CharSetImporter(&CharSet, "8x8terminal.dat");
 	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
-	ClearBox(TopLeft, BoxSize);
+	//ClearBox(TopLeft, BoxSize);
 	if (!err) {
 		/*Warp PNG */
 		vector<unsigned char> temp(PNG.Image, PNG.Image + PNG.Height*PNG.Width*4);
@@ -159,17 +152,18 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 			{ PointsTo[3].X - TopLeft.X, PointsTo[3].Y - TopLeft.Y }
 		};
 		cv::Mat tempmat = OpenWarpPerspective(
-			temp, cv::Size(PNG.Height,PNG.Width),
+			temp, cv::Size(PNG.Width,PNG.Height),
 			PointsFrom[0], PointsFrom[1], PointsFrom[2], PointsFrom[3],
 			PointsTotemp[0], PointsTotemp[1], PointsTotemp[2], PointsTotemp[3]
 			);
 		free(PNG.Image);
 		PNG.Image = tempmat.data;
-		PNG.Height = tempmat.rows;
-		PNG.Width = tempmat.cols;
+		//PNG.Height = tempmat.rows;
+		//PNG.Width = tempmat.cols;
 		CalculatePNGSizes(&PNG, &subsec, Con);
 		/*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
 		PreciseProcessPNG(&PNG, subsec, CharSet);
+		TopLeft = { TopLeft.X / FontX, TopLeft.Y / FontY };
 		WriteOutPic(&PNG, TopLeft, BoxSize);
 		//free(PNG.Image);
 		free(PNG.ASCII_Image);

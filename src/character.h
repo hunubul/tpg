@@ -45,6 +45,7 @@ public:
 	int wsc() { return wearing.weapon.getWeaponStaminaConsumption(); };
 	int ssc() { return wearing.shield.getShieldStaminaConsumption(); };
 	int gdx() { return wearing.weapon.getDamageX(); };
+	void BrokenInv();
 };
 
 class player : public character {

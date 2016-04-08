@@ -5,7 +5,12 @@
 
 using namespace std;
 
-item::item(){}
+item::item() { broken = false; }
+
+bool item::IsBroken(int asd) {
+	if (asd <= 0) return true;
+	else return false;
+}
 
 void item::ures() {
 	name = "EMPTY";
@@ -128,44 +133,162 @@ shield::shield() {
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
 		defstam += 3;
-		durability = (int)(durability*1.25);
+		durability = (durability*1.25);
 		break;
 	case 2:
 		material = "steel";
 		name = material + " " + name;
 		dmgx = dmgx*0.9;
 		defstam += 5;
-		durability = (int)(durability*1.5);
+		durability = (durability*1.5);
 		break;
 	}
-	durability += (rand() % 5) * 10;
+	durability += (rand() % 5) * (rand() % 10);
 }
 
 armor::armor() {
-
-
+	
 }
 headpiece::headpiece() {
-
-
+	int asd = rand() % 3;
+	durability = 100;
+	switch (asd)
+	{
+	case 0:
+		name = "Leather cap";
+		defx = 1.1;
+		break;
+	case 1:
+		name = "Mail hood";
+		durability = (durability*1.75);
+		defx = 1.3;
+		break;
+	case 2:
+		name = "Steel helmet";
+		durability = (durability*2.25);
+		defx = 1.5;
+		break;
+	}
+	durability += (rand() % 5) * (rand() % 10);
 }
 chestpiece::chestpiece() {
-
-
+	int asd = rand() % 3;
+	durability = 180;
+	switch (asd)
+	{
+	case 0:
+		name = "Leather armor";
+		defx = 1.2;
+		break;
+	case 1:
+		name = "Chainmail";
+		durability = (durability*1.75);
+		defx = 1.5;
+		break;
+	case 2:
+		name = "Steel plate armor";
+		durability = (durability*2.25);
+		defx = 1.75;
+		break;
+	}
+	durability += (rand() % 5) * (rand() % 10);
 }
 gloves::gloves() {
-
-
+	int asd = rand() % 3;
+	durability = 120;
+	switch (asd)
+	{
+	case 0:
+		name = "Leather gloves";
+		defx = 1.1;
+		break;
+	case 1:
+		name = "Chain gloves";
+		durability = (durability*1.5);
+		defx = 1.25;
+		break;
+	case 2:
+		name = "Steel gauntlets";
+		durability = (durability*1.75);
+		defx = 1.4;
+		break;
+	}
+	durability += (rand() % 5) * (rand() % 10);
 }
 pants::pants() {
-
+	int asd = rand() % 3;
+	durability = 180;
+	switch (asd)
+	{
+	case 0:
+		name = "Leather pants";
+		defx = 1.15;
+		break;
+	case 1:
+		name = "Chain leggings";
+		durability = (durability*1.25);
+		defx = 1.35;
+		break;
+	case 2:
+		name = "Steel plate leggings";
+		durability = (durability*1.5);
+		defx = 1.6;
+		break;
+	}
+	durability += (rand() % 5) * (rand() % 10);
 
 }
 legs::legs() {
-
-
+	int asd = rand() % 3;
+	durability = 150;
+	switch (asd)
+	{
+	case 0:
+		name = "Leather boots";
+		defx = 1.05;
+		break;
+	case 1:
+		name = "Chain boots";
+		durability = (durability*1.5);
+		defx = 1.15;
+		break;
+	case 2:
+		name = "Steel boots";
+		durability = (durability*1.75);
+		defx = 1.25;
+		break;
+	}
+	durability += (rand() % 5) * (rand() % 10);
 }
-
+//------------------DurDmg függvények-----------------
+void weapon::SubWeaponDur(int SubDur) {
+	durability -= SubDur;
+	IsBroken(durability);
+}
+void shield::SubShieldDur(int SubDur) {
+	durability -= SubDur;
+	IsBroken(durability);
+}
+void headpiece::SubHeadpieceDur(int SubDur) {
+	durability -= SubDur;
+	IsBroken(durability);
+}
+void chestpiece::SubArmorDur(int SubDur) {
+	durability -= SubDur;
+	IsBroken(durability);
+}
+void gloves::SubGlovesDur(int SubDur) {
+	durability -= SubDur;
+	IsBroken(durability);
+}
+void pants::SubPantsDur(int SubDur) {
+	durability -= SubDur;
+	IsBroken(durability);
+}
+void legs::SubLegsDur(int SubDur) {
+	durability -= SubDur;
+	IsBroken(durability);
+}
 //---------------------ÜRES ITEMEK--------------------
 emptyweapon::emptyweapon() {ures();}
 emptyshield::emptyshield() {ures();}

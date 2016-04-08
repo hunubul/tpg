@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-
-
 class item {
 public:
 		std::string name; //item neve
@@ -18,8 +16,10 @@ public:
 		int defstam; //stamina consumption, stamina fogyasztás védekezésenként, shield
 		int durability; //egyértelmű, mindennek van
 		int durdmg; //fegyvernél sebzés a durabilityre
+		bool broken;
 		item();
 		void ures();
+		bool IsBroken(int asd);
 };
 
 class weapon:public item {
@@ -28,12 +28,14 @@ public:
 	std::vector<item> beolvas();
 	int getWeaponStaminaConsumption() { return stcons; };
 	int getDamageX() { return dmgx; };
+	void SubWeaponDur(int subdur);
 };
 
 class shield:public item {
 public:
 	shield();
 	int getShieldStaminaConsumption() { return defstam; };
+	void SubShieldDur(int subdur);
 };
 
 
@@ -45,26 +47,31 @@ public:
 class headpiece:public armor {
 public:
 	headpiece();
+	void SubHeadpieceDur(int subdur);
 };
 
 class chestpiece:public armor {
 public:
 	chestpiece();
+	void SubArmorDur(int subdur);
 };
 
 class gloves:public armor {
 public:
 	gloves();
+	void SubGlovesDur(int subdur);
 };
 
 class pants:public armor {
 public:
 	pants();
+	void SubPantsDur(int subdur);
 };
 
 class legs:public armor {
 public:
 	legs();
+	void SubLegsDur(int subdur);
 };
 
 //---------------------ÜRES ITEMEK--------------------

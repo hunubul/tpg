@@ -82,11 +82,11 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
     TCOD_key_t input;
     TCODConsole::root->rect(0,ConsoleHeight-menu_height,menu_ch_sel_width,menu_height,true);
     if(p1.getStamina()>= p1.ssc()) {
-        for(int i=0; i<menu_attack_size; i++) TCODConsole::root->print(0,ConsoleHeight-menu_height+i,"%s",defense_choices[i].c_str());
+        for(int i=0; i<menu_defense_size; i++) TCODConsole::root->print(0,ConsoleHeight-menu_height+i,"%s",defense_choices[i].c_str());
         do {
             MenuSelection(0,selIndx,defense_choices,input,con_log);
             if(input.vk==TCODK_UP&&selIndx-1>=0) selIndx--;
-            if(input.vk==TCODK_DOWN&&selIndx+1<=menu_attack_size-1) selIndx++;
+            if(input.vk==TCODK_DOWN&&selIndx+1<=menu_defense_size-1) selIndx++;
         } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
     } else {
         do {
@@ -97,23 +97,28 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
     }
     TCODConsole::root->rect(0,ConsoleHeight-menu_height,menu_ch_sel_width*2,menu_height,true);
     if     (defense_choices[selIndx]=="block from left"&&local_atc==ALEFT&&p1.getStamina()>= p1.ssc()) {
-		con_log.push_back( {"You successfuly blocked an attack from left!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+		con_log.push_back({ "You successfuly blocked an attack from left!",TCOD_gold });
+		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
     else if(defense_choices[selIndx]=="block from above"&&local_atc==AUP&&p1.getStamina()>= p1.ssc()) {
-		con_log.push_back( {"You successfuly blocked an attack from above!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+		con_log.push_back( {"You successfuly blocked an attack from above!",TCOD_gold});
+		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
     else if(defense_choices[selIndx]=="block from right"&&local_atc==ARIGHT&&p1.getStamina()>= p1.ssc()) {
-		con_log.push_back( {"You successfuly blocked an attack from right!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+		con_log.push_back( {"You successfuly blocked an attack from right!",TCOD_gold});
+		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
     else if(defense_choices[selIndx]=="block from below"&&local_atc==ADOWN&&p1.getStamina()>= p1.ssc()) {
-		con_log.push_back( {"You successfuly blocked an attack from below!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+		con_log.push_back( {"You successfuly blocked an attack from below!",TCOD_gold});
+		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
     else if(defense_choices[selIndx]=="block frontal attack"&&local_atc==AMID&&p1.getStamina()>= p1.ssc()) {
-		con_log.push_back( {"You successfuly blocked a frontal attack!",TCOD_gold}); p1.subStamina(p1.ssc()); }
+		con_log.push_back( {"You successfuly blocked a frontal attack!",TCOD_gold});
+		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
     else {
         e.subStamina(e.wsc()/2);
         bool Critical=p1.damage(e.gdx() * e.offense);
-        if     (local_atc==ALEFT) con_log.push_back( {"The enemy successfuly hit you from left.",TCOD_purple});
-        else if(local_atc==AUP)   con_log.push_back( {"The enemy successfuly hit you from above.",TCOD_purple});
-        else if(local_atc==ARIGHT)con_log.push_back( {"The enemy successfuly hit you from right.",TCOD_purple});
-        else if(local_atc==ADOWN) con_log.push_back( {"The enemy successfuly hit you from below.",TCOD_purple});
-        else if(local_atc==AMID)  con_log.push_back( {"The enemy successfuly hit you with a frontal attack.",TCOD_purple});
+		if (local_atc == ALEFT)			{ con_log.push_back({ "The enemy successfuly hit you from left.",TCOD_purple }); }
+		else if (local_atc == AUP)		{ con_log.push_back({ "The enemy successfuly hit you from above.",TCOD_purple }); }
+		else if (local_atc == ARIGHT)	{ con_log.push_back({ "The enemy successfuly hit you from right.",TCOD_purple }); }
+		else if (local_atc == ADOWN)	{ con_log.push_back({ "The enemy successfuly hit you from below.",TCOD_purple }); }
+		else if (local_atc == AMID)		{ con_log.push_back({ "The enemy successfuly hit you with a frontal attack.",TCOD_purple }); }
         if(Critical) con_log.push_back( {"Critical damage!",TCOD_flame});
     }
 }

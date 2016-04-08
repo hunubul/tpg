@@ -224,7 +224,8 @@ void CalculatePNGSizes(IMAGE* PNG, SUBSECTION* subsec, CONSOLEINFO Con) {
 }
 
 //TODO OpenCV tisztítás
-void OpenWarpPerspective(const std::vector<unsigned char>& _image
+cv::Mat OpenWarpPerspective(const std::vector<unsigned char>& _image
+	, const cv::Size _img_size
 	, const POINTS& _lu
 	, const POINTS& _ru
 	, const POINTS& _rd
@@ -234,20 +235,23 @@ void OpenWarpPerspective(const std::vector<unsigned char>& _image
 	, const POINTS& _rd_result
 	, const POINTS& _ld_result)
 {
-	std::vector<POINTS> source_points(4);
-	std::vector<POINTS> dest_points(4);
+	cv::Point2f source_points[4];
+	cv::Point2f dest_points[4];
+	
+	source_points[0] = cv::Point2f(_lu.X,_lu.Y);
+	source_points[1] = cv::Point2f(_ru.X, _ru.Y);
+	source_points[2] = cv::Point2f(_rd.X, _rd.Y);
+	source_points[3] = cv::Point2f(_ld.X, _ld.Y);
 
-	source_points[0] = _lu;
-	source_points[1] = _ru;
-	source_points[2] = _rd;
-	source_points[3] = _ld;
-
-	dest_points[0] = _lu_result;
-	dest_points[1] = _ru_result;
-	dest_points[2] = _rd_result;
-	dest_points[3] = _ld_result;
+	dest_points[0] = cv::Point2f(_lu_result.X, _lu_result.Y);
+	dest_points[1] = cv::Point2f(_ru_result.X, _ru_result.Y);
+	dest_points[2] = cv::Point2f(_rd_result.X, _rd_result.Y);
+	dest_points[3] = cv::Point2f(_ld_result.X, _ld_result.Y);
 
 	cv::Mat dst;
+	cv::Mat asd(_img_size, CV_8UC4, (void*)_image.data());
 	cv::Mat _transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
-	cv::warpPerspective(_image, dst, _transform_matrix, dst.size());
+	cv::warpPerspective(asd, dst, _transform_matrix, dst.size());
+
+	return dst;
 }

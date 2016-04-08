@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "logging.h"
 #include "lodepng\lodepng.h"
+#include <math.h>
 
 using namespace std;
 
@@ -92,40 +93,55 @@ void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	}
 	else ErrorOccured(PicName + ".png was not found");
 }
-void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS>& PointsFrom, vector<POINTS>& PointsTo) {
-	if (PointsFrom.size() < 4 || PointsTo.size() < 4) FatalError("Not enough Points to warp!!");
+void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
+	if (PointsTo.size() < 4) FatalError("Not enough Points to warp!!");
 	CONSOLEINFO Con;
 	IMAGE PNG;
 	SUBSECTION subsec;
 	CHAR_SET CharSet;
 	string PicPath = IMAGE_PATH + PicName + ".png";
+	SIZES BoxSize;
+	vector<double> Xpoints = { PointsTo[0].X,PointsTo[1].X,PointsTo[2].X,PointsTo[3].X };
+	vector<double> Ypoints = { PointsTo[0].X,PointsTo[1].X,PointsTo[2].X,PointsTo[3].X };
+	SIZES TopLeft = { min(PointsTo[0].X,PointsTo[3].X), max(PointsTo[0].Y,PointsTo[1].Y) };
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
 	Con.FontSize.Y = FontY;
-	//Con.CharAmount.X = BoxSize.X;
-	//Con.CharAmount.Y = BoxSize.Y;
-	//Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
-	//Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+    Con.CharAmount.X = BoxSize.X = *max_element(Xpoints.begin(), Xpoints.end()) - TopLeft.X;
+	Con.CharAmount.Y = BoxSize.Y = *max_element(Ypoints.begin(), Ypoints.end()) - TopLeft.Y;
+	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
 	/*----------------------------------------------*/
 	CharSetImporter(&CharSet, "8x8terminal.dat");
 	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
-	//ClearBox(TopLeft, BoxSize);
+	ClearBox(TopLeft, BoxSize);
 	if (!err) {
+		/*Warp PNG */
+		vector<unsigned char> temp(PNG.Image, PNG.Image + PNG.Height*PNG.Width*4);
+		vector<POINTS> PointsFrom = { { 0,0 }, { static_cast<double>(PNG.Width),0 }, { static_cast<double>(PNG.Width),static_cast<double>(PNG.Height) }, { 0,static_cast<double>(PNG.Height) } };
+		vector<POINTS> PointsTotemp = {
+			{ PointsTo[0].X - TopLeft.X, PointsTo[0].Y - TopLeft.Y }, //Warp to
+			{ PointsTo[1].X - TopLeft.X, PointsTo[1].Y - TopLeft.Y },
+			{ PointsTo[2].X - TopLeft.X, PointsTo[2].Y - TopLeft.Y },
+			{ PointsTo[3].X - TopLeft.X, PointsTo[3].Y - TopLeft.Y }
+		};
+		cv::Mat tempmat = OpenWarpPerspective(
+			temp, cv::Size(PNG.Height,PNG.Width),
+			PointsFrom[0], PointsFrom[1], PointsFrom[2], PointsFrom[3],
+			PointsTotemp[0], PointsTotemp[1], PointsTotemp[2], PointsTotemp[3]
+			);
+		free(PNG.Image);
+		PNG.Image = tempmat.data;
+		PNG.Height = tempmat.rows;
+		PNG.Width = tempmat.cols;
 		CalculatePNGSizes(&PNG, &subsec, Con);
 		/*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
 		PreciseProcessPNG(&PNG, subsec, CharSet);
-		/*Warp PNG */
-		vector<unsigned char> temp(PNG.ASCII_Image, PNG.ASCII_Image + PNG.HeightTile*PNG.WidthTile);
-		OpenWarpPerspective(
-			temp,
-			PointsFrom[0], PointsFrom[1], PointsFrom[2], PointsFrom[3],
-			PointsTo[0], PointsTo[1], PointsTo[2], PointsTo[3]
-			);
-		//WriteOutPic(&PNG, TopLeft, BoxSize);
-		free(PNG.Image);
-		free(PNG.ASCII_Image);
-		free(PNG.ASCII_Color);
+		WriteOutPic(&PNG, TopLeft, BoxSize);
+		//free(PNG.Image);
+		//free(PNG.ASCII_Image);
+		//free(PNG.ASCII_Color);
 	}
 	else ErrorOccured(PicName + ".png was not found");
 }

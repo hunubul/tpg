@@ -58,14 +58,14 @@ namespace globals {
 	};
 	// Szoba Vízszintes pontok
 	static std::vector<std::vector<POINTS>> POINTS_TOP = {
-		{ {   0, 0   },{ 638, 0   },{1028, 0   } },
-		{ { 190, 106 },{ 638, 106 },{1090, 106 } },
-		{ { 316, 180 },{ 638, 180 },{ 958, 180 } }
+		{ {   0, 0   },{  190, 106 },{ 316, 180 } },
+		{ { 638, 0   },{  638, 106 },{ 638, 180 } },
+		{ {1028, 0   },{ 1090, 106 },{ 958, 180 } }
 	};
 	static std::vector<std::vector<POINTS>> POINTS_BOTTOM = {
-		{ { 316, 537 },{ 638, 537 },{1028, 537 } },
-		{ { 190, 611 },{ 638, 611 },{1090, 611 } },
-		{ {   0, 720 },{ 638, 720 },{1280, 720 } }
+		{ { 316, 537 },{  190, 611 },{   0, 720 } },
+		{ { 638, 537 },{  638, 611 },{ 638, 720 } },
+		{ {1028, 537 },{ 1090, 611 },{1280, 720 } }
 	};
 
 	/* Global functions */
@@ -74,7 +74,8 @@ namespace globals {
 	/**< Clear Polygon Box @param lu left-upper @param ru right-upper @param rl right-lower @param ll left-lower*/
 	void ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll);
 	void Pic2ASCIIandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize);
-	void Pic2ASCIIWarpandWrite(std::string PicName, std::vector<POINTS>& PointsFrom, std::vector<POINTS>& PointsTo);
+	/**< Warps and prints image, start destiny Points from TOPLEFT clockwise */
+	void Pic2ASCIIWarpandWrite(std::string PicName, std::vector<POINTS> PointsTo);
 	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
 }
 

@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
 	BottomBoxPos = SIZES{ (ConsoleWidth - BottomBoxSiz.X) / 2,ConsoleHeight - BottomBoxSiz.Y };
 	MiddleBoxPos = SIZES{ (ConsoleWidth - MiddleBoxSiz.X) / 2,(ConsoleHeight - MiddleBoxSiz.Y) / 2 };
 
-	/*for (int i = 0;i < POINTS_LEFT[0].size();i++) {
-		for (int j = 0;i < POINTS_LEFT.size();j++) {
+	for (size_t i = 0;i < POINTS_LEFT[0].size();i++) {
+		for (size_t j = 0;j < POINTS_LEFT.size();j++) {
 			POINTS_LEFT[j][i] = {
 				POINTS_LEFT[j][i].X*ConsoleWidth / 1280,
 				POINTS_LEFT[j][i].Y*ConsoleHeight / 720
@@ -59,8 +59,8 @@ int main(int argc, char *argv[]) {
 			};
 		}
 	}
-	for (int i = 0;i < POINTS_TOP[0].size();i++) {
-		for (int j = 0;i < POINTS_TOP.size();j++) {
+	for (size_t i = 0;i < POINTS_TOP[0].size();i++) {
+		for (size_t j = 0;j < POINTS_TOP.size();j++) {
 			POINTS_TOP[j][i] = {
 				POINTS_TOP[j][i].X*ConsoleWidth / 1280,
 				POINTS_TOP[j][i].Y*ConsoleHeight / 720
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 				POINTS_BOTTOM[j][i].Y*ConsoleHeight / 720
 			};
 		}
-	}*/
+	}
 	TCODConsole::initRoot(ConsoleWidth, ConsoleHeight, "TPG");
 	TCODSystem::setFps(FPS);
 #ifndef DEBUG

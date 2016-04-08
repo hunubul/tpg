@@ -104,7 +104,8 @@ void Indexer(CHAR_SET* CharSet,int char_index);
 void WriteOutPic(IMAGE* PNG,SIZES TopLeft,SIZES BoxSize);
 void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 
-void OpenWarpPerspective(const std::vector<unsigned char>& _image
+cv::Mat OpenWarpPerspective(const std::vector<unsigned char>& _image
+	, const cv::Size _img_size
 	, const POINTS& _lu
 	, const POINTS& _ru
 	, const POINTS& _rd

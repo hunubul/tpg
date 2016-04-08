@@ -28,5 +28,9 @@ public:
     void WriteMiddleBox(std::vector<std::string> aktFal);
     void WriteLeftBox(std::vector<std::string> aktFal);
     void WriteRightBox(std::vector<std::string> aktFal);
+
+	void WriteWarpMiddleBox(std::vector<std::string> aktFal);
+	void WriteWarpLeftBox(std::vector<std::string> aktFal);
+	void WriteWarpRightBox(std::vector<std::string> aktFal);
 };
 #endif

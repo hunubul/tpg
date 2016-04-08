@@ -13,6 +13,15 @@ SIZES enemy::TopLeft;
 character::character(int maxhp,int maxstam,int defense,int offense) :
     maxhp(maxhp),hp(maxhp),maxstam(maxstam),stam(maxstam),defense(defense),offense(offense) {}
 
+void character::BrokenInv() {
+	if (wearing.weapon.broken) { wearing.weapon= (weapon)emptyweapon(); }
+	if (wearing.shield.broken) { wearing.shield = (shield)emptyshield(); }
+	if (wearing.chestpiece.broken) { wearing.chestpiece = (chestpiece)emptychestpiece(); }
+	if (wearing.headpiece.broken) { wearing.headpiece = (headpiece)emptyheadpiece(); }
+	if (wearing.gloves.broken) { wearing.gloves = (gloves)emptygloves(); }
+	if (wearing.pants.broken) { wearing.pants = (pants)emptypants(); }
+	if (wearing.legs.broken) { wearing.legs = (legs)emptylegs(); }
+}
 
 bool character::damage(double DMG) {
     double asd=(rand()%80+81)/100.0;
@@ -58,10 +67,10 @@ enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
 	wearing.weapon = (weapon)emptyweapon();
 	wearing.shield = (shield)emptyshield();
 	wearing.chestpiece = (chestpiece)emptychestpiece();
+	wearing.headpiece = (headpiece)emptyheadpiece();
 	wearing.gloves = (gloves)emptygloves();
 	wearing.pants = (pants)emptypants();
 	wearing.legs = (legs)emptylegs();
-	wearing.headpiece = (headpiece)emptyheadpiece();
 	int asd = rand() % 5;
 	if (asd == 0) wearing.weapon;
 	if (asd == 1) wearing.shield;

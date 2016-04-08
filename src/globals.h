@@ -32,8 +32,8 @@ namespace globals {
 	static std::string harc_menu_choices[] = { "Attack","Use item","Rest" };
 	extern int menu_attack_size;
 	extern std::vector< std::string> attack_choices;
-	static const int menu_defense_size = 5;
-	static std::string defense_choices[] = { "block from left","block from above","block from right","block from below","block frontal attack" };
+	static const int menu_defense_size = 6;
+	static std::string defense_choices[] = { "block from left","block from above","block from right","block from below","block frontal attack","don't block bro, don't do it!" };
 	static const int menu_useitem_size = 3;
 	static std::string useitem_choices[] = { "???","???","???" };
 	static const int con_log_StartingPos = 4 * menu_ch_sel_width;

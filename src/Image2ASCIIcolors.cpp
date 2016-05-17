@@ -224,8 +224,7 @@ void CalculatePNGSizes(IMAGE* PNG, SUBSECTION* subsec, CONSOLEINFO Con) {
 }
 
 //TODO OpenCV tisztítás
-cv::Mat OpenWarpPerspective(const std::vector<unsigned char>& _image
-	, const cv::Size _img_size
+cv::Mat OpenWarpPerspective(const cv::Mat& _image
 	, const POINTS& _lu
 	, const POINTS& _ru
 	, const POINTS& _rd
@@ -248,10 +247,14 @@ cv::Mat OpenWarpPerspective(const std::vector<unsigned char>& _image
 	dest_points[2] = cv::Point2f(_rd_result.X, _rd_result.Y);
 	dest_points[3] = cv::Point2f(_ld_result.X, _ld_result.Y);
 
-	cv::Mat dst;
-	cv::Mat asd(_img_size, CV_8UC4, (void*)_image.data());
-	cv::Mat _transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
-	cv::warpPerspective(asd, dst, _transform_matrix, _img_size);
+	cv::Size dest_size = cv::Size(
+		std::fmax(dest_points[1].x - dest_points[0].x, dest_points[2].x - dest_points[3].x),
+		std::fmax(dest_points[3].y - dest_points[0].y, dest_points[2].y - dest_points[1].y)
+		);
 
+	cv::Mat dst;
+	cv::Mat _transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
+	cv::warpPerspective(_image, dst, _transform_matrix, dest_size);
+	
 	return dst;
 }

@@ -32,7 +32,7 @@ std::vector<std::vector<POINTS>> globals::POINTS_RIGHT = {
 std::vector<std::vector<POINTS>> globals::POINTS_TOP = {
 	{ {   0, 0   },{  190, 106 },{ 316, 180 } },
 	{ { 638, 0   },{  638, 106 },{ 638, 180 } },
-	{ {1028, 0   },{ 1090, 106 },{ 958, 180 } }
+	{ {1280, 0   },{ 1090, 106 },{ 958, 180 } }
 };
 std::vector<std::vector<POINTS>> globals::POINTS_BOTTOM = {
 	{ {  316, 537 },{  190, 611 },{    0, 720 } },
@@ -128,7 +128,10 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 	SIZES BoxSize;
 	vector<double> Xpoints = { PointsTo[0].X,PointsTo[1].X,PointsTo[2].X,PointsTo[3].X };
 	vector<double> Ypoints = { PointsTo[0].Y,PointsTo[1].Y,PointsTo[2].Y,PointsTo[3].Y };
-	SIZES TopLeft = { static_cast<int>(min(PointsTo[0].X,PointsTo[3].X)), static_cast<int>(min(PointsTo[0].Y,PointsTo[1].Y)) };
+	SIZES TopLeft = {
+		static_cast<int>( min(PointsTo[0].X,PointsTo[3].X) ),
+		static_cast<int>( min(PointsTo[0].Y,PointsTo[1].Y) )
+	};
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
 	Con.FontSize.Y = FontY;
@@ -143,23 +146,31 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 	//ClearBox(TopLeft, BoxSize);
 	if (!err) {
 		/*Warp PNG */
-		vector<unsigned char> temp(PNG.Image, PNG.Image + PNG.Height*PNG.Width*4);
-		vector<POINTS> PointsFrom = { { 0,0 }, { static_cast<double>(PNG.Width),0 }, { static_cast<double>(PNG.Width),static_cast<double>(PNG.Height) }, { 0,static_cast<double>(PNG.Height) } };
+		//vector<unsigned char> temp(PNG.Image, PNG.Image + PNG.Height*PNG.Width*4);
+		cv::Mat temp(PNG.Height,PNG.Width, CV_8UC4, (void*)PNG.Image);
+		vector<POINTS> PointsFrom = {
+			{ 0, 0 },
+			{ (double)PNG.Width, 0 },
+			{ (double)PNG.Width, (double)PNG.Height },
+			{ 0, (double)PNG.Height }
+		};
 		vector<POINTS> PointsTotemp = {
 			{ PointsTo[0].X - TopLeft.X, PointsTo[0].Y - TopLeft.Y }, //Warp to
 			{ PointsTo[1].X - TopLeft.X, PointsTo[1].Y - TopLeft.Y },
 			{ PointsTo[2].X - TopLeft.X, PointsTo[2].Y - TopLeft.Y },
 			{ PointsTo[3].X - TopLeft.X, PointsTo[3].Y - TopLeft.Y }
 		};
-		cv::Mat tempmat = OpenWarpPerspective(
-			temp, cv::Size(PNG.Width,PNG.Height),
-			PointsFrom[0], PointsFrom[1], PointsFrom[2], PointsFrom[3],
+		cv::Mat tempmat = OpenWarpPerspective( temp,
+			  PointsFrom[0],   PointsFrom[1],   PointsFrom[2],   PointsFrom[3],
 			PointsTotemp[0], PointsTotemp[1], PointsTotemp[2], PointsTotemp[3]
-			);
+		);
+		//std::vector<std::uint8_t> ImageBuffer;
+		//lodepng::encode(ImageBuffer, tempmat.data, tempmat.cols, tempmat.rows);
+		//lodepng::save_file(ImageBuffer, ("./asd/"+PicName + "asd.png").c_str());
 		free(PNG.Image);
-		PNG.Image = tempmat.data;
-		//PNG.Height = tempmat.rows;
-		//PNG.Width = tempmat.cols;
+		PNG.Image = (unsigned char*)tempmat.data;
+		PNG.Height = tempmat.rows;
+		PNG.Width = tempmat.cols;
 		CalculatePNGSizes(&PNG, &subsec, Con);
 		/*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
 		PreciseProcessPNG(&PNG, subsec, CharSet);

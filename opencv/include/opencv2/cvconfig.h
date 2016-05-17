@@ -26,10 +26,10 @@
 /* #undef HAVE_CARBON */
 
 /* AMD's Basic Linear Algebra Subprograms Library*/
-/* #undef HAVE_CLAMDBLAS */
+#define HAVE_CLAMDBLAS
 
 /* AMD's OpenCL Fast Fourier Transform Library*/
-/* #undef HAVE_CLAMDFFT */
+#define HAVE_CLAMDFFT
 
 /* Clp support */
 /* #undef HAVE_CLP */

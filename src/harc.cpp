@@ -54,10 +54,11 @@ void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
 		con_log.push_back( {"Your frontal attack got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
     else {
         p1.subStamina(p1.wsc()/2);
-        bool Critical=e.damage(p1.gdx());
+        bool Critical=e.damage(p1.wearing.weapon.dmgx);
         con_log.push_back( {"Your attack was successful.",TCOD_pink});
         if(Critical) con_log.push_back( {"Critical damage!",TCOD_flame});
     }
+	PrintPlayerStats();
 }
 
 void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
@@ -113,7 +114,7 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
 		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
     else {
         e.subStamina(e.wsc()/2);
-        bool Critical=p1.damage(e.gdx() * e.offense);
+        bool Critical=p1.damage(e.wearing.weapon.dmgx * e.offense);
 		if (local_atc == ALEFT)			{ con_log.push_back({ "The enemy successfuly hit you from left.",TCOD_purple }); }
 		else if (local_atc == AUP)		{ con_log.push_back({ "The enemy successfuly hit you from above.",TCOD_purple }); }
 		else if (local_atc == ARIGHT)	{ con_log.push_back({ "The enemy successfuly hit you from right.",TCOD_purple }); }
@@ -121,6 +122,7 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
 		else if (local_atc == AMID)		{ con_log.push_back({ "The enemy successfuly hit you with a frontal attack.",TCOD_purple }); }
         if(Critical) con_log.push_back( {"Critical damage!",TCOD_flame});
     }
+	PrintPlayerStats();
 }
 
 void PrintPlayerStats() {
@@ -253,13 +255,11 @@ void HarcGUI(enemy e,ROUND most) {
         }
     } while(e.getHP()>0&&p1.getHP()>0&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
     if(e.getHP()==0) {
-        PrintPlayerStats();
         con_log.push_back( {e.name+" is dead!",TCOD_red});
         std::string anyad[]={"Victory!"};
         MenuSelection(0,0,anyad,input,con_log);
     }
     if(p1.getHP()==0) {
-        PrintPlayerStats();
         con_log.push_back( {"K den.",TCOD_red});
         std::string anyad[]={"Game Over!"};
         MenuSelection(0,0,anyad,input,con_log);

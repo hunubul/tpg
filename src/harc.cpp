@@ -9,7 +9,6 @@ using namespace std;
 //TODO ha enemynek van shieldje, akkor ahhoz képest védekezzen: normál shield: 2 helyen, nagy shield: közép + 1 hely, az lesz a könyebb
 //TODO fegyverekhez (+nagyshieldhez) különleges támadás, effektek, effektekhez meg eleve az egész effektek részt meg kell írni
 //Ezt úgy, hogy fegyvertípust azonosítani, hozzáadni a különleges támadás nevét az attack choices-hoz, ehhez tárolni kell globálisan a neveket
-//TODO durability management
 
 std::string WeaponArtName;
 
@@ -42,6 +41,8 @@ void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
         if(dice>=80) local_def=(ADIR)(local_def+1);
         local_def=(ADIR)(local_def%5);
     }
+	int DDamage;
+	e.wearing.shield.SubShieldDur(DDamage);
     if     (attack_choices[selIndx]=="from left"&&local_def==ALEFT&&e.getStamina()>=e.ssc()) {
 		con_log.push_back( {"You attacked from left, but it got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
     else if(attack_choices[selIndx]=="from above"&&local_def==AUP&&e.getStamina()>= e.ssc()) {
@@ -53,11 +54,30 @@ void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
     else if(attack_choices[selIndx]=="frontal attack"&&local_def==AMID&&e.getStamina()>= e.ssc()) {
 		con_log.push_back( {"Your frontal attack got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }
     else {
+		e.wearing.shield.SubShieldDur(-DDamage);
         p1.subStamina(p1.wsc()/2);
-        bool Critical=e.damage(p1.gdx());
+		switch (selIndx)
+		{
+		case 0:
+		case 2:
+			e.wearing.gloves.SubGlovesDur(DDamage / 2);
+			e.wearing.chestpiece.SubArmorDur(DDamage / 2);
+			break;
+		case 1:
+			e.wearing.headpiece.SubHeadpieceDur(DDamage);
+			break;
+		case 3:
+			e.wearing.pants.SubPantsDur(DDamage);
+			break;
+		case 4:
+			e.wearing.chestpiece.SubArmorDur(DDamage);
+			break;
+		}
+        bool Critical=e.damage(p1.wearing.weapon.dmgx);
         con_log.push_back( {"Your attack was successful.",TCOD_pink});
         if(Critical) con_log.push_back( {"Critical damage!",TCOD_flame});
     }
+	PrintPlayerStats();
 }
 
 void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
@@ -96,6 +116,8 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
         } while(input.vk!=TCODK_ENTER&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
     }
     TCODConsole::root->rect(0,ConsoleHeight-menu_height,menu_ch_sel_width*2,menu_height,true);
+	int DDamage = e.wearing.weapon.durdmg;
+	p1.wearing.shield.SubShieldDur(DDamage);
     if     (defense_choices[selIndx]=="block from left"&&local_atc==ALEFT&&p1.getStamina()>= p1.ssc()) {
 		con_log.push_back({ "You successfuly blocked an attack from left!",TCOD_gold });
 		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
@@ -113,14 +135,33 @@ void EnemyAttack(enemy &e,std::vector<CONLOG> &con_log) {
 		p1.subStamina(p1.ssc()); p1.wearing.shield.durability -= e.wearing.weapon.durdmg; }
     else {
         e.subStamina(e.wsc()/2);
-        bool Critical=p1.damage(e.gdx() * e.offense);
-		if (local_atc == ALEFT)			{ con_log.push_back({ "The enemy successfuly hit you from left.",TCOD_purple }); }
-		else if (local_atc == AUP)		{ con_log.push_back({ "The enemy successfuly hit you from above.",TCOD_purple }); }
-		else if (local_atc == ARIGHT)	{ con_log.push_back({ "The enemy successfuly hit you from right.",TCOD_purple }); }
-		else if (local_atc == ADOWN)	{ con_log.push_back({ "The enemy successfuly hit you from below.",TCOD_purple }); }
-		else if (local_atc == AMID)		{ con_log.push_back({ "The enemy successfuly hit you with a frontal attack.",TCOD_purple }); }
+		p1.wearing.shield.SubShieldDur(-DDamage);
+        bool Critical=p1.damage(e.wearing.weapon.dmgx * e.offense);
+		if (local_atc == ALEFT)			{
+			con_log.push_back({ "The enemy successfuly hit you from left.",TCOD_purple });
+			p1.wearing.gloves.SubGlovesDur(DDamage / 2);
+			p1.wearing.chestpiece.SubArmorDur(DDamage / 2);
+		}
+		else if (local_atc == AUP)		{
+			con_log.push_back({ "The enemy successfuly hit you from above.",TCOD_purple });
+			e.wearing.headpiece.SubHeadpieceDur(DDamage);
+		}
+		else if (local_atc == ARIGHT)	{
+			con_log.push_back({ "The enemy successfuly hit you from right.",TCOD_purple });
+			e.wearing.gloves.SubGlovesDur(DDamage / 2);
+			e.wearing.chestpiece.SubArmorDur(DDamage / 2);
+		}
+		else if (local_atc == ADOWN)	{
+			con_log.push_back({ "The enemy successfuly hit you from below.",TCOD_purple });
+			e.wearing.pants.SubPantsDur(DDamage);
+		}
+		else if (local_atc == AMID)		{
+			con_log.push_back({ "The enemy successfuly hit you with a frontal attack.",TCOD_purple });
+			e.wearing.chestpiece.SubArmorDur(DDamage);
+		}
         if(Critical) con_log.push_back( {"Critical damage!",TCOD_flame});
     }
+	PrintPlayerStats();
 }
 
 void PrintPlayerStats() {
@@ -253,13 +294,11 @@ void HarcGUI(enemy e,ROUND most) {
         }
     } while(e.getHP()>0&&p1.getHP()>0&&input.vk!=TCODK_ESCAPE&&!TCODConsole::isWindowClosed());
     if(e.getHP()==0) {
-        PrintPlayerStats();
         con_log.push_back( {e.name+" is dead!",TCOD_red});
         std::string anyad[]={"Victory!"};
         MenuSelection(0,0,anyad,input,con_log);
     }
     if(p1.getHP()==0) {
-        PrintPlayerStats();
         con_log.push_back( {"K den.",TCOD_red});
         std::string anyad[]={"Game Over!"};
         MenuSelection(0,0,anyad,input,con_log);

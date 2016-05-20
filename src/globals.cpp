@@ -12,6 +12,7 @@ SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;
 SIZES  globals::MiddleBoxSiz, globals::MiddleBoxPos;
 player globals::p1;
 std::vector<enemy> globals::enemies;
+CHAR_SET globals::CharSet;
 int globals::menu_attack_size = 5;
 std::vector< std::string> globals::attack_choices = { "from left","from above","from right","from below","frontal attack" };
 std::vector<std::vector<POINTS>> globals::POINTS_LEFT = {
@@ -62,7 +63,6 @@ void globals::Pic2ASCII(string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII) {
 	CONSOLEINFO Con;
 	IMAGE PNG;
 	SUBSECTION subsec;
-	CHAR_SET CharSet;
 	string PicPath = IMAGE_PATH + PicName + ".png";
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
@@ -72,8 +72,6 @@ void globals::Pic2ASCII(string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII) {
 	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
 	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
 	/*----------------------------------------------*/
-	CharSetImporter(&CharSet, "8x8terminal.dat");
-	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
 	//ClearBox(TopLeft, BoxSize);
 	if (!err) {
@@ -94,7 +92,6 @@ void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	CONSOLEINFO Con;
 	IMAGE PNG;
 	SUBSECTION subsec;
-	CHAR_SET CharSet;
 	string PicPath = IMAGE_PATH + PicName + ".png";
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
@@ -104,8 +101,6 @@ void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
 	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
 	/*----------------------------------------------*/
-	CharSetImporter(&CharSet, "8x8terminal.dat");
-	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
 	ClearBox(TopLeft, BoxSize);
 	if (!err) {
@@ -123,14 +118,13 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 	CONSOLEINFO Con;
 	IMAGE PNG;
 	SUBSECTION subsec;
-	CHAR_SET CharSet;
 	string PicPath = IMAGE_PATH + PicName + ".png";
 	SIZES BoxSize;
 	vector<double> Xpoints = { PointsTo[0].X,PointsTo[1].X,PointsTo[2].X,PointsTo[3].X };
 	vector<double> Ypoints = { PointsTo[0].Y,PointsTo[1].Y,PointsTo[2].Y,PointsTo[3].Y };
 	SIZES TopLeft = {
-		static_cast<int>( min(PointsTo[0].X,PointsTo[3].X) ),
-		static_cast<int>( min(PointsTo[0].Y,PointsTo[1].Y) )
+		(int)( min(PointsTo[0].X,PointsTo[3].X) ),
+		(int)( min(PointsTo[0].Y,PointsTo[1].Y) )
 	};
 	/*-----------Initializing CONSOLEINFO-----------*/
 	Con.FontSize.X = FontX;
@@ -140,26 +134,50 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
     Con.CharAmount.X = BoxSize.X = Con.Size.X / FontX;
 	Con.CharAmount.Y = BoxSize.Y = Con.Size.Y / FontY;
 	/*----------------------------------------------*/
-	CharSetImporter(&CharSet, "8x8terminal.dat");
-	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
 	//ClearBox(TopLeft, BoxSize);
 	if (!err) {
 		/*Warp PNG */
 		//vector<unsigned char> temp(PNG.Image, PNG.Image + PNG.Height*PNG.Width*4);
-		cv::Mat temp(PNG.Height,PNG.Width, CV_8UC4, (void*)PNG.Image);
+		cv::Mat temp(PNG.Height, PNG.Width, CV_8UC4, (void*)PNG.Image);
 		vector<POINTS> PointsFrom = {
 			{ 0, 0 },
 			{ (double)PNG.Width, 0 },
 			{ (double)PNG.Width, (double)PNG.Height },
 			{ 0, (double)PNG.Height }
 		};
-		vector<POINTS> PointsTotemp = {
-			{ PointsTo[0].X - TopLeft.X, PointsTo[0].Y - TopLeft.Y }, //Warp to
-			{ PointsTo[1].X - TopLeft.X, PointsTo[1].Y - TopLeft.Y },
-			{ PointsTo[2].X - TopLeft.X, PointsTo[2].Y - TopLeft.Y },
-			{ PointsTo[3].X - TopLeft.X, PointsTo[3].Y - TopLeft.Y }
-		};
+		vector<POINTS> PointsTotemp;
+		POINTS lu= { PointsTo[0].X - TopLeft.X, PointsTo[0].Y - TopLeft.Y };
+		POINTS ru= { PointsTo[1].X - TopLeft.X, PointsTo[1].Y - TopLeft.Y };
+		POINTS rl= { PointsTo[2].X - TopLeft.X, PointsTo[2].Y - TopLeft.Y };
+		POINTS ll= { PointsTo[3].X - TopLeft.X, PointsTo[3].Y - TopLeft.Y };
+		if (PNG.Height > PNG.Width) {
+		// Függõleges lock
+			lu.X *= (double)PNG.Width / PNG.Height;
+			ru.X *= (double)PNG.Width / PNG.Height;
+			rl.X *= (double)PNG.Width / PNG.Height;
+			ll.X *= (double)PNG.Width / PNG.Height;
+			double ratio = (fabs(PointsTo[2].X - PointsTo[3].X) - fabs(rl.X - ll.X) )/2*fabs(PointsTo[3].Y - PointsTo[2].Y) / (PointsTo[2].X - PointsTo[3].X);
+			PointsTotemp = {
+				{ lu.X, lu.Y  }, //Warp to
+				{ ru.X, ru.Y  },
+				{ rl.X, rl.Y  },
+				{ ll.X, ll.Y  }
+			};
+		} else {
+		// Vízszintes lock
+			lu.Y *= (double)PNG.Height / PNG.Width;
+			ru.Y *= (double)PNG.Height / PNG.Width;
+			rl.Y *= (double)PNG.Height / PNG.Width;
+			ll.Y *= (double)PNG.Height / PNG.Width;
+			double ratio = fabs(ll.X - PointsTo[3].X)*fabs(PointsTo[3].Y - PointsTo[2].Y) / fabs(PointsTo[2].X - PointsTo[3].X);
+			PointsTotemp = {
+				{ lu.X , lu.Y }, //Warp to
+				{ ru.X , ru.Y },
+				{ rl.X , rl.Y },
+				{ ll.X , ll.Y }
+			};
+		}
 		cv::Mat tempmat = OpenWarpPerspective( temp,
 			  PointsFrom[0],   PointsFrom[1],   PointsFrom[2],   PointsFrom[3],
 			PointsTotemp[0], PointsTotemp[1], PointsTotemp[2], PointsTotemp[3]
@@ -206,4 +224,8 @@ void globals::ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& 
 		}
 	}
 	TCODConsole::root->setDefaultForeground(TCODColor::white);*/
+}
+
+inline double globals::EgyenesY(POINTS a, POINTS b, double x) {
+	return fabs(b.X - x)*fabs(b.Y - a.Y) / fabs(b.X - a.X);
 }

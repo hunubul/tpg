@@ -15,6 +15,7 @@ namespace globals {
 	static const int FPS = 60;
 	static const std::string ERR_LOG = "error.log";
 
+	extern CHAR_SET CharSet;
 	extern int ConsoleWidth, ConsoleHeight;
 	static const int FontX = 8;
 	static const int FontY = 8;
@@ -56,6 +57,7 @@ namespace globals {
 	/**< Warps and prints image, start destiny Points from TOPLEFT clockwise */
 	void Pic2ASCIIWarpandWrite(std::string PicName, std::vector<POINTS> PointsTo);
 	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
+	inline double EgyenesY(POINTS a, POINTS b, double x);
 }
 
 #endif

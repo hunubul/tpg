@@ -250,7 +250,6 @@ void level::RoomWriteout() {
 	CONSOLEINFO Con;
 	IMAGE PNG;
 	SUBSECTION subsec;
-	CHAR_SET CharSet;
 	SIZES TopLeft = SIZES{ 0,0 };
 	SIZES BoxSize = SIZES{ ConsoleWidth,ConsoleHeight };
 	/*-----------Initializing CONSOLEINFO-----------*/
@@ -261,8 +260,6 @@ void level::RoomWriteout() {
 	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
 	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
 	/*----------------------------------------------*/
-	CharSetImporter(&CharSet, "8x8terminal.dat");
-	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	const string path = IMAGE_PATH + "Room.png";
 	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, path.c_str());
 	PNG.HeightTile = Con.CharAmount.Y;

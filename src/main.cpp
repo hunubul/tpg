@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
 	ConsoleHeight /= FontY;
 #ifdef DEBUG
 	ConsoleHeight -= 10;
+	_ConsoleHeight -= 10*FontY;
 #endif // DEBUG
 	//UpperBoxSiz  = (SIZES){ConsoleWidth*634/1280,ConsoleHeight*174/720};
 	UpperBoxSiz = SIZES{ ConsoleWidth,ConsoleHeight * 174 / 720 };
@@ -73,6 +74,8 @@ int main(int argc, char *argv[]) {
 			};
 		}
 	}
+	CharSetImporter(&CharSet, "8x8terminal.dat");
+	CalculateWeights(&CharSet); /* Calculating charset weights... */
 	TCODConsole::initRoot(ConsoleWidth, ConsoleHeight, "TPG");
 	TCODSystem::setFps(FPS);
 #ifndef DEBUG

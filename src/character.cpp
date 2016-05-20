@@ -76,7 +76,6 @@ enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
 	if (asd == 1) wearing.shield;
     CONSOLEINFO Con;
     SUBSECTION subsec;
-    CHAR_SET CharSet;
     std::string PicPath = IMAGE_PATH+name+".png";
     /*-----------Initializing CONSOLEINFO-----------*/
     Con.FontSize.X = FontX;
@@ -86,8 +85,6 @@ enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
     Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
     /*----------------------------------------------*/
-    CharSetImporter(&CharSet,"8x8terminal.dat");
-    CalculateWeights(&CharSet); /* Calculating charset weights... */
     int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
     if(!err) {
         CalculatePNGSizes(&PNG,&subsec,Con);

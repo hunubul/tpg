@@ -44,7 +44,6 @@ public:
 	double getDefValue();
 	int wsc() { return wearing.weapon.getWeaponStaminaConsumption(); };
 	int ssc() { return wearing.shield.getShieldStaminaConsumption(); };
-//	double gdx() { return wearing.weapon.getDamageX(); };
 	void BrokenInv();
 };
 

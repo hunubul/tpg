@@ -25,13 +25,13 @@ int main(int argc, char *argv[]) {
 	TCODSystem::getCurrentResolution(&ConsoleWidth, &ConsoleHeight);
 	// ConsoleWidth = 1024;
 	// ConsoleHeight = 768;
-	int _ConsoleWidth = ConsoleWidth;
-	int _ConsoleHeight = ConsoleHeight;
+	ConsoleWidthPixels = ConsoleWidth;
+	ConsoleHeightPixels = ConsoleHeight;
 	ConsoleWidth /= FontX;
 	ConsoleHeight /= FontY;
 #ifdef DEBUG
 	ConsoleHeight -= 10;
-	_ConsoleHeight -= 10*FontY;
+	ConsoleHeightPixels -= 10*FontY;
 #endif // DEBUG
 	//UpperBoxSiz  = (SIZES){ConsoleWidth*634/1280,ConsoleHeight*174/720};
 	UpperBoxSiz = SIZES{ ConsoleWidth,ConsoleHeight * 174 / 720 };
@@ -49,28 +49,28 @@ int main(int argc, char *argv[]) {
 	for (size_t i = 0;i < POINTS_LEFT[0].size();i++) {
 		for (size_t j = 0;j < POINTS_LEFT.size();j++) {
 			POINTS_LEFT[j][i] = {
-				POINTS_LEFT[j][i].X*_ConsoleWidth / 1280,
-				POINTS_LEFT[j][i].Y*_ConsoleHeight / 720
+				POINTS_LEFT[j][i].X*ConsoleWidthPixels / 1280,
+				POINTS_LEFT[j][i].Y*ConsoleHeightPixels / 720
 			};
 			POINTS_MIDDLE[j][i] = {
-				POINTS_MIDDLE[j][i].X*_ConsoleWidth / 1280,
-				POINTS_MIDDLE[j][i].Y*_ConsoleHeight / 720
+				POINTS_MIDDLE[j][i].X*ConsoleWidthPixels / 1280,
+				POINTS_MIDDLE[j][i].Y*ConsoleHeightPixels / 720
 			};
 			POINTS_RIGHT[j][i] = {
-				POINTS_RIGHT[j][i].X*_ConsoleWidth / 1280,
-				POINTS_RIGHT[j][i].Y*_ConsoleHeight / 720
+				POINTS_RIGHT[j][i].X*ConsoleWidthPixels / 1280,
+				POINTS_RIGHT[j][i].Y*ConsoleHeightPixels / 720
 			};
 		}
 	}
 	for (size_t i = 0;i < POINTS_TOP[0].size();i++) {
 		for (size_t j = 0;j < POINTS_TOP.size();j++) {
 			POINTS_TOP[j][i] = {
-				POINTS_TOP[j][i].X*_ConsoleWidth / 1280,
-				POINTS_TOP[j][i].Y*_ConsoleHeight / 720
+				POINTS_TOP[j][i].X*ConsoleWidthPixels / 1280,
+				POINTS_TOP[j][i].Y*ConsoleHeightPixels / 720
 			};
 			POINTS_BOTTOM[j][i] = {
-				POINTS_BOTTOM[j][i].X*_ConsoleWidth / 1280,
-				POINTS_BOTTOM[j][i].Y*_ConsoleHeight / 720
+				POINTS_BOTTOM[j][i].X*ConsoleWidthPixels / 1280,
+				POINTS_BOTTOM[j][i].Y*ConsoleHeightPixels / 720
 			};
 		}
 	}

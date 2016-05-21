@@ -41,7 +41,7 @@ void PlayerAttack(enemy &e,int selIndx,std::vector<CONLOG> &con_log) {
         if(dice>=80) local_def=(ADIR)(local_def+1);
         local_def=(ADIR)(local_def%5);
     }
-	int DDamage;
+	int DDamage=0;
 	e.wearing.shield.SubShieldDur(DDamage);
     if     (attack_choices[selIndx]=="from left"&&local_def==ALEFT&&e.getStamina()>=e.ssc()) {
 		con_log.push_back( {"You attacked from left, but it got blocked.",TCOD_cyan}); e.subStamina(e.ssc()); }

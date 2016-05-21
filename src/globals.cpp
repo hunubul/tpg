@@ -6,6 +6,7 @@
 using namespace std;
 
 int    globals::ConsoleWidth, globals::ConsoleHeight;
+int    globals::ConsoleWidthPixels, globals::ConsoleHeightPixels;
 SIZES  globals::UpperBoxSiz, globals::UpperBoxPos;
 SIZES  globals::SideBoxSiz, globals::SideBoxPosLeft, globals::SideBoxPosRight;
 SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;
@@ -153,17 +154,23 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 		POINTS ll= { PointsTo[3].X - TopLeft.X, PointsTo[3].Y - TopLeft.Y };
 		if (PNG.Height > PNG.Width) {
 		// Függõleges lock
-			lu.X *= (double)PNG.Width / PNG.Height;
-			ru.X *= (double)PNG.Width / PNG.Height;
-			rl.X *= (double)PNG.Width / PNG.Height;
-			ll.X *= (double)PNG.Width / PNG.Height;
+			//lu.X *= (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
+			ru.X = (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
+			rl.X = (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
+			//ll.X *= (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
 			double ratio = (fabs(PointsTo[2].X - PointsTo[3].X) - fabs(rl.X - ll.X) )/2*fabs(PointsTo[3].Y - PointsTo[2].Y) / (PointsTo[2].X - PointsTo[3].X);
 			PointsTotemp = {
-				{ lu.X, lu.Y  }, //Warp to
-				{ ru.X, ru.Y  },
-				{ rl.X, rl.Y  },
-				{ ll.X, ll.Y  }
+				{ lu.X , lu.Y }, //Warp to
+				{ ru.X , ru.Y },
+				{ rl.X , rl.Y },
+				{ ll.X , ll.Y }
 			};
+			/*PointsTotemp = {
+				{ lu.X, PerspektivaKozeprolY(PointsTo[0],lu.X + TopLeft.X) - TopLeft.Y }, //Warp to
+				{ ru.X, PerspektivaKozeprolY(PointsTo[1],ru.X + TopLeft.X) - TopLeft.Y },
+				{ rl.X, PerspektivaKozeprolY(PointsTo[2],rl.X + TopLeft.X) - TopLeft.Y },
+				{ ll.X, PerspektivaKozeprolY(PointsTo[3],ll.X + TopLeft.X) - TopLeft.Y }
+			};*/
 		} else {
 		// Vízszintes lock
 			lu.Y *= (double)PNG.Height / PNG.Width;
@@ -226,6 +233,15 @@ void globals::ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& 
 	TCODConsole::root->setDefaultForeground(TCODColor::white);*/
 }
 
-inline double globals::EgyenesY(POINTS a, POINTS b, double x) {
-	return fabs(b.X - x)*fabs(b.Y - a.Y) / fabs(b.X - a.X);
+inline double globals::PerspektivaKozeprolY(POINTS A, double x) {
+	if(ConsoleWidthPixels/2 < A.X)
+		if(ConsoleHeightPixels/2 < A.Y)
+			return (x-ConsoleWidthPixels/2)*(A.Y - ConsoleHeightPixels/2) / (A.X - ConsoleWidthPixels/2) + ConsoleHeightPixels/2;
+		else // if(ConsoleHeightPixels/2 >= A.Y)
+			return ConsoleHeightPixels/2 - (x - ConsoleWidthPixels/2)*(ConsoleHeightPixels/2 - A.Y) / (A.X - ConsoleWidthPixels/2);
+	else // if(ConsoleWidthPixels/2 >= A.X)
+		if (ConsoleHeightPixels/2 < A.Y)
+			return A.Y - (x-A.X)*(A.Y - ConsoleHeightPixels/2) / (ConsoleWidthPixels/2 - A.X);
+		else // if(ConsoleHeightPixels/2 >= A.Y)
+			return (x-A.X)*(ConsoleHeightPixels/2 - A.Y) / (ConsoleWidthPixels/2 - A.X) + A.Y;
 }

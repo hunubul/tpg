@@ -166,18 +166,23 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> Po
 			double HorLeftover = (Con.Size.X - ru.X) / 2; //Vízszintes maradék amennyit balra és jobbra kihagy
 
 			switch (wall) {
-				case LEFT_WALL:
 				case CEILING_WALL:
 				case FLOOR_WALL:
-				case RIGHT_WALL:
-					lu.Y = PerspektivaKozeprolY(PointsTo[0], lu.X + TopLeft.X + HorLeftover);
-					ru.Y = PerspektivaKozeprolY(PointsTo[1], ru.X + TopLeft.X + HorLeftover);
+				case LEFT_WALL:
+					//PointsTo[0] = { lu.X + TopLeft.X + HorLeftover,fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - HorLeftover)*fabs(PointsTo[1].Y - PointsTo[0].Y)/Con.Size.X};
+					//PointsTo[1] = { ru.X + TopLeft.X + HorLeftover,fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - (HorLeftover + ru.X))*fabs(PointsTo[1].Y - PointsTo[0].Y) / Con.Size.X };
+					//PointsTo[2] = { rl.X + TopLeft.X + HorLeftover,fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - (HorLeftover + rl.X))*fabs(PointsTo[3].Y - PointsTo[2].Y) / Con.Size.X };
+					//PointsTo[3] = { ll.X + TopLeft.X + HorLeftover,fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - HorLeftover)*fabs(PointsTo[3].Y - PointsTo[2].Y) / Con.Size.X };
+					/*lu.Y = PerspektivaKozeprolY(PointsTo[0], lu.X + TopLeft.X + HorLeftover);
+					ru.Y = PerspektivaKozeprolY(PointsTo[1], ru.X + TopLeft.X + HorLeftover);*/
+					lu.Y = fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - HorLeftover)*fabs(PointsTo[1].Y - PointsTo[0].Y) / Con.Size.X;
+					ru.Y = fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - (HorLeftover + ru.X))*fabs(PointsTo[1].Y - PointsTo[0].Y) / Con.Size.X;
 					lower = fmin(lu.Y, ru.Y);
 					PointsTotemp = {
 						{ lu.X, lu.Y - lower }, //Warp to
 						{ ru.X, ru.Y - lower },
-						{ rl.X, PerspektivaKozeprolY(PointsTo[2],rl.X + TopLeft.X + HorLeftover) - lower },
-						{ ll.X, PerspektivaKozeprolY(PointsTo[3],ll.X + TopLeft.X + HorLeftover) - lower }
+						{ rl.X, Con.Size.Y-fabs(PointsTo[3].Y - PointsTo[2].Y) + (Con.Size.X - (HorLeftover + rl.X))*fabs(PointsTo[3].Y - PointsTo[2].Y) / Con.Size.X - lower },
+						{ ll.X, Con.Size.Y-fabs(PointsTo[3].Y - PointsTo[2].Y) + (Con.Size.X - HorLeftover)*fabs(PointsTo[3].Y - PointsTo[2].Y) / Con.Size.X - lower }
 					};
 					break;
 				case MIDDLE_WALL:
@@ -186,6 +191,17 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> Po
 						{ ru.X , ru.Y },
 						{ rl.X , rl.Y },
 						{ ll.X , ll.Y }
+					};
+					break;
+				case RIGHT_WALL:
+					lu.Y = fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - (HorLeftover + ru.X))*fabs(PointsTo[1].Y - PointsTo[0].Y) / Con.Size.X;
+					ru.Y = fabs(PointsTo[1].Y - PointsTo[0].Y) - (Con.Size.X - HorLeftover)*fabs(PointsTo[1].Y - PointsTo[0].Y) / Con.Size.X;
+					lower = fmin(lu.Y, ru.Y);
+					PointsTotemp = {
+						{ lu.X, lu.Y - lower }, //Warp to
+						{ ru.X, ru.Y - lower },
+						{ rl.X, Con.Size.Y - fabs(PointsTo[3].Y - PointsTo[2].Y) + (Con.Size.X - HorLeftover)*fabs(PointsTo[3].Y - PointsTo[2].Y) / Con.Size.X - lower },
+						{ ll.X, Con.Size.Y - fabs(PointsTo[3].Y - PointsTo[2].Y) + (Con.Size.X - (HorLeftover + rl.X))*fabs(PointsTo[3].Y - PointsTo[2].Y) / Con.Size.X - lower }
 					};
 					break;
 				default:
@@ -298,12 +314,12 @@ void globals::ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& 
 inline double globals::PerspektivaKozeprolY(POINTS A, double x) {
 	if(ConsoleWidthPixels/2 < A.X)
 		if(ConsoleHeightPixels/2 < A.Y)
-			return (x - A.X)*(ConsoleHeightPixels / 2 - A.Y) / (ConsoleWidthPixels / 2 - A.X) + A.Y;
-		else // if(ConsoleHeightPixels/2 >= A.Y)
-			return A.Y - (x - A.X)*(A.Y - ConsoleHeightPixels / 2) / (ConsoleWidthPixels / 2 - A.X);
-	else // if(ConsoleWidthPixels/2 >= A.X)
-		if (ConsoleHeightPixels/2 < A.Y)
 			return (x - ConsoleWidthPixels / 2)*(A.Y - ConsoleHeightPixels / 2) / (A.X - ConsoleWidthPixels / 2) + ConsoleHeightPixels / 2;
 		else // if(ConsoleHeightPixels/2 >= A.Y)
 			return ConsoleHeightPixels / 2 - (x - ConsoleWidthPixels / 2)*(ConsoleHeightPixels / 2 - A.Y) / (A.X - ConsoleWidthPixels / 2);
+	else // if(ConsoleWidthPixels/2 >= A.X)
+		if (ConsoleHeightPixels/2 < A.Y)
+			return A.Y - (x - A.X)*(A.Y - ConsoleHeightPixels / 2) / (ConsoleWidthPixels / 2 - A.X);
+		else // if(ConsoleHeightPixels/2 >= A.Y)
+			return (x - A.X)*(ConsoleHeightPixels / 2 - A.Y) / (ConsoleWidthPixels / 2 - A.X) + A.Y;
 }

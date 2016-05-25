@@ -157,7 +157,7 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> Po
 		double VerLeftoverRatio;
 		double RatioX = fmin(PointsTo[1].X - PointsTo[0].X, PointsTo[2].X - PointsTo[3].X);
 		double RatioY = fmin(PointsTo[2].Y - PointsTo[1].Y, PointsTo[3].Y - PointsTo[0].Y);
-
+		
 		if ((double)RatioX/RatioY > (double)PNG.Width/PNG.Height) {
 		// Függõleges lock
 			ru.X = (double)RatioY*(double)PNG.Width / (double)PNG.Height;
@@ -194,8 +194,8 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> Po
 			}
 		} else {
 		// Vízszintes lock
-			rl.Y = (double)RatioX*(double)PNG.Height / (double)PNG.Width;
-			ll.Y = (double)RatioX*(double)PNG.Height / (double)PNG.Width;
+			rl.Y = (double)Con.Size.X*(double)PNG.Height / (double)PNG.Width;
+			ll.Y = (double)Con.Size.X*(double)PNG.Height / (double)PNG.Width;
 
 			switch (wall) {
 			case LEFT_WALL:

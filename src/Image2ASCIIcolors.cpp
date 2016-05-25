@@ -11,6 +11,7 @@
 #include "math.h"
 #include <string>
 #include <vector>
+#include <algorithm>
 
 /**
  * @brief Imports and arranges each ASCII CHAR
@@ -247,9 +248,12 @@ cv::Mat OpenWarpPerspective(const cv::Mat& _image
 	dest_points[2] = cv::Point2f(_rd_result.X, _rd_result.Y);
 	dest_points[3] = cv::Point2f(_ld_result.X, _ld_result.Y);
 
+	std::vector<double> Xpoints = { dest_points[0].x,dest_points[1].x,dest_points[2].x,dest_points[3].x };
+	std::vector<double> Ypoints = { dest_points[0].y,dest_points[1].y,dest_points[2].y,dest_points[3].y };
+
 	cv::Size dest_size = cv::Size(
-		std::fmax(dest_points[1].x - dest_points[0].x, dest_points[2].x - dest_points[3].x),
-		std::fmax(dest_points[3].y - dest_points[0].y, dest_points[2].y - dest_points[1].y)
+		*std::max_element(Xpoints.begin(), Xpoints.end()),
+		*std::max_element(Ypoints.begin(), Ypoints.end())
 		);
 
 	cv::Mat dst;

@@ -24,11 +24,13 @@ void FatalError(std::string ErrorText) {
     std::ofstream out(ERR_LOG.c_str(),std::ofstream::out|std::ofstream::app);
     std::string PrintText="[";
     PrintText.append(getCurrentDateTime());
-    PrintText.append("] A fatal error occured! ");
-    PrintText.append(ErrorText+" Exitting...");
+    PrintText.append("] A fatal error occured!");
     TCODConsole::root->clear();
-    TCODConsole::root->print(0,0,PrintText.c_str());
+	std::string windowText = PrintText + " Exitting...";
+    TCODConsole::root->print(0,0,windowText.c_str());
     TCODConsole::root->flush();
+    PrintText.append(" "+ErrorText+" Exitting...");
+	fprintf(stdout,"%s",PrintText.c_str());
     out << PrintText << std::endl;
     Exitting();
     out.close();

@@ -9,6 +9,9 @@
 #include <vector>
 
 namespace globals {
+	/** @brief enum az aktuális falnak */
+	typedef enum { MIDDLE_WALL, LEFT_WALL, RIGHT_WALL, CEILING_WALL, FLOOR_WALL } WALL;
+
 	/* Globals */
 	static const std::string IMAGE_PATH = "images/";
 	static const std::string DOLGOK_PATH = "dolgok/";
@@ -56,7 +59,7 @@ namespace globals {
 	void ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll);
 	void Pic2ASCIIandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize);
 	/**< Warps and prints image, start destiny Points from TOPLEFT clockwise */
-	void Pic2ASCIIWarpandWrite(std::string PicName, std::vector<POINTS> PointsTo);
+	void Pic2ASCIIWarpandWrite(std::string PicName, WALL wall, std::vector<POINTS> PointsTo);
 	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
 	inline double PerspektivaKozeprolY(POINTS A, double x);
 }

@@ -114,7 +114,7 @@ void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	}
 	else ErrorOccured(PicName + ".png was not found");
 }
-void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
+void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> PointsTo) {
 	if (PointsTo.size() < 4) FatalError("Not enough Points to warp!!");
 	CONSOLEINFO Con;
 	IMAGE PNG;
@@ -152,38 +152,100 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, vector<POINTS> PointsTo) {
 		POINTS ru= { PointsTo[1].X - TopLeft.X, PointsTo[1].Y - TopLeft.Y };
 		POINTS rl= { PointsTo[2].X - TopLeft.X, PointsTo[2].Y - TopLeft.Y };
 		POINTS ll= { PointsTo[3].X - TopLeft.X, PointsTo[3].Y - TopLeft.Y };
-		if (PNG.Height > PNG.Width) {
+		double lower;
+		double VerLeftover; //Függõleges maradék amennyit fent és lent kihagy
+		double VerLeftoverRatio;
+		double RatioX = fmin(PointsTo[1].X - PointsTo[0].X, PointsTo[2].X - PointsTo[3].X);
+		double RatioY = fmin(PointsTo[2].Y - PointsTo[1].Y, PointsTo[3].Y - PointsTo[0].Y);
+
+		if ((double)RatioX/RatioY > (double)PNG.Width/PNG.Height) {
 		// Függõleges lock
-			//lu.X *= (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
-			ru.X = (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
-			rl.X = (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
-			//ll.X *= (double)ll.Y*(double)PNG.Width / (double)PNG.Height;
-			double ratio = (fabs(PointsTo[2].X - PointsTo[3].X) - fabs(rl.X - ll.X) )/2*fabs(PointsTo[3].Y - PointsTo[2].Y) / (PointsTo[2].X - PointsTo[3].X);
-			PointsTotemp = {
-				{ lu.X , lu.Y }, //Warp to
-				{ ru.X , ru.Y },
-				{ rl.X , rl.Y },
-				{ ll.X , ll.Y }
-			};
-			/*PointsTotemp = {
-				{ lu.X, PerspektivaKozeprolY(PointsTo[0],lu.X + TopLeft.X) - TopLeft.Y }, //Warp to
-				{ ru.X, PerspektivaKozeprolY(PointsTo[1],ru.X + TopLeft.X) - TopLeft.Y },
-				{ rl.X, PerspektivaKozeprolY(PointsTo[2],rl.X + TopLeft.X) - TopLeft.Y },
-				{ ll.X, PerspektivaKozeprolY(PointsTo[3],ll.X + TopLeft.X) - TopLeft.Y }
-			};*/
+			ru.X = (double)RatioY*(double)PNG.Width / (double)PNG.Height;
+			rl.X = (double)RatioY*(double)PNG.Width / (double)PNG.Height;
+
+			double HorLeftover = (Con.Size.X - ru.X) / 2; //Vízszintes maradék amennyit balra és jobbra kihagy
+
+			switch (wall) {
+				case LEFT_WALL:
+				case CEILING_WALL:
+				case FLOOR_WALL:
+				case RIGHT_WALL:
+					lu.Y = PerspektivaKozeprolY(PointsTo[0], lu.X + TopLeft.X + HorLeftover);
+					ru.Y = PerspektivaKozeprolY(PointsTo[1], ru.X + TopLeft.X + HorLeftover);
+					lower = fmin(lu.Y, ru.Y);
+					PointsTotemp = {
+						{ lu.X, lu.Y - lower }, //Warp to
+						{ ru.X, ru.Y - lower },
+						{ rl.X, PerspektivaKozeprolY(PointsTo[2],rl.X + TopLeft.X + HorLeftover) - lower },
+						{ ll.X, PerspektivaKozeprolY(PointsTo[3],ll.X + TopLeft.X + HorLeftover) - lower }
+					};
+					break;
+				case MIDDLE_WALL:
+					PointsTotemp = {
+						{ lu.X , lu.Y }, //Warp to
+						{ ru.X , ru.Y },
+						{ rl.X , rl.Y },
+						{ ll.X , ll.Y }
+					};
+					break;
+				default:
+					FatalError("Invalid wall");
+					break;
+			}
 		} else {
 		// Vízszintes lock
-			lu.Y *= (double)PNG.Height / PNG.Width;
-			ru.Y *= (double)PNG.Height / PNG.Width;
-			rl.Y *= (double)PNG.Height / PNG.Width;
-			ll.Y *= (double)PNG.Height / PNG.Width;
-			double ratio = fabs(ll.X - PointsTo[3].X)*fabs(PointsTo[3].Y - PointsTo[2].Y) / fabs(PointsTo[2].X - PointsTo[3].X);
-			PointsTotemp = {
-				{ lu.X , lu.Y }, //Warp to
-				{ ru.X , ru.Y },
-				{ rl.X , rl.Y },
-				{ ll.X , ll.Y }
-			};
+			rl.Y = (double)RatioX*(double)PNG.Height / (double)PNG.Width;
+			ll.Y = (double)RatioX*(double)PNG.Height / (double)PNG.Width;
+
+			switch (wall) {
+			case LEFT_WALL:
+				VerLeftover = (Con.Size.Y - ll.Y) / 2;
+				VerLeftoverRatio = (PointsTo[2].Y - PointsTo[1].Y)*VerLeftover / Con.Size.Y;
+				PointsTo[0].Y += VerLeftover;
+				PointsTo[1].Y += VerLeftoverRatio;
+				PointsTo[2].Y -= VerLeftoverRatio;
+				PointsTo[3].Y -= VerLeftover;
+			case CEILING_WALL:
+			case FLOOR_WALL:
+				lu.Y = PerspektivaKozeprolY(PointsTo[0], lu.X + TopLeft.X);
+				ru.Y = PerspektivaKozeprolY(PointsTo[1], ru.X + TopLeft.X);
+				lower = fmin(lu.Y, ru.Y);
+				PointsTotemp = {
+					{ lu.X, lu.Y - lower }, //Warp to
+					{ ru.X, ru.Y - lower },
+					{ rl.X, PerspektivaKozeprolY(PointsTo[2],rl.X + TopLeft.X) - lower },
+					{ ll.X, PerspektivaKozeprolY(PointsTo[3],ll.X + TopLeft.X) - lower }
+				};
+				break;
+			case MIDDLE_WALL:
+				PointsTotemp = {
+					{ lu.X , lu.Y }, //Warp to
+					{ ru.X , ru.Y },
+					{ rl.X , rl.Y },
+					{ ll.X , ll.Y }
+				};
+				break;
+			case RIGHT_WALL:
+				VerLeftover = (Con.Size.Y - rl.Y) / 2;
+				VerLeftoverRatio = (PointsTo[3].Y - PointsTo[0].Y)*VerLeftover / Con.Size.Y;
+				PointsTo[0].Y += VerLeftoverRatio;
+				PointsTo[1].Y += VerLeftover;
+				PointsTo[2].Y -= VerLeftover;
+				PointsTo[3].Y -= VerLeftoverRatio;
+				lu.Y = PerspektivaKozeprolY(PointsTo[0], lu.X + TopLeft.X);
+				ru.Y = PerspektivaKozeprolY(PointsTo[1], ru.X + TopLeft.X);
+				lower = fmin(lu.Y, ru.Y);
+				PointsTotemp = {
+					{ lu.X, lu.Y - lower }, //Warp to
+					{ ru.X, ru.Y - lower },
+					{ rl.X, PerspektivaKozeprolY(PointsTo[2],rl.X + TopLeft.X) - lower },
+					{ ll.X, PerspektivaKozeprolY(PointsTo[3],ll.X + TopLeft.X) - lower }
+				};
+				break;
+			default:
+				FatalError("Invalid wall.");
+				break;
+			}
 		}
 		cv::Mat tempmat = OpenWarpPerspective( temp,
 			  PointsFrom[0],   PointsFrom[1],   PointsFrom[2],   PointsFrom[3],
@@ -236,12 +298,12 @@ void globals::ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& 
 inline double globals::PerspektivaKozeprolY(POINTS A, double x) {
 	if(ConsoleWidthPixels/2 < A.X)
 		if(ConsoleHeightPixels/2 < A.Y)
-			return (x-ConsoleWidthPixels/2)*(A.Y - ConsoleHeightPixels/2) / (A.X - ConsoleWidthPixels/2) + ConsoleHeightPixels/2;
+			return (x - A.X)*(ConsoleHeightPixels / 2 - A.Y) / (ConsoleWidthPixels / 2 - A.X) + A.Y;
 		else // if(ConsoleHeightPixels/2 >= A.Y)
-			return ConsoleHeightPixels/2 - (x - ConsoleWidthPixels/2)*(ConsoleHeightPixels/2 - A.Y) / (A.X - ConsoleWidthPixels/2);
+			return A.Y - (x - A.X)*(A.Y - ConsoleHeightPixels / 2) / (ConsoleWidthPixels / 2 - A.X);
 	else // if(ConsoleWidthPixels/2 >= A.X)
 		if (ConsoleHeightPixels/2 < A.Y)
-			return A.Y - (x-A.X)*(A.Y - ConsoleHeightPixels/2) / (ConsoleWidthPixels/2 - A.X);
+			return (x - ConsoleWidthPixels / 2)*(A.Y - ConsoleHeightPixels / 2) / (A.X - ConsoleWidthPixels / 2) + ConsoleHeightPixels / 2;
 		else // if(ConsoleHeightPixels/2 >= A.Y)
-			return (x-A.X)*(ConsoleHeightPixels/2 - A.Y) / (ConsoleWidthPixels/2 - A.X) + A.Y;
+			return ConsoleHeightPixels / 2 - (x - ConsoleWidthPixels / 2)*(ConsoleHeightPixels / 2 - A.Y) / (A.X - ConsoleWidthPixels / 2);
 }

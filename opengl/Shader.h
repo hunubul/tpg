@@ -17,7 +17,7 @@ const char* framebufferFragPath = "./shaders/framebuffer.frag";
 class Shader
 {
 public:
-	GLuint Program, FrameBufferProgram;
+	GLuint Program, FrameBufferProgram, ComputerShaderProgram;
 	// Constructor generates the shader on the fly
 	Shader()
 	{
@@ -105,16 +105,29 @@ public:
 		glDeleteShader(fragment);
 
 
+		//------------------------------------------
 		GLuint vertexShader, fragmentShader;
 		// Create and compile the vertex shader
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShader, 1, &vFramebuffShaderCode, NULL);
 		glCompileShader(vertexShader);
+		// Print compile errors if any
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+		if (!success) {
+			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+			std::cout << "ERROR::SHADER::BUFFERVERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		}
 
 		// Create and compile the fragment shader
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(fragmentShader, 1, &fFramebuffShaderCode, NULL);
 		glCompileShader(fragmentShader);
+		// Print compile errors if any
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+		if (!success) {
+			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+			std::cout << "ERROR::SHADER::BUFFERFRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		}
 
 		// Link the vertex and fragment shader into a shader program
 		FrameBufferProgram = glCreateProgram();
@@ -126,6 +139,57 @@ public:
 		// Delete the shaders as they're linked into our program now and no longer necessery
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
+
+
+		//---Creating the compute shader, and the program object containing the shader---
+		ComputerShaderProgram = glCreateProgram();
+		GLuint cs = glCreateShader(GL_COMPUTE_SHADER);
+
+		// In order to write to a texture, we have to introduce it as image2D.
+		// local_size_x/y/z layout variables define the work group size.
+		// gl_GlobalInvocationID is a uvec3 variable giving the global ID of the thread,
+		// gl_LocalInvocationID is the local index within the work group, and
+		// gl_WorkGroupID is the work group's index
+		const char *csSrc[] = {
+			"#version 430 core\n",
+			"uniform float roll;\
+         layout(r32f, location=0) writeonly uniform image2D destTex;\
+         layout (local_size_x = 16, local_size_y = 16) in;\
+         void main() {\
+             ivec2 storePos = ivec2(gl_GlobalInvocationID.xy);\
+             float localCoef = length(vec2(ivec2(gl_LocalInvocationID.xy)-8)/8.0);\
+             float globalCoef = sin(float(gl_WorkGroupID.x+gl_WorkGroupID.y)*0.1 + roll)*0.5;\
+             imageStore(destTex, storePos, vec4(1.0, 0.0, 0.0, 0.0));\
+         }"
+		};
+
+		glShaderSource(cs, 2, csSrc, NULL);
+		glCompileShader(cs);
+		int rvalue;
+		glGetShaderiv(cs, GL_COMPILE_STATUS, &rvalue);
+		if (!rvalue) {
+			fprintf(stderr, "Error in compiling the compute shader\n");
+			GLchar log[10240];
+			GLsizei length;
+			glGetShaderInfoLog(cs, 10239, &length, log);
+			fprintf(stderr, "Compiler log:\n%s\n", log);
+			//exit(40);
+		}
+		glAttachShader(ComputerShaderProgram, cs);
+
+		glLinkProgram(ComputerShaderProgram);
+		glGetProgramiv(ComputerShaderProgram, GL_LINK_STATUS, &rvalue);
+		if (!rvalue) {
+			fprintf(stderr, "Error in linking compute shader program\n");
+			GLchar log[10240];
+			GLsizei length;
+			glGetProgramInfoLog(ComputerShaderProgram, 10239, &length, log);
+			fprintf(stderr, "Linker log:\n%s\n", log);
+			//exit(41);
+		}
+		glDeleteShader(cs);
+
+		//glUniform1i(glGetUniformLocation(ComputerShaderProgram, "destTex"), 0);// glGetUniformLocation(FrameBufferProgram, "srcTex"));
 	}
 	// Uses the current shader
 	void Use()
@@ -135,6 +199,10 @@ public:
 	void UseFrameBufferProgram()
 	{
 		glUseProgram(this->FrameBufferProgram);
+	}
+	void UseComputerShaderProgram()
+	{
+		glUseProgram(this->ComputerShaderProgram);
 	}
 };
 

@@ -5,6 +5,27 @@
 #include <vector>
 
 namespace CHAR {
+	enum CHAR;
+}
+class FontChar;
+
+extern int FontX;
+extern int FontY;
+extern FontChar fontChar;
+
+class FontChar {
+private:
+public:
+	std::map<CHAR::CHAR, std::vector<std::vector<bool>> > ASCIIFont;
+	std::vector<unsigned char> ASCIIChar;
+	std::map<CHAR::CHAR, unsigned char> ASCIIBrightness;
+	std::map<CHAR::CHAR, std::vector<unsigned short>> ASCIIHistogram;
+
+	FontChar();
+	int size();
+};
+
+namespace CHAR {
 	enum CHAR {
 		EMPTY = 0,
 		SMILE,
@@ -163,9 +184,5 @@ namespace CHAR {
 		EXTENDED_99
 	};
 }
-
-extern int FontX;
-extern int FontY;
-extern std::map<CHAR::CHAR, std::vector<bool> > FontChar;
 
 #endif

@@ -1,5 +1,6 @@
 // Std. Includes
 #include <string>
+#include <cmath>
 #include "Source.h"
 
 // GLEW
@@ -43,11 +44,12 @@ void initAll()
 {
 	// Init GLFW
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
+	//glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 
 	GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", nullptr, nullptr); // Windowed
 	glfwMakeContextCurrent(window);
@@ -220,13 +222,13 @@ void initAll()
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 	glTexImage2D(
-		GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
-	);
+		GL_TEXTURE_2D, 0, GL_RGBA, screenWidth, screenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL
+		);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(
 		GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0
-	);
+		);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	// Depth stencil for framebuffer
 	GLuint rboDepthStencil;
@@ -235,47 +237,47 @@ void initAll()
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight);
 	glFramebufferRenderbuffer(
 		GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil
-	);
+		);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	unsigned char* temp = new unsigned char[FontX*FontY*FontChar.size()];
-	unsigned char* tempColor = new unsigned char[FontChar.size()];
-	int brightness = 0;
-	for (int k = 0; k < FontChar.size(); k++) {
-		for (int i = 0; i < FontY; i++) {
-			for (int j = 0; j < FontX; j++) {
-				temp[FontX*FontY*k + (FontY - 1 - i)*FontY + j] = FontChar[(CHAR::CHAR)k][i*FontY + j] * 255;
-				if (FontChar[(CHAR::CHAR)k][i*FontY + j] == 1)
-					brightness++;
-			}
-		}
-		tempColor[k] = brightness*255/(FontX*FontY);
-		brightness = 0;
-	}
 
 	//--=ASCII as texture=--
 	GLuint ASCIITexture;
 	glGenTextures(1, &ASCIITexture);
 	glBindTexture(GL_TEXTURE_2D, ASCIITexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FontX, FontY*FontChar.size(), 0, GL_RED, GL_UNSIGNED_BYTE, temp);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FontX, FontY*fontChar.size(), 0, GL_RED, GL_UNSIGNED_BYTE, fontChar.ASCIIChar.data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	delete[] temp;
 
-	//--=ASCII Brightness as texture=--
-	GLuint ASCIIBrightnessTexture;
-	glGenTextures(1, &ASCIIBrightnessTexture);
-	glBindTexture(GL_TEXTURE_2D, ASCIIBrightnessTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, FontChar.size(), 0, GL_RED, GL_UNSIGNED_BYTE, tempColor);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	delete[] tempColor;
+	GLuint ASCIIBrightness;
+	{
+		unsigned char* tempBrightness = new unsigned char[fontChar.ASCIIBrightness.size()];
+
+		for (int i = 0; i < fontChar.ASCIIBrightness.size(); i++) {
+			tempBrightness[i] = fontChar.ASCIIBrightness[(CHAR::CHAR)i];
+		}
+
+		//--=ASCII Brightness as texture=--
+		glGenTextures(1, &ASCIIBrightness);
+		glBindTexture(GL_TEXTURE_2D, ASCIIBrightness);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, fontChar.size(), 0, GL_RED, GL_UNSIGNED_BYTE, tempBrightness);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		delete[] tempBrightness;
+	}
+
+	/*GLuint ASCIIindex;
+	glGenTextures(1, &ASCIIindex);*/
+
+	unsigned char* screenPixels = new unsigned char[screenWidth*screenHeight * 4];
+	std::vector<std::vector<std::vector<unsigned short>>> screenHistogram;
+	unsigned short brightHistogram = 0;
 
 	// Game loop
 	while (!glfwWindowShouldClose(window)) {
 		// Set frame time
-		GLfloat currentFrame = glfwGetTime();
+		GLfloat currentFrame = (GLfloat)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
@@ -327,20 +329,106 @@ void initAll()
 		}
 		glBindVertexArray(0);
 
+		/*glReadPixels(0,0,screenWidth,screenHeight, GL_RGBA, GL_UNSIGNED_BYTE, screenPixels);
+		std::vector<unsigned short> tempBrightHisto;
+		std::vector<std::vector<unsigned short>> screenXHistogram;
+		brightHistogram = 0;
+		for (unsigned int l = 0;l<screenHeight/FontY;l++) {
+			for (unsigned int k = 0; k<screenWidth/FontX; k++) {
+				for (int i = 0; i < FontY; i++) {
+					for (int j = 0; j < FontX; j++) {
+						brightHistogram += (j+1) * (
+							screenPixels[(l*screenWidth*FontY + k*FontX + i*screenWidth + j) * 4 + 0] +
+							screenPixels[(l*screenWidth*FontY + k*FontX + i*screenWidth + j) * 4 + 1] +
+							screenPixels[(l*screenWidth*FontY + k*FontX + i*screenWidth + j) * 4 + 2]
+						)/3 * (screenPixels[(l*screenWidth*FontY + k*FontX + i*screenWidth + j) * 4 + 3]/255);
+					}
+					tempBrightHisto.push_back(brightHistogram);
+					brightHistogram = 0;
+				}
+				screenXHistogram.push_back(tempBrightHisto);
+				tempBrightHisto.clear();
+			}
+			screenHistogram.push_back(screenXHistogram);
+			screenXHistogram.clear();
+		}*/
+
+		/*std::vector<unsigned char> ASCIIindexVector;
+		int index = 0;
+		int minWeight = INT_MAX;
+		int currWeight = 0;
+		for (unsigned int l = 0; l < screenHeight / FontY; l++) {
+			for (unsigned int k = 0; k < screenWidth / FontX; k++) {
+				for (int i = 0; i < 255; i++) {
+					currWeight = 0;
+					/*for (int j = 0; j < FontX; j++) {
+						currWeight += std::abs(
+							fontChar.ASCIIHistogram[(CHAR::CHAR)i][j] -
+							screenHistogram[l][k][j]
+						);
+					}*/
+					/*if (minWeight > currWeight) {
+						minWeight = currWeight;
+						index = i;
+					}
+				}
+				ASCIIindexVector.push_back(index);
+			}
+		}*/
+
+		/*glBindTexture(GL_TEXTURE_2D, ASCIIindex);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, ASCIIindexVector.size(), 0, GL_RED, GL_UNSIGNED_BYTE, ASCIIindexVector.data());
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);*/
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+		//for (int i = 0; i < 1024; ++i) {
+		//ourShader.UseComputerShaderProgram();
+		//glUniform1i(glGetUniformLocation(ourShader.ComputerShaderProgram, "destTex"), 0);
+		
+		/*GLenum err = GL_NO_ERROR;
+		while ((err = glGetError()) != GL_NO_ERROR) {
+			printf("Error: %x\n", err);
+		}*/
+
+		//glBindVertexArray(VAO_FrameBuff);
+
+		//ourShader.UseComputerShaderProgram();
+		/*glUniform1i(glGetUniformLocation(ourShader.ComputerShaderProgram, "destTex"), 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texColorBuffer);*/
+
+		//glBindVertexArray(0);
+		
+
+		/*glUniform1f(glGetUniformLocation(ourShader.ComputerShaderProgram, "roll"), (float)5 * 0.01f);
+		glDispatchCompute(512 / 16, 512 / 16, 1); // 512^2 threads in blocks of 16^2
+
+		glMemoryBarrier(GL_ALL_BARRIER_BITS);*/
+		//}
+
+
 		glBindVertexArray(VAO_FrameBuff);
 
 		ourShader.UseFrameBufferProgram();
-		glUniform1i(glGetUniformLocation(ourShader.FrameBufferProgram, "frameBuffer"), 0);
+		/*glUniform1i(glGetUniformLocation(ourShader.FrameBufferProgram, "frameBuffer"), 0);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+		glBindTexture(GL_TEXTURE_2D, texColorBuffer);*/
+		glBindImageTexture(0, texColorBuffer, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
 
 		glUniform1i(glGetUniformLocation(ourShader.FrameBufferProgram, "ASCII"), 1);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, ASCIITexture);
 		glUniform1i(glGetUniformLocation(ourShader.FrameBufferProgram, "ASCIIBrightness"), 2);
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, ASCIIBrightnessTexture);
+		glBindTexture(GL_TEXTURE_2D, ASCIIBrightness);
+		/*glUniform1i(glGetUniformLocation(ourShader.FrameBufferProgram, "srcTex"), 3);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, ASCIIBrightness);*/
+
+		//glUniform1iv(glGetUniformLocation(ourShader.FrameBufferProgram, "screenHistogram"), screenWidth / FontX*screenHeight / FontY * 8, (GLint*)screenHistogram);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
@@ -350,6 +438,7 @@ void initAll()
 	}
 
 	// Properly de-allocate all resources once they've outlived their purpose
+	delete[] screenPixels;
 	glDeleteFramebuffers(1, &frameBuffer);
 	glDeleteVertexArrays(1, &VAO_FrameBuff);
 	glDeleteBuffers(1, &VBO_FrameBuff);
@@ -389,16 +478,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (firstMouse) {
-		lastX = xpos;
-		lastY = ypos;
+		lastX = (GLfloat)xpos;
+		lastY = (GLfloat)ypos;
 		firstMouse = false;
 	}
 
-	GLfloat xoffset = xpos - lastX;
-	GLfloat yoffset = lastY - ypos;  // Reversed since y-coordinates go from bottom to left
+	GLfloat xoffset = (GLfloat)(xpos - lastX);
+	GLfloat yoffset = (GLfloat)(lastY - ypos);  // Reversed since y-coordinates go from bottom to left
 
-	lastX = xpos;
-	lastY = ypos;
+	lastX = (GLfloat)xpos;
+	lastY = (GLfloat)ypos;
 
 	camera.ProcessMouseMovement(xoffset, yoffset);
 }
@@ -406,6 +495,5 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera.ProcessMouseScroll(yoffset);
+	camera.ProcessMouseScroll((GLfloat)yoffset);
 }
-

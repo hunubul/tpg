@@ -1,0 +1,61 @@
+#version 430 core
+
+layout(rgba8, binding=0) readonly uniform image2D framebuffer;
+layout(rgba8, binding=1) readonly uniform image2D framebufferDown;
+layout(rgba8, binding=2) readonly uniform image2D ASCII;
+layout(rgba8, binding=3) readonly uniform image2D ASCIIBrightness;
+layout(rgba16f, binding=4) writeonly uniform image2D ASCIIScreenWeights;
+
+uniform float FontSize;
+
+layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+void main() {
+	ivec2 loadPos = ivec2(gl_GlobalInvocationID.y,gl_GlobalInvocationID.z);
+	//float localCoef = length(vec2(ivec2(gl_LocalInvocationID.xy)-8)/8.0);
+	//float globalCoef = sin(float(gl_WorkGroupID.x+gl_WorkGroupID.y)*0.1 + roll)*0.5;
+
+	float currWeight1 = 0.0;
+	float currWeight2 = 0.0;
+	float currWeight3 = 0.0;
+	float currWeight4 = 0.0;
+	
+	// Regular Process
+	float average = (
+		imageLoad(framebufferDown, loadPos).r + 
+		imageLoad(framebufferDown, loadPos).g +
+		imageLoad(framebufferDown, loadPos).b
+	)/3;
+
+	currWeight1 = 1.0 - abs( imageLoad(ASCIIBrightness, ivec2(gl_LocalInvocationID.x*4  ,0)).x - average );
+	currWeight2 = 1.0 - abs( imageLoad(ASCIIBrightness, ivec2(gl_LocalInvocationID.x*4+1,0)).x - average );
+	currWeight3 = 1.0 - abs( imageLoad(ASCIIBrightness, ivec2(gl_LocalInvocationID.x*4+2,0)).x - average );
+	currWeight4 = 1.0 - abs( imageLoad(ASCIIBrightness, ivec2(gl_LocalInvocationID.x*4+3,0)).x - average );
+	imageStore(
+		ASCIIScreenWeights,
+		ivec2(loadPos.x*64 + gl_LocalInvocationID.x  , loadPos.y),
+		vec4( currWeight1*FontSize, currWeight2*FontSize, currWeight3*FontSize, currWeight4*FontSize )
+	);
+
+
+	// Precise Process
+	/*float average2;
+	for(int x=0;x<8;x++) {
+		for(int y=0;y<8;y++) {
+			average2 = (
+				imageLoad(framebuffer, ivec2(loadPos.x*8+x,loadPos.y*8+y) ).x + 
+				imageLoad(framebuffer, ivec2(loadPos.x*8+x,loadPos.y*8+y) ).y +
+				imageLoad(framebuffer, ivec2(loadPos.x*8+x,loadPos.y*8+y) ).z
+			)/3;
+			currWeight1 += 1.0 - abs( imageLoad(ASCII, ivec2(x,(gl_LocalInvocationID.x*4  )*8+y)).x - average2 );
+			currWeight2 += 1.0 - abs( imageLoad(ASCII, ivec2(x,(gl_LocalInvocationID.x*4+1)*8+y)).x - average2 );
+			currWeight3 += 1.0 - abs( imageLoad(ASCII, ivec2(x,(gl_LocalInvocationID.x*4+2)*8+y)).x - average2 );
+			currWeight4 += 1.0 - abs( imageLoad(ASCII, ivec2(x,(gl_LocalInvocationID.x*4+3)*8+y)).x - average2 );
+		}
+	}
+	imageStore(
+		ASCIIScreenWeights,
+		ivec2(loadPos.x*64 + gl_LocalInvocationID.x  , loadPos.y),
+		vec4( currWeight1*4.0, currWeight2*4.0, currWeight3*4.0, currWeight4*4.0 )
+	);*/
+}

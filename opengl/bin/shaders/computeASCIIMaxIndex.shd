@@ -1,0 +1,40 @@
+#version 430 core
+
+layout(rgba16f, binding=0) readonly  uniform image2D ASCIIScreenWeights;
+layout(r16f   , binding=1) writeonly uniform image2D ASCIIMaxIndexes;
+
+//int FontSize = $;
+
+layout(location=0) uniform int DirtyX;
+layout(location=1) uniform int DirtyY;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main() {
+	ivec2 loadPos = ivec2(DirtyX + gl_GlobalInvocationID.x,DirtyY + gl_GlobalInvocationID.y);
+	ivec2 storePos = loadPos;
+
+	float maxWeight = 0.0;
+	float currWeight = 0.0;
+	int index = 0;
+
+	for(int i=0;i<64;i++) {
+		if(maxWeight<imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).x) {
+			maxWeight = imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).x;
+			index = i*4    ;
+		}
+		if(maxWeight<imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).y) {
+			maxWeight = imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).y;
+			index = i*4 + 1;
+		}
+		if(maxWeight<imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).z) {
+			maxWeight = imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).z;
+			index = i*4 + 2;
+		}
+		if(maxWeight<imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).w) {
+			maxWeight = imageLoad( ASCIIScreenWeights, ivec2(loadPos.x*64 + i , loadPos.y) ).w;
+			index = i*4 + 3;
+		}
+	}
+	imageStore( ASCIIMaxIndexes, storePos, vec4(index) );
+}

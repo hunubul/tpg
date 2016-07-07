@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <vector>
 
 #include <GL/glew.h>
 
@@ -13,7 +14,7 @@ class Shader
 public:
 	GLuint Program;
 	// Constructor generates the shader on the fly
-	Shader(std::string vertexPath, std::string fragmentPath)
+	Shader(std::string vertexPath, std::string fragmentPath, std::vector<int> fragmentParams)
 	{
 		// 1. Retrieve the vertex/fragment source code from filePath
 		std::string vertexCode;
@@ -42,7 +43,22 @@ public:
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
 		const GLchar* vShaderCode = vertexCode.c_str();
-		const GLchar* fShaderCode = fragmentCode.c_str();
+		const GLchar* fShaderCode;
+		std::string completedFragmentCode;
+		if (fragmentParams.size() > 0) {
+			std::stringstream tokenizedFragmentCode(fragmentCode);
+			std::string temp;
+			for (size_t i = 0; i < fragmentParams.size(); i++) {
+				std::getline(tokenizedFragmentCode, temp, '$');
+				completedFragmentCode.append(temp);
+				completedFragmentCode.append(std::to_string(fragmentParams[i]));
+			}
+			std::getline(tokenizedFragmentCode, temp, '$');
+			completedFragmentCode.append(temp);
+			fShaderCode = completedFragmentCode.c_str();
+		} else {
+			fShaderCode = fragmentCode.c_str();
+		}
 		// 2. Compile shaders
 		GLuint vertex, fragment;
 		GLint success;
@@ -93,7 +109,7 @@ public:
 class ComputeShader {
 public:
 	GLuint ComputerShaderProgram;
-	ComputeShader(std::string computeShaderPath) {
+	ComputeShader(std::string computeShaderPath, std::vector<int> computeParams) {
 		// Retrieve the vertex/fragment source code from filePath
 		std::string computeCode;
 		std::ifstream computeFile;
@@ -113,7 +129,22 @@ public:
 		catch (std::ifstream::failure e) {
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
-		const GLchar* computeShaderCode = computeCode.c_str();
+		const GLchar* computeShaderCode;
+		std::string completedComputeCode;
+		if (computeParams.size() > 0) {
+			std::stringstream tokenizedFragmentCode(computeCode);
+			std::string temp;
+			for (size_t i = 0; i < computeParams.size(); i++) {
+				std::getline(tokenizedFragmentCode, temp, '$');
+				completedComputeCode.append(temp);
+				completedComputeCode.append(std::to_string(computeParams[i]));
+			}
+			std::getline(tokenizedFragmentCode, temp, '$');
+			completedComputeCode.append(temp);
+			computeShaderCode = completedComputeCode.c_str();
+		} else {
+			computeShaderCode = computeCode.c_str();
+		}
 
 		//---Creating the compute shader, and the program object containing the shader---
 		ComputerShaderProgram = glCreateProgram();

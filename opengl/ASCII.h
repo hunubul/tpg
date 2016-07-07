@@ -9,15 +9,14 @@ namespace CHAR {
 }
 class FontChar;
 
-extern const int FontX;
-extern const int FontY;
-extern const int WriteOutFontX;
-extern const int WriteOutFontY;
+const int FontX = 8;
+const int FontY = 8;
+const int WriteOutFontX = 8;
+const int WriteOutFontY = 12;
 extern FontChar fontChar;
 
 class FontChar {
 private:
-	void GenASCIIFontWriteOut();
 public:
 	std::map<CHAR::CHAR, std::vector<std::vector<bool>> > ASCIIFont;
 	std::map<CHAR::CHAR, std::vector<std::vector<bool>> > ASCIIFontWriteOut;

@@ -155,11 +155,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="initOpenGL.cpp" />
     <ClCompile Include="OpenGLRender.cpp" />
     <ClCompile Include="ASCII.cpp" />
+    <ClCompile Include="Vertices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="initOpenGL.h" />
     <ClInclude Include="OpenGLRender.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ASCII.h" />

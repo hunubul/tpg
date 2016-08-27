@@ -4,6 +4,7 @@
 #include <fstream>
 #include "SOIL.h"
 #include "OpenGLRender.h"
+#include "initOpenGL.h"
 
 unsigned char* terminal;
 FontChar fontChar;
@@ -62,8 +63,8 @@ int FontChar::size() {
 	return ASCIIFont.size();
 }
 
-int main() {
-
-	initAll();
+int main(int argc, char *argv[]) {
+	initOpenGL();
+	openGLloop();
 	return 0;
 }

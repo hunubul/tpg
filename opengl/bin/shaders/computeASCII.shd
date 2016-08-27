@@ -11,7 +11,7 @@ int FontSize = $;
 layout(location=0) uniform int DirtyX;
 layout(location=1) uniform int DirtyY;
 
-layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+layout(local_size_x = $, local_size_y = 1, local_size_z = 1) in;
 
 void main() {
 	ivec2 loadPos = ivec2(DirtyX + gl_GlobalInvocationID.y,DirtyY + gl_GlobalInvocationID.z);

@@ -1,8 +1,8 @@
 #include <stdexcept>
 #include "level.h"
-#include "lodepng\lodepng.h"
 #include "globals.h"
 #include "harc.h"
+#include "openGL/OpenGLRender.h"
 
 using namespace globals;
 using namespace std;
@@ -96,10 +96,12 @@ void level::engine() {
 	posX = MidX;
 	posY = MidY;
 	most = UP;
-	int lehet;
+	//int lehet;
 	int prevX = posX;
 	int prevY = posY;
-	TCOD_key_t key;
+
+	openGLloop();
+	/*TCOD_key_t key;
 	TCOD_mouse_t mouse;
 	TCOD_event_t event;
 	bool procNeighb=true; //Process Neighbours
@@ -147,7 +149,7 @@ void level::engine() {
 
 			}
 		}
-	} while (!TCODConsole::isWindowClosed() && key.vk != TCODK_ESCAPE);
+	} while (!TCODConsole::isWindowClosed() && key.vk != TCODK_ESCAPE);*/
 }
 void level::merre(IRANY honnan) {
 	switch (honnan) {
@@ -181,7 +183,7 @@ void level::merre(IRANY honnan) {
  * @brief kiírja az egész térképet, + az aktív szoba tartalmát
  */
 void level::writeout() {
-	TCODConsole::root->clear();
+	//TCODConsole::root->clear();
 	//boost::posix_time::ptime timetmp=boost::posix_time::microsec_clock::local_time();
 	RoomWriteout();
 	WriteOutBoxes();
@@ -190,19 +192,19 @@ void level::writeout() {
 	//WriteOutGenTime(timetmp);
 #endif // DEBUG
 	//terkep[posX][posY].writeout((IRANY)most);
-	TCODConsole::root->flush();
+	//TCODConsole::root->flush();
 }
 void level::WriteOutMiniMap() {
 	for (int i = 0; i < MaxRoomX; i++) {
 		for (int j = 0; j < MaxRoomY; j++) {
 			if (posX == i&&posY == j) {
 				FOV[i][j] = 1;
-				TCODConsole::root->setDefaultForeground(TCODColor::red);
+				//TCODConsole::root->setDefaultForeground(TCODColor::red);
 			}
 #ifdef DEBUG
 			writearrow();
-			if (Map[i][j] == 1) TCODConsole::root->print(i, j, "#");
-			else TCODConsole::root->print(i, j, " ");
+			//if (Map[i][j] == 1) TCODConsole::root->print(i, j, "#");
+			//else TCODConsole::root->print(i, j, " ");
 #else
 			if (FOV[i][j] == 1) {
 				TCODConsole::root->print(i, j, "#");
@@ -214,20 +216,20 @@ void level::WriteOutMiniMap() {
 			}
 			else if (TCODConsole::root->getChar(i, j) != '?') TCODConsole::root->print(i, j, " ");
 #endif // DEBUG
-			TCODConsole::root->setDefaultForeground(TCODColor::white);
+			//TCODConsole::root->setDefaultForeground(TCODColor::white);
 		}
 	}
 	// Drawing frame
 	for (int i = 0; i < MaxRoomX; i++) {
-		TCODConsole::root->print(i, MaxRoomY, "%c", TCOD_CHAR_DHLINE);
+		//TCODConsole::root->print(i, MaxRoomY, "%c", TCOD_CHAR_DHLINE);
 	}
 	for (int j = 0; j < MaxRoomY; j++) {
-		TCODConsole::root->print(MaxRoomX, j, "%c", TCOD_CHAR_DVLINE);
+		//TCODConsole::root->print(MaxRoomX, j, "%c", TCOD_CHAR_DVLINE);
 	}
-	TCODConsole::root->print(MaxRoomX, MaxRoomY, "%c", TCOD_CHAR_DSE);
+	//TCODConsole::root->print(MaxRoomX, MaxRoomY, "%c", TCOD_CHAR_DSE);
 }
 void level::writearrow() {
-	switch (most) {
+	/*switch (most) {
 	case UP:
 		TCODConsole::root->print(MaxRoomX + 3, 0, "/\\ ");
 		TCODConsole::root->print(MaxRoomX + 3, 1, "|| ");
@@ -244,39 +246,39 @@ void level::writearrow() {
 		TCODConsole::root->print(MaxRoomX + 3, 0, "<--");
 		TCODConsole::root->print(MaxRoomX + 3, 1, "  ");
 		break;
-	}
+	}*/
 }
 void level::RoomWriteout() {
-	CONSOLEINFO Con;
-	IMAGE PNG;
-	SUBSECTION subsec;
-	SIZES TopLeft = SIZES{ 0,0 };
-	SIZES BoxSize = SIZES{ ConsoleWidth,ConsoleHeight };
-	/*-----------Initializing CONSOLEINFO-----------*/
-	Con.FontSize.X = FontX;
-	Con.FontSize.Y = FontY;
-	Con.CharAmount.X = ConsoleWidth;
-	Con.CharAmount.Y = ConsoleHeight;
-	Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
-	Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
-	/*----------------------------------------------*/
-	const string path = IMAGE_PATH + "Room.png";
-	int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, path.c_str());
-	PNG.HeightTile = Con.CharAmount.Y;
-	PNG.WidthTile = Con.CharAmount.X;
-	subsec.height = (double)PNG.Height / PNG.HeightTile; /* Calculating SUBSECTION in pixels */
-	subsec.width = (double)PNG.Width / PNG.WidthTile; /* Calculating SUBSECTION in pixels */
-	if (!err) {
-		PreciseProcessPNG(&PNG, subsec, CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-		WriteOutPic(&PNG, TopLeft, BoxSize);
-		free(PNG.Image);
-		free(PNG.ASCII_Image);
-		free(PNG.ASCII_Color);
-	}
-	else {
-		string ErrorText = "/" + IMAGE_PATH + "Room.png was not found!";
-		throw runtime_error(ErrorText);
-	}
+	//CONSOLEINFO Con;
+	//IMAGE PNG;
+	//SUBSECTION subsec;
+	//SIZES TopLeft = SIZES{ 0,0 };
+	//SIZES BoxSize = SIZES{ ConsoleWidth,ConsoleHeight };
+	///*-----------Initializing CONSOLEINFO-----------*/
+	//Con.FontSize.X = FontX;
+	//Con.FontSize.Y = FontY;
+	//Con.CharAmount.X = ConsoleWidth;
+	//Con.CharAmount.Y = ConsoleHeight;
+	//Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+	//Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+	///*----------------------------------------------*/
+	//const string path = IMAGE_PATH + "Room.png";
+	//int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, path.c_str());
+	//PNG.HeightTile = Con.CharAmount.Y;
+	//PNG.WidthTile = Con.CharAmount.X;
+	//subsec.height = (double)PNG.Height / PNG.HeightTile; /* Calculating SUBSECTION in pixels */
+	//subsec.width = (double)PNG.Width / PNG.WidthTile; /* Calculating SUBSECTION in pixels */
+	//if (!err) {
+	//	PreciseProcessPNG(&PNG, subsec, CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+	//	WriteOutPic(&PNG, TopLeft, BoxSize);
+	//	free(PNG.Image);
+	//	free(PNG.ASCII_Image);
+	//	free(PNG.ASCII_Color);
+	//}
+	//else {
+	//	string ErrorText = "/" + IMAGE_PATH + "Room.png was not found!";
+	//	throw runtime_error(ErrorText);
+	//}
 }
 void level::WriteOutBoxes() {
 	SIZES TopLeft;

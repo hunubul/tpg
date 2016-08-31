@@ -6,8 +6,6 @@
 #ifndef IMAGE2ASCIICOLORS_H_INCLUDED
 #define IMAGE2ASCIICOLORS_H_INCLUDED
 
-#include "libtcod.hpp"
-#include <opencv2/opencv.hpp>
 #include <vector>
 
 /*-----------------------SETTINGS-----------------------------*/
@@ -54,7 +52,7 @@ typedef struct
 {
     unsigned char *Image;       /**< the raw pixels for images */
     unsigned char *ASCII_Image; /**< the processed ascii image (contains characters) */
-    TCODColor *ASCII_Color;     /**< ascii image colors */
+    //TCODColor *ASCII_Color;     /**< ascii image colors */
     unsigned Width;     /**< width of raw images in pixels */
     unsigned Height;    /**< heigth of raw images in pixels */
     unsigned WidthTile; /**< width of raw images in characters */
@@ -65,7 +63,7 @@ typedef struct
 typedef struct
 {
 	std::vector<unsigned char> ASCII_Image; /**< the processed ascii image (contains characters) */
-	TCODColor *ASCII_Color;     /**< ascii image colors */
+	//TCODColor *ASCII_Color;     /**< ascii image colors */
 	unsigned WidthTile; /**< width of raw images in characters */
 	unsigned HeightTile;/**< height of raw images in characters */
 } ASCII_IMAGE;
@@ -104,7 +102,7 @@ void Indexer(CHAR_SET* CharSet,int char_index);
 void WriteOutPic(IMAGE* PNG,SIZES TopLeft,SIZES BoxSize);
 void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 
-cv::Mat OpenWarpPerspective(const cv::Mat& _image
+/*cv::Mat OpenWarpPerspective(const cv::Mat& _image
 	, const POINTS& _lu
 	, const POINTS& _ru
 	, const POINTS& _rd
@@ -112,6 +110,6 @@ cv::Mat OpenWarpPerspective(const cv::Mat& _image
 	, const POINTS& _lu_result
 	, const POINTS& _ru_result
 	, const POINTS& _rd_result
-	, const POINTS& _ld_result);
+	, const POINTS& _ld_result);*/
 
 #endif // IMAGE2ASCIICOLORS_H_INCLUDED

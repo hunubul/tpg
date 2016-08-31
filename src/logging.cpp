@@ -1,7 +1,6 @@
 #include <string>
 #include <fstream>
 #include <time.h>
-#include "libtcod.hpp"
 #include "logging.h"
 #include "globals.h"
 
@@ -12,7 +11,7 @@ const std::string getCurrentDateTime() {
     time_t     now = time(0);
     struct tm  tstruct;
     char       buf[80];
-    tstruct = *localtime(&now);
+    localtime_s(&tstruct, &now);
     // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
     // for more information about date/time format
     strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
@@ -25,16 +24,16 @@ void FatalError(std::string ErrorText) {
     std::string PrintText="[";
     PrintText.append(getCurrentDateTime());
     PrintText.append("] A fatal error occured!");
-    TCODConsole::root->clear();
+    //TCODConsole::root->clear();
 	std::string windowText = PrintText + " Exitting...";
-    TCODConsole::root->print(0,0,windowText.c_str());
-    TCODConsole::root->flush();
+    //TCODConsole::root->print(0,0,windowText.c_str());
+    //TCODConsole::root->flush();
     PrintText.append(" "+ErrorText+" Exitting...");
 	fprintf(stdout,"%s",PrintText.c_str());
     out << PrintText << std::endl;
     Exitting();
     out.close();
-    TCODConsole::root->waitForKeypress(true);
+    //TCODConsole::root->waitForKeypress(true);
     exit(1);
 }
 void ErrorOccured(std::string ErrorText) {

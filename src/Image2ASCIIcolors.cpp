@@ -7,7 +7,6 @@
 
 #include "Image2ASCIIcolors.h"
 #include <stdio.h>
-#include <opencv2/opencv.hpp>
 #include "math.h"
 #include <string>
 #include <vector>
@@ -19,7 +18,7 @@
  * @param [in] filename (8x14asciichars.dat) where the ASCII CHAR informations are, see [mainpage](index.html)
  */
 void CharSetImporter(CHAR_SET*CharSet, const char* filename) {
-	FILE *f;
+	/*FILE *f;
 	int i;
 	char buff[9 + 2 * CHAR_X*CHAR_Y];
 	f = fopen(filename, "r");
@@ -49,7 +48,7 @@ void CharSetImporter(CHAR_SET*CharSet, const char* filename) {
 		TCODConsole::waitForKeypress(true);
 		exit(1);
 	}
-	fclose(f);
+	fclose(f);*/
 }
 /**
  * @brief Precise processing a .PNG image file
@@ -59,71 +58,71 @@ void CharSetImporter(CHAR_SET*CharSet, const char* filename) {
  * @details Tries to contrast up SUBSECTIONS for clearer curves in images see AMPLIFIER, min((CHAR_SET.ARR[][][] - ImgSubWeight[][])^2)
  */
 void PreciseProcessPNG(IMAGE* PNG, SUBSECTION& subsec, CHAR_SET& CharSet) {
-	int WeightTemp[CHAR_NUM]; /* how many are similar */
-	int ImgSubWeight[CHAR_Y][CHAR_X]; /* a pixel brightness of the subsection */
-	int weight, minWeight, weightMax, weightMin, minIdx, cnt, cnt2;
-	int R, G, B;
-	PNG->ASCII_Image = (unsigned char*)calloc(PNG->WidthTile*PNG->HeightTile, sizeof(unsigned char));
-	PNG->ASCII_Color = (TCODColor*)calloc(PNG->WidthTile*PNG->HeightTile, sizeof(TCODColor));
-	double cmpSubsecY = subsec.height / CHAR_Y;
-	double cmpSubsecX = subsec.width / CHAR_X;
-	for (int pY = 0; pY < (int)PNG->HeightTile; pY++) {
-		for (int pX = 0; pX < (int)PNG->WidthTile; pX++) {
-			for (int m = 0; m < CHAR_NUM; m++) {
-				WeightTemp[m] = 0;
-			}
-			weight = cnt = R = G = B = 0;
-			minWeight = weightMax = weightMin = minIdx = cnt2 = 0;
-			for (int cY = 0 + pY*CHAR_Y, k = 0; cY < CHAR_Y + pY*CHAR_Y; cY++, k++) {
-				for (int cX = 0 + pX*CHAR_X, l = 0; cX < CHAR_X + pX*CHAR_X; cX++, l++) {
-					for (double y = 0 + cY*cmpSubsecY; y < cmpSubsecY + cY*cmpSubsecY; y++) {
-						for (double x = 0 + cX*cmpSubsecX; x < cmpSubsecX + cX*cmpSubsecX; x++) {
-							cnt++;
-							/* x: column, y: row, *4 RGBA, A: Alpha channel (visibility) 0->invisible, 255->fully visible */
-							R += PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4] /* R */
-								* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;
-							G += PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 1] /* G */
-								* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;
-							B += PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 2] /* B */
-								* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;
-							cnt2++;
-							weight += (PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4] +   /* R */
-								PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 1] +   /* G */
-								PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 2]) / 3 /* B */ /* max 255 (RGB pixel's weight) */
-								* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;/* A Transparency (0xAlphaChannel/0xFF) */
-						}
-					}
-					ImgSubWeight[k][l] = weight / cnt2;
-					if (l == 0) weightMin = ImgSubWeight[k][l];
-					if (ImgSubWeight[k][l] > weightMax) weightMax = ImgSubWeight[k][l];
-					if (ImgSubWeight[k][l] < weightMin) weightMin = ImgSubWeight[k][l];
-					cnt2 = weight = 0;
-				}
-			}
-			/* Adjusting SUBSECTION contrast-brightness **WARNING** Pixel errors will be amplified too */
-			if (weightMax != 0) {
-				for (int k = 0; k < CHAR_Y; k++) {
-					for (int l = 0; l < CHAR_X; l++) {
-						ImgSubWeight[k][l] += 255 - weightMax; //When in a subsec there are only a few 255 white pixels (=weightMax), then ImgSubWeight will be not adjusted
-					}
-				}
-				for (int i = 0; i < CHAR_NUM; i++) {
-					for (int k = 0; k < CHAR_Y; k++) {
-						for (int l = 0; l < CHAR_X; l++) {
-							WeightTemp[i] += abs(ImgSubWeight[k][l] - (CharSet.ARR[i][k][l] - '0') * 255);
-						}
-					}
-					if (i == 0) minWeight = WeightTemp[i];
-					if (WeightTemp[i] < minWeight) {
-						minWeight = WeightTemp[i];
-						minIdx = i;
-					}
-				}
-			}
-			PNG->ASCII_Image[pX + pY*PNG->WidthTile] = CharSet.CHAR[minIdx];
-			PNG->ASCII_Color[pX + pY*PNG->WidthTile] = TCODColor(R / cnt, G / cnt, B / cnt);
-		}
-	}
+	//int WeightTemp[CHAR_NUM]; /* how many are similar */
+	//int ImgSubWeight[CHAR_Y][CHAR_X]; /* a pixel brightness of the subsection */
+	//int weight, minWeight, weightMax, weightMin, minIdx, cnt, cnt2;
+	//int R, G, B;
+	//PNG->ASCII_Image = (unsigned char*)calloc(PNG->WidthTile*PNG->HeightTile, sizeof(unsigned char));
+	//PNG->ASCII_Color = (TCODColor*)calloc(PNG->WidthTile*PNG->HeightTile, sizeof(TCODColor));
+	//double cmpSubsecY = subsec.height / CHAR_Y;
+	//double cmpSubsecX = subsec.width / CHAR_X;
+	//for (int pY = 0; pY < (int)PNG->HeightTile; pY++) {
+	//	for (int pX = 0; pX < (int)PNG->WidthTile; pX++) {
+	//		for (int m = 0; m < CHAR_NUM; m++) {
+	//			WeightTemp[m] = 0;
+	//		}
+	//		weight = cnt = R = G = B = 0;
+	//		minWeight = weightMax = weightMin = minIdx = cnt2 = 0;
+	//		for (int cY = 0 + pY*CHAR_Y, k = 0; cY < CHAR_Y + pY*CHAR_Y; cY++, k++) {
+	//			for (int cX = 0 + pX*CHAR_X, l = 0; cX < CHAR_X + pX*CHAR_X; cX++, l++) {
+	//				for (double y = 0 + cY*cmpSubsecY; y < cmpSubsecY + cY*cmpSubsecY; y++) {
+	//					for (double x = 0 + cX*cmpSubsecX; x < cmpSubsecX + cX*cmpSubsecX; x++) {
+	//						cnt++;
+	//						/* x: column, y: row, *4 RGBA, A: Alpha channel (visibility) 0->invisible, 255->fully visible */
+	//						R += PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4] /* R */
+	//							* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;
+	//						G += PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 1] /* G */
+	//							* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;
+	//						B += PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 2] /* B */
+	//							* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;
+	//						cnt2++;
+	//						weight += (PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4] +   /* R */
+	//							PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 1] +   /* G */
+	//							PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 2]) / 3 /* B */ /* max 255 (RGB pixel's weight) */
+	//							* PNG->Image[((int)x + (int)y*(int)PNG->Width) * 4 + 3] / 255;/* A Transparency (0xAlphaChannel/0xFF) */
+	//					}
+	//				}
+	//				ImgSubWeight[k][l] = weight / cnt2;
+	//				if (l == 0) weightMin = ImgSubWeight[k][l];
+	//				if (ImgSubWeight[k][l] > weightMax) weightMax = ImgSubWeight[k][l];
+	//				if (ImgSubWeight[k][l] < weightMin) weightMin = ImgSubWeight[k][l];
+	//				cnt2 = weight = 0;
+	//			}
+	//		}
+	//		/* Adjusting SUBSECTION contrast-brightness **WARNING** Pixel errors will be amplified too */
+	//		if (weightMax != 0) {
+	//			for (int k = 0; k < CHAR_Y; k++) {
+	//				for (int l = 0; l < CHAR_X; l++) {
+	//					ImgSubWeight[k][l] += 255 - weightMax; //When in a subsec there are only a few 255 white pixels (=weightMax), then ImgSubWeight will be not adjusted
+	//				}
+	//			}
+	//			for (int i = 0; i < CHAR_NUM; i++) {
+	//				for (int k = 0; k < CHAR_Y; k++) {
+	//					for (int l = 0; l < CHAR_X; l++) {
+	//						WeightTemp[i] += abs(ImgSubWeight[k][l] - (CharSet.ARR[i][k][l] - '0') * 255);
+	//					}
+	//				}
+	//				if (i == 0) minWeight = WeightTemp[i];
+	//				if (WeightTemp[i] < minWeight) {
+	//					minWeight = WeightTemp[i];
+	//					minIdx = i;
+	//				}
+	//			}
+	//		}
+	//		PNG->ASCII_Image[pX + pY*PNG->WidthTile] = CharSet.CHAR[minIdx];
+	//		PNG->ASCII_Color[pX + pY*PNG->WidthTile] = TCODColor(R / cnt, G / cnt, B / cnt);
+	//	}
+	//}
 }
 /**
  * @brief Calculates CHAR_SET WEIGHT and also SCALING_WEIGHT
@@ -191,17 +190,17 @@ void Indexer(CHAR_SET* CharSet, int char_index) {
 }
 
 void WriteOutPic(IMAGE* PNG, SIZES TopLeft, SIZES BoxSize) {
-	unsigned i, j;
-	unsigned VerLeftover = (BoxSize.Y - PNG->HeightTile) / 2; //Függőleges maradék amennyit fent és lent kihagy
-	unsigned HorLeftover = (BoxSize.X - PNG->WidthTile) / 2; //Vízszintes maradék amennyit balra és jobbra kihagy
-	for (i = 0; i < PNG->HeightTile; i++) {
-		for (j = 0; j < PNG->WidthTile; j++) {
-			if (PNG->ASCII_Color != NULL) TCODConsole::root->setDefaultForeground(PNG->ASCII_Color[j + i*PNG->WidthTile]);
-			if ((TCODConsole::root->getChar(TopLeft.X + HorLeftover + j, TopLeft.Y + VerLeftover + i) == '.' || TCODConsole::root->getChar(TopLeft.X + HorLeftover + j, TopLeft.Y + VerLeftover + i) == ' '))
-				TCODConsole::root->putChar(TopLeft.X + HorLeftover + j, TopLeft.Y + VerLeftover + i, PNG->ASCII_Image[j + i*PNG->WidthTile]);
-		}
-	}
-	TCODConsole::root->setDefaultForeground(TCODColor::white);
+	//unsigned i, j;
+	//unsigned VerLeftover = (BoxSize.Y - PNG->HeightTile) / 2; //Függőleges maradék amennyit fent és lent kihagy
+	//unsigned HorLeftover = (BoxSize.X - PNG->WidthTile) / 2; //Vízszintes maradék amennyit balra és jobbra kihagy
+	//for (i = 0; i < PNG->HeightTile; i++) {
+	//	for (j = 0; j < PNG->WidthTile; j++) {
+	//		if (PNG->ASCII_Color != NULL) TCODConsole::root->setDefaultForeground(PNG->ASCII_Color[j + i*PNG->WidthTile]);
+	//		if ((TCODConsole::root->getChar(TopLeft.X + HorLeftover + j, TopLeft.Y + VerLeftover + i) == '.' || TCODConsole::root->getChar(TopLeft.X + HorLeftover + j, TopLeft.Y + VerLeftover + i) == ' '))
+	//			TCODConsole::root->putChar(TopLeft.X + HorLeftover + j, TopLeft.Y + VerLeftover + i, PNG->ASCII_Image[j + i*PNG->WidthTile]);
+	//	}
+	//}
+	//TCODConsole::root->setDefaultForeground(TCODColor::white);
 }
 void CalculatePNGSizes(IMAGE* PNG, SUBSECTION* subsec, CONSOLEINFO Con) {
 	/* FONTSIZE.Y*subsection_scale*height_tile=height ; FONTSIZE.X*subsection_scale*width_tile=width */
@@ -222,43 +221,4 @@ void CalculatePNGSizes(IMAGE* PNG, SUBSECTION* subsec, CONSOLEINFO Con) {
 
 	/*        height_tile = height/14; unsigned subsection_height=14;
 	 *        width_tile = width/8;    unsigned subsection_height=8; */
-}
-
-//TODO OpenCV tisztítás
-cv::Mat OpenWarpPerspective(const cv::Mat& _image
-	, const POINTS& _lu
-	, const POINTS& _ru
-	, const POINTS& _rd
-	, const POINTS& _ld
-	, const POINTS& _lu_result
-	, const POINTS& _ru_result
-	, const POINTS& _rd_result
-	, const POINTS& _ld_result)
-{
-	cv::Point2f source_points[4];
-	cv::Point2f dest_points[4];
-	
-	source_points[0] = cv::Point2f(_lu.X,_lu.Y);
-	source_points[1] = cv::Point2f(_ru.X, _ru.Y);
-	source_points[2] = cv::Point2f(_rd.X, _rd.Y);
-	source_points[3] = cv::Point2f(_ld.X, _ld.Y);
-
-	dest_points[0] = cv::Point2f(_lu_result.X, _lu_result.Y);
-	dest_points[1] = cv::Point2f(_ru_result.X, _ru_result.Y);
-	dest_points[2] = cv::Point2f(_rd_result.X, _rd_result.Y);
-	dest_points[3] = cv::Point2f(_ld_result.X, _ld_result.Y);
-
-	std::vector<double> Xpoints = { dest_points[0].x,dest_points[1].x,dest_points[2].x,dest_points[3].x };
-	std::vector<double> Ypoints = { dest_points[0].y,dest_points[1].y,dest_points[2].y,dest_points[3].y };
-
-	cv::Size dest_size = cv::Size(
-		*std::max_element(Xpoints.begin(), Xpoints.end()),
-		*std::max_element(Ypoints.begin(), Ypoints.end())
-		);
-
-	cv::Mat dst;
-	cv::Mat _transform_matrix = cv::getPerspectiveTransform(source_points, dest_points);
-	cv::warpPerspective(_image, dst, _transform_matrix, dest_size);
-	
-	return dst;
 }

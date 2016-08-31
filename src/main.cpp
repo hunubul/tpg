@@ -10,83 +10,27 @@
 #include "level.h"
 #include "logging.h"
 #include "globals.h"
+#include "openGL/initOpenGL.h"
 
 using namespace globals;
 using namespace std;
 
 void BeolvasEnemyk();
-void LoadingScreen();
 
 //4:3  - 1024x768
 //16:9 - 1280x720
 
 int main(int argc, char *argv[]) {
 	srand((unsigned int)time(NULL));
-	TCODSystem::getCurrentResolution(&ConsoleWidth, &ConsoleHeight);
-	// ConsoleWidth = 1024;
-	// ConsoleHeight = 768;
-	ConsoleWidthPixels = ConsoleWidth;
-	ConsoleHeightPixels = ConsoleHeight;
-	ConsoleWidth /= FontX;
-	ConsoleHeight /= FontY;
-#ifdef DEBUG
-	ConsoleHeight -= 10;
-	ConsoleHeightPixels -= 10*FontY;
-#endif // DEBUG
-	//UpperBoxSiz  = (SIZES){ConsoleWidth*634/1280,ConsoleHeight*174/720};
-	UpperBoxSiz = SIZES{ ConsoleWidth,ConsoleHeight * 174 / 720 };
-	//SideBoxSiz   = (SIZES){ConsoleWidth*316/1280,ConsoleHeight*355/720};
-	SideBoxSiz = SIZES{ ConsoleWidth * 316 / 1280,ConsoleHeight };
-	//BottomBoxSiz = (SIZES){ConsoleWidth*634/1280,ConsoleHeight*180/720};
-	BottomBoxSiz = SIZES{ ConsoleWidth,ConsoleHeight * 180 / 720 };
-	MiddleBoxSiz = SIZES{ ConsoleWidth * 628 / 1280,ConsoleHeight * 354 / 720 };
-	UpperBoxPos = SIZES{ (ConsoleWidth - UpperBoxSiz.X) / 2,0 };
-	SideBoxPosLeft = SIZES{ 0,(ConsoleHeight - SideBoxSiz.Y) / 2 };
-	SideBoxPosRight = SIZES{ ConsoleWidth - SideBoxSiz.X,(ConsoleHeight - SideBoxSiz.Y) / 2 };
-	BottomBoxPos = SIZES{ (ConsoleWidth - BottomBoxSiz.X) / 2,ConsoleHeight - BottomBoxSiz.Y };
-	MiddleBoxPos = SIZES{ (ConsoleWidth - MiddleBoxSiz.X) / 2,(ConsoleHeight - MiddleBoxSiz.Y) / 2 };
-
-	for (size_t i = 0;i < POINTS_LEFT[0].size();i++) {
-		for (size_t j = 0;j < POINTS_LEFT.size();j++) {
-			POINTS_LEFT[j][i] = {
-				POINTS_LEFT[j][i].X*ConsoleWidthPixels / 1280,
-				POINTS_LEFT[j][i].Y*ConsoleHeightPixels / 720
-			};
-			POINTS_MIDDLE[j][i] = {
-				POINTS_MIDDLE[j][i].X*ConsoleWidthPixels / 1280,
-				POINTS_MIDDLE[j][i].Y*ConsoleHeightPixels / 720
-			};
-			POINTS_RIGHT[j][i] = {
-				POINTS_RIGHT[j][i].X*ConsoleWidthPixels / 1280,
-				POINTS_RIGHT[j][i].Y*ConsoleHeightPixels / 720
-			};
-		}
-	}
-	for (size_t i = 0;i < POINTS_TOP[0].size();i++) {
-		for (size_t j = 0;j < POINTS_TOP.size();j++) {
-			POINTS_TOP[j][i] = {
-				POINTS_TOP[j][i].X*ConsoleWidthPixels / 1280,
-				POINTS_TOP[j][i].Y*ConsoleHeightPixels / 720
-			};
-			POINTS_BOTTOM[j][i] = {
-				POINTS_BOTTOM[j][i].X*ConsoleWidthPixels / 1280,
-				POINTS_BOTTOM[j][i].Y*ConsoleHeightPixels / 720
-			};
-		}
-	}
-	CharSetImporter(&CharSet, "8x8terminal.dat");
-	CalculateWeights(&CharSet); /* Calculating charset weights... */
-	TCODConsole::initRoot(ConsoleWidth, ConsoleHeight, "TPG");
-	TCODSystem::setFps(FPS);
 #ifndef DEBUG
-	TCODConsole::setFullscreen(true);
+	//TCODConsole::setFullscreen(true);
 #endif // DEBUG
+	initOpenGL();
 	try {
-		LoadingScreen();
 		BeolvasEnemyk();
 		level asd(17, 17, 8, 16, 80); /* A pálya inicializálása */
 		//chest Chest; /* Chest inicializálás */
-		asd.engine(); /* A fõ loop */
+		asd.engine(); /* A fő loop */
 	}
 	catch (const exception& ex) { FatalError(ex.what()); }
 	Exitting();
@@ -126,11 +70,4 @@ void BeolvasEnemyk() {
 		enemy en(name, defense, offense, defdir, atcdir);
 		enemies.push_back(en);
 	}
-}
-
-void LoadingScreen() {
-	TCODConsole::root->clear();
-	TCODConsole::root->flush();
-	Pic2ASCIIandWrite("Editing/loading", { 0, 0 }, { ConsoleWidth, ConsoleHeight });
-	TCODConsole::root->flush();
 }

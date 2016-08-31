@@ -9,8 +9,14 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="lodepng">
-      <UniqueIdentifier>{e43bb6c8-466b-477e-b9ce-37668566cdbb}</UniqueIdentifier>
+    <Filter Include="Source Files\openGL">
+      <UniqueIdentifier>{1076716d-5ecc-4a22-9432-8775f5a22487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{a55b9587-9e8e-4661-a91f-c6d8c45d32df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\openGL">
+      <UniqueIdentifier>{93bdcb61-e232-4580-a6d8-e08a87a0326c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -44,11 +50,20 @@
     <ClCompile Include="src\SelectionMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\lodepng\lodepng.cpp">
-      <Filter>lodepng</Filter>
-    </ClCompile>
     <ClCompile Include="src\globals.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\openGL\ASCII.cpp">
+      <Filter>Source Files\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\openGL\initOpenGL.cpp">
+      <Filter>Source Files\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\openGL\OpenGLRender.cpp">
+      <Filter>Source Files\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\openGL\Vertices.cpp">
+      <Filter>Source Files\openGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,11 +94,46 @@
     <ClInclude Include="src\logging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\lodepng\lodepng.h">
-      <Filter>lodepng</Filter>
-    </ClInclude>
     <ClInclude Include="src\globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\openGL\ASCII.h">
+      <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\openGL\Camera.h">
+      <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\openGL\initOpenGL.h">
+      <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\openGL\OpenGLRender.h">
+      <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\openGL\Shader.h">
+      <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\openGL\Vertices.h">
+      <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\shaders\computeASCII.shd">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\shaders\computeASCIIMaxIndex.shd">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\shaders\framebuffer.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\shaders\framebuffer.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\shaders\textures.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\shaders\textures.vert">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

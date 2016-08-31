@@ -1,5 +1,4 @@
 #include "Image2ASCIIcolors.h"
-#include "lodepng.h"
 #include "character.h"
 #include "level.h"
 #include "logging.h"
@@ -62,45 +61,45 @@ player::player() : character(100,100,4,4) {
 
 enemy::enemy(std::string name,int defense,int offense,ADIR def,ADIR atc) :
     character(100,100,defense,offense),def(def),atc(atc),name(name) {
-    enemy::BoxSize={ConsoleWidth*911/1280,ConsoleHeight*666/720};
-    enemy::TopLeft={ConsoleWidth-enemy::BoxSize.X,0};
-	wearing.weapon = (weapon)emptyweapon();
-	wearing.shield = (shield)emptyshield();
-	wearing.chestpiece = (chestpiece)emptychestpiece();
-	wearing.headpiece = (headpiece)emptyheadpiece();
-	wearing.gloves = (gloves)emptygloves();
-	wearing.pants = (pants)emptypants();
-	wearing.legs = (legs)emptylegs();
-	int asd = rand() % 5;
-	if (asd == 0) wearing.weapon;
-	if (asd == 1) wearing.shield;
-    CONSOLEINFO Con;
-    SUBSECTION subsec;
-    std::string PicPath = IMAGE_PATH+name+".png";
-    /*-----------Initializing CONSOLEINFO-----------*/
-    Con.FontSize.X = FontX;
-    Con.FontSize.Y = FontY;
-    Con.CharAmount.X = BoxSize.X;
-    Con.CharAmount.Y = BoxSize.Y;
-    Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
-    Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
-    /*----------------------------------------------*/
-    int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
-    if(!err) {
-        CalculatePNGSizes(&PNG,&subsec,Con);
-        PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-        free(PNG.Image);
-        PNG.Image=NULL;
-	} else {
-		std::string PicPath = IMAGE_PATH + "Editing/missing_enemy.png";
-		err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
-		if (!err) {
-			CalculatePNGSizes(&PNG, &subsec, Con);
-			PreciseProcessPNG(&PNG, subsec, CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
-			free(PNG.Image);
-			PNG.Image = NULL;
-		} else FatalError("Missing missing_enemy");
-	}
+ //   enemy::BoxSize={ConsoleWidth*911/1280,ConsoleHeight*666/720};
+ //   enemy::TopLeft={ConsoleWidth-enemy::BoxSize.X,0};
+	//wearing.weapon = (weapon)emptyweapon();
+	//wearing.shield = (shield)emptyshield();
+	//wearing.chestpiece = (chestpiece)emptychestpiece();
+	//wearing.headpiece = (headpiece)emptyheadpiece();
+	//wearing.gloves = (gloves)emptygloves();
+	//wearing.pants = (pants)emptypants();
+	//wearing.legs = (legs)emptylegs();
+	//int asd = rand() % 5;
+	//if (asd == 0) wearing.weapon;
+	//if (asd == 1) wearing.shield;
+ //   CONSOLEINFO Con;
+ //   SUBSECTION subsec;
+ //   std::string PicPath = IMAGE_PATH+name+".png";
+ //   /*-----------Initializing CONSOLEINFO-----------*/
+ //   Con.FontSize.X = FontX;
+ //   Con.FontSize.Y = FontY;
+ //   Con.CharAmount.X = BoxSize.X;
+ //   Con.CharAmount.Y = BoxSize.Y;
+ //   Con.Size.X = Con.FontSize.X * Con.CharAmount.X;
+ //   Con.Size.Y = Con.FontSize.Y * Con.CharAmount.Y;
+ //   /*----------------------------------------------*/
+ //   int err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
+ //   if(!err) {
+ //       CalculatePNGSizes(&PNG,&subsec,Con);
+ //       PreciseProcessPNG(&PNG,subsec,CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+ //       free(PNG.Image);
+ //       PNG.Image=NULL;
+	//} else {
+	//	std::string PicPath = IMAGE_PATH + "Editing/missing_enemy.png";
+	//	err = lodepng_decode32_file(&PNG.Image, &PNG.Width, &PNG.Height, PicPath.c_str());
+	//	if (!err) {
+	//		CalculatePNGSizes(&PNG, &subsec, Con);
+	//		PreciseProcessPNG(&PNG, subsec, CharSet); /*ProcessingPNG [in]:PNGImage,SUBSECTION,[out]: PNG_WEIGHT */
+	//		free(PNG.Image);
+	//		PNG.Image = NULL;
+	//	} else FatalError("Missing missing_enemy");
+	//}
 }
 
 enemy::~enemy() {

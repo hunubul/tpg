@@ -19,9 +19,9 @@ public:
     std::vector<std::vector<szoba> > terkep; //egyértelmû
     level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter);
     void engine();
+	void ManageEvents();
     void writeout();
     void WriteOutMiniMap();
-    //void WriteOutGenTime(boost::posix_time::ptime starttime);
 
     void RoomWriteout();
     void WriteOutBoxes();

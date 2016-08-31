@@ -102,14 +102,5 @@ void Indexer(CHAR_SET* CharSet,int char_index);
 void WriteOutPic(IMAGE* PNG,SIZES TopLeft,SIZES BoxSize);
 void CalculatePNGSizes(IMAGE* PNG,SUBSECTION* subsec,CONSOLEINFO Con);
 
-/*cv::Mat OpenWarpPerspective(const cv::Mat& _image
-	, const POINTS& _lu
-	, const POINTS& _ru
-	, const POINTS& _rd
-	, const POINTS& _ld
-	, const POINTS& _lu_result
-	, const POINTS& _ru_result
-	, const POINTS& _rd_result
-	, const POINTS& _ld_result);*/
 
 #endif // IMAGE2ASCIICOLORS_H_INCLUDED

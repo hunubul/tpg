@@ -1,7 +1,19 @@
+// OpenGL headers
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GL/glu.h>
+#include <GL/gl.h>
+
+// SDL headers
+#include <SDL_main.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 #include <stdexcept>
 #include "level.h"
 #include "globals.h"
 #include "harc.h"
+#include "openGL/initOpenGL.h"
 #include "openGL/OpenGLRender.h"
 
 using namespace globals;
@@ -72,7 +84,7 @@ level::level(int Max_X, int Max_Y, int MidX, int MidY, int MaxCounter) : MidX(Mi
 			counter++;
 		}
 	}
-	//boost::posix_time::ptime timetmp=boost::posix_time::microsec_clock::local_time();
+
 	int direction; //Flagek használatával, a szoba kostruktorában meghatározhatjuk hogy melyik falra kell ajtó
 	for (int i = 0; i < MaxRoomX; i++) { //tényleges, követhetõ térkép csinálása
 		vector<szoba> temp;
@@ -87,7 +99,6 @@ level::level(int Max_X, int Max_Y, int MidX, int MidY, int MaxCounter) : MidX(Mi
 		}
 		terkep.push_back(temp);
 	}
-	//GenTimeSzobaFeltoltes = boost::posix_time::microsec_clock::local_time() - timetmp;
 }
 /**
  * @brief a fõ loop, nyíl input kezelés
@@ -96,61 +107,113 @@ void level::engine() {
 	posX = MidX;
 	posY = MidY;
 	most = UP;
-	//int lehet;
-	int prevX = posX;
-	int prevY = posY;
+	
+	//unsigned char* texture1Arr = new unsigned char[screenWidth *screenHeight * 3];
+	
+	// Game loop
+	while (!quit) {
+		ManageEvents();
 
-	openGLloop();
-	/*TCOD_key_t key;
-	TCOD_mouse_t mouse;
-	TCOD_event_t event;
-	bool procNeighb=true; //Process Neighbours
-	writeout();
-	do {
-		if (prevX != posX || prevY != posY) writeout();
-		prevX = posX;
-		prevY = posY;
-		event = TCODSystem::waitForEvent(TCOD_EVENT_ANY, &key, &mouse, true);
-		TCODSystem::sleepMilli(1000 / FPS);
-		//HarcGUI(enemies[0]);
-		if (event == TCOD_EVENT_KEY_PRESS) {
-			switch (key.vk) { //Irány változó típusból adódik
-			case TCODK_LEFT:
+		// Set frame time
+		frameLimiter();
+
+		// Check and call events
+		Do_Movement();
+
+		// Place and transform 3D to screen
+		render3Dmodels();
+
+		/*GLenum err = GL_NO_ERROR;
+		while ((err = glGetError()) != GL_NO_ERROR) {
+		printf("Error: %x\n", err);
+		}*/
+
+		// Render subsections
+		setDirtyParams();
+		RenderSubsection(dirtyX[0], dirtyY[0], dirtyWidth[0], dirtyHeight[0]);
+		RenderSubsection(dirtyX[1], dirtyY[1], dirtyWidth[1], dirtyHeight[1]);
+
+		// Draw with framebuffer shader on screen
+		drawBufferShader();
+
+		// Update and render Font text
+		writeout();
+		DrawText();
+
+		// Swap the buffers
+		SDL_GL_SwapWindow(window);
+	}
+}
+
+void level::ManageEvents() {
+	int lehet;
+
+	while (SDL_PollEvent(&sdlEvent) != 0) {
+		switch (sdlEvent.type) {
+		case SDL_KEYDOWN:
+			switch (sdlEvent.key.keysym.sym) {
+			// Esc button is pressed
+			case SDLK_ESCAPE:
+				quit = true;
+				break;
+			case SDLK_f:
+				if (ASCIION) {
+					ASCIION = false;
+				} else {
+					ASCIION = true;
+					firstRender = true;
+				}
+				break;
+#ifdef DEBUG
+			case SDLK_g:
+				HarcGUI(enemies[0]);
+				break;
+#endif
+			case SDLK_LEFT:
 				lehet = (most + 3) % 4;
 				merre((IRANY)lehet);
 				break;
-			case TCODK_UP:
+			case SDLK_UP:
 				lehet = (most + 0) % 4;
 				merre((IRANY)lehet);
 				break;
-			case TCODK_RIGHT:
+			case SDLK_RIGHT:
 				lehet = (most + 1) % 4;
 				merre((IRANY)lehet);
 				break;
-			case TCODK_DOWN:
+			case SDLK_DOWN:
 				lehet = (most + 2) % 4;
 				merre((IRANY)lehet);
 				break;
-			default:
-				break;
 			}
-#ifdef DEBUG
-			if (key.c=='d') {
-				HarcGUI(enemies[0]);
-			}
-#endif
-		}
-		
-		else if (event == TCOD_EVENT_MOUSE_PRESS) {
-			if (mouse.lbutton) {
+			if (sdlEvent.key.keysym.sym >= 0 && sdlEvent.key.keysym.sym < 1024)
+				keys[sdlEvent.key.keysym.sym] = true;
+			break;
 
-			}
-			else if (mouse.rbutton) {
+		case SDL_KEYUP:
+			if (sdlEvent.key.keysym.sym >= 0 && sdlEvent.key.keysym.sym < 1024)
+				keys[sdlEvent.key.keysym.sym] = false;
+			break;
 
-			}
+		case SDL_MOUSEMOTION:
+			camera.ProcessMouseMovement((GLfloat)sdlEvent.motion.xrel, -(GLfloat)sdlEvent.motion.yrel);
+			break;
+
+		case SDL_MOUSEWHEEL:
+			camera.ProcessMouseScroll((GLfloat)sdlEvent.wheel.y);
+			break;
+
+		case SDL_QUIT:
+			quit = true;
+			break;
+
+		default:
+			break;
+
 		}
-	} while (!TCODConsole::isWindowClosed() && key.vk != TCODK_ESCAPE);*/
+	}
 }
+
 void level::merre(IRANY honnan) {
 	switch (honnan) {
 	case UP:
@@ -179,14 +242,14 @@ void level::merre(IRANY honnan) {
 		break;
 	}
 }
+
 /**
- * @brief kiírja az egész térképet, + az aktív szoba tartalmát
+ * @brief kiírja az egész térképet
  */
 void level::writeout() {
 	//TCODConsole::root->clear();
-	//boost::posix_time::ptime timetmp=boost::posix_time::microsec_clock::local_time();
-	RoomWriteout();
-	WriteOutBoxes();
+	//RoomWriteout();
+	//WriteOutBoxes();
 	WriteOutMiniMap();
 #ifdef DEBUG
 	//WriteOutGenTime(timetmp);
@@ -195,38 +258,43 @@ void level::writeout() {
 	//TCODConsole::root->flush();
 }
 void level::WriteOutMiniMap() {
+	Font miniMap(fontZig, 255, 255, 255);
+	miniMap.fontAlign = FONS_ALIGN_LEFT | FONS_ALIGN_TOP;
+	miniMap.fontSize = 12.0f;
 	for (int i = 0; i < MaxRoomX; i++) {
 		for (int j = 0; j < MaxRoomY; j++) {
 			if (posX == i&&posY == j) {
 				FOV[i][j] = 1;
-				//TCODConsole::root->setDefaultForeground(TCODColor::red);
+				miniMap.changeFontColor(255, 0, 0);
 			}
 #ifdef DEBUG
 			writearrow();
-			//if (Map[i][j] == 1) TCODConsole::root->print(i, j, "#");
-			//else TCODConsole::root->print(i, j, " ");
+			if (Map[i][j] == 1) miniMap.append("#");
+			else miniMap.append(" ");
 #else
 			if (FOV[i][j] == 1) {
-				TCODConsole::root->print(i, j, "#");
-				TCODConsole::root->setDefaultForeground(TCODColor::white);
+				miniMap.append("#");
+				miniMap.changeFontColor(255, 255, 255);
 				if (i - 1 >= 0 && Map[i - 1][j] == 1 && FOV[i - 1][j] != 1) TCODConsole::root->print(i - 1, j, "?");
 				if (j - 1 >= 0 && Map[i][j - 1] == 1 && FOV[i][j - 1] != 1) TCODConsole::root->print(i, j - 1, "?");
 				if (i + 1 < MaxRoomX&&Map[i + 1][j] == 1 && FOV[i + 1][j] != 1) TCODConsole::root->print(i + 1, j, "?");
 				if (j + 1 < MaxRoomY&&Map[i][j + 1] == 1 && FOV[i][j + 1] != 1) TCODConsole::root->print(i, j + 1, "?");
 			}
-			else if (TCODConsole::root->getChar(i, j) != '?') TCODConsole::root->print(i, j, " ");
+			else if (TCODConsole::root->getChar(i, j) != '?') miniMap.append(" ");
 #endif // DEBUG
-			//TCODConsole::root->setDefaultForeground(TCODColor::white);
+			if (posX == i&&posY == j) {
+				miniMap.changeFontColor(255, 255, 255);
+			}
 		}
+		miniMap.append("|");
+		miniMap.endLine();
 	}
 	// Drawing frame
 	for (int i = 0; i < MaxRoomX; i++) {
-		//TCODConsole::root->print(i, MaxRoomY, "%c", TCOD_CHAR_DHLINE);
+		miniMap.append("-");
 	}
-	for (int j = 0; j < MaxRoomY; j++) {
-		//TCODConsole::root->print(MaxRoomX, j, "%c", TCOD_CHAR_DVLINE);
-	}
-	//TCODConsole::root->print(MaxRoomX, MaxRoomY, "%c", TCOD_CHAR_DSE);
+	miniMap.append("-");
+	texts.push_back(miniMap);
 }
 void level::writearrow() {
 	/*switch (most) {

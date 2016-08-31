@@ -40,7 +40,7 @@ SDL_Window* window;
 SDL_GLContext glContext;
 
 // Properties
-const GLuint screenWidth = 1600, screenHeight = 900;
+GLuint screenWidth, screenHeight;
 const int MAX_NUM_OF_DIRTY_BLOCKS = 5;
 
 //Shaders location
@@ -78,7 +78,7 @@ ComputeShader* computeASCIIMaxIndexShader;
 // Function prototypes
 void LoadFonts();
 FONScontext* fs = NULL;
-int fontNormal, fontItalic, fontBold, fontJapanese;
+int fontNormal, fontItalic, fontBold, fontJapanese, fontZig;
 
 int gcd(int a, int b); //Greatest Common Divisor
 void ClaculateVertices();
@@ -97,6 +97,22 @@ void initOpenGL() {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		return;
 	}
+
+	// Declare display mode structure to be filled in.
+	SDL_DisplayMode current;
+	// Get current display mode of all displays.
+	for (int i = SDL_GetNumVideoDisplays() - 1; i >= 0; i--) {
+		int should_be_zero = SDL_GetCurrentDisplayMode(i, &current);
+		if (should_be_zero != 0)
+			// In case of error...
+			SDL_Log("Could not get display mode for video display #%d: %s", i, SDL_GetError());
+		else
+			// On success, print the current display mode.
+			SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", i, current.w, current.h, current.refresh_rate);
+	}
+	screenWidth = current.w;
+	screenHeight = current.h;
+
 	// Create window
 	window = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (window == NULL) {
@@ -350,6 +366,11 @@ void LoadFonts() {
 	fontJapanese = fonsAddFont(fs, "sans-jp", "DroidSansJapanese.ttf");
 	if (fontJapanese == FONS_INVALID) {
 		printf("Could not add font japanese.\n");
+		return;
+	}
+	fontZig = fonsAddFont(fs, "zig", "zig.ttf");
+	if (fontZig == FONS_INVALID) {
+		printf("Could not add font zig.\n");
 		return;
 	}
 }

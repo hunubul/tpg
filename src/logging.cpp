@@ -3,6 +3,8 @@
 #include <time.h>
 #include "logging.h"
 #include "globals.h"
+#include "openGL/initOpenGL.h"
+#include "gl3fontstash.h"
 
 using namespace globals;
 
@@ -49,4 +51,27 @@ void Exitting() {
     std::string PrintText="*******************************************************************";
     out << PrintText << std::endl;
     out.close();
+
+	// Properly de-allocate all resources once they've outlived their purpose
+	glDeleteFramebuffers(1, &frameBuffer);
+	glDeleteVertexArrays(1, &VAO_FrameBuff);
+	glDeleteBuffers(1, &VBO_FrameBuff);
+	glDeleteVertexArrays(1, &VAOfront);
+	glDeleteBuffers(1, &VBOfront);
+	glDeleteVertexArrays(1, &VAOleft);
+	glDeleteBuffers(1, &VBOleft);
+	glDeleteVertexArrays(1, &VAOright);
+	glDeleteBuffers(1, &VBOright);
+	glDeleteVertexArrays(1, &VAOfloor);
+	glDeleteBuffers(1, &VBOfloor);
+	glDeleteVertexArrays(1, &VAOceiling);
+	glDeleteBuffers(1, &VBOceiling);
+	gl3fonsDelete(fs);
+
+	//Destroy window
+	SDL_DestroyWindow(window);
+	window = NULL;
+
+	//Quit SDL subsystems
+	SDL_Quit();
 }

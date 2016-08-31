@@ -22,9 +22,6 @@ void BeolvasEnemyk();
 
 int main(int argc, char *argv[]) {
 	srand((unsigned int)time(NULL));
-#ifndef DEBUG
-	//TCODConsole::setFullscreen(true);
-#endif // DEBUG
 	initOpenGL();
 	try {
 		BeolvasEnemyk();

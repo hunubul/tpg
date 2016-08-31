@@ -19,9 +19,11 @@
 // GL includes
 #include "ASCII.h"
 #include "initOpenGL.h"
+#include "OpenGLRender.h"
 #include "Shader.h"
 #include "Camera.h"
 #include "Vertices.h"
+#include "../globals.h"
 
 // GLM Mathemtics
 #include <glm/glm.hpp>
@@ -36,14 +38,7 @@
 #include "gl3fontstash.h"
 
 SDL_Event sdlEvent;
-
-// Function prototypes
-void Do_Movement();
-void ManageEvents();
-void render3Dmodells();
-void RenderSubsection(int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight);
-void setDirtyParams();
-void DrawText();
+std::vector<Font> texts;
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -63,134 +58,6 @@ std::vector<int> dirtyY(MAX_NUM_OF_DIRTY_BLOCKS, -1);
 std::vector<int> dirtyWidth(MAX_NUM_OF_DIRTY_BLOCKS, -1);
 std::vector<int> dirtyHeight(MAX_NUM_OF_DIRTY_BLOCKS, -1);
 
-// The MAIN function, from here we start our application and run our Game loop
-void openGLloop()
-{
-	//unsigned char* texture1Arr = new unsigned char[screenWidth *screenHeight * 3];
-
-	// Game loop
-	while (!quit) {
-		ManageEvents();
-
-		// Set frame time
-		GLfloat currentFrame = (GLfloat)SDL_GetTicks() / 1000;
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
-		// Check and call events
-		Do_Movement();
-
-		// Place and transform 3D to screen
-		render3Dmodells();
-
-		if (ASCIION) {
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);	 // READ: Supersampled
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameDownBuffer); // WRITE
-
-			// Downsample the supersampled FBO using LINEAR interpolation
-			glBlitFramebuffer(
-				0, 0, screenWidth, screenHeight,
-				0, 0, screenWidth / FontX, screenHeight / FontY,
-				GL_COLOR_BUFFER_BIT,
-				GL_LINEAR
-			);
-		}
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		/*GLenum err = GL_NO_ERROR;
-		while ((err = glGetError()) != GL_NO_ERROR) {
-			printf("Error: %x\n", err);
-		}*/
-
-		// Render subsections
-		setDirtyParams();
-		RenderSubsection(dirtyX[0], dirtyY[0], dirtyWidth[0], dirtyHeight[0]);
-		RenderSubsection(dirtyX[1], dirtyY[1], dirtyWidth[1], dirtyHeight[1]);
-
-		glBindVertexArray(VAO_FrameBuff);
-
-		framebufferShader->UseProgram();
-		glBindImageTexture(0, texColorBuffer, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA8);
-		glBindImageTexture(1, ASCIITexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA8);
-		glBindImageTexture(2, ASCIIMaxIndexes, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16F);
-		glBindImageTexture(3, prevframeTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
-		glUniform1i(0, (GLint)ASCIION);
-		glUniform1iv(1, MAX_NUM_OF_DIRTY_BLOCKS, dirtyX.data());
-		glUniform1iv(1+   MAX_NUM_OF_DIRTY_BLOCKS, MAX_NUM_OF_DIRTY_BLOCKS, dirtyY.data());
-		glUniform1iv(1+2* MAX_NUM_OF_DIRTY_BLOCKS, MAX_NUM_OF_DIRTY_BLOCKS, dirtyWidth.data());
-		glUniform1iv(1+3* MAX_NUM_OF_DIRTY_BLOCKS, MAX_NUM_OF_DIRTY_BLOCKS, dirtyHeight.data());
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
-
-		// Update and render Font text
-		DrawText();
-
-		// Swap the buffers
-		SDL_GL_SwapWindow(window);
-	}
-
-	// Properly de-allocate all resources once they've outlived their purpose
-	glDeleteFramebuffers(1, &frameBuffer);
-	glDeleteVertexArrays(1, &VAO_FrameBuff);
-	glDeleteBuffers(1, &VBO_FrameBuff);
-	glDeleteVertexArrays(1, &VAOfront);
-	glDeleteBuffers(1, &VBOfront);
-	glDeleteVertexArrays(1, &VAOleft);
-	glDeleteBuffers(1, &VBOleft);
-	glDeleteVertexArrays(1, &VAOright);
-	glDeleteBuffers(1, &VBOright);
-	glDeleteVertexArrays(1, &VAOfloor);
-	glDeleteBuffers(1, &VBOfloor);
-	glDeleteVertexArrays(1, &VAOceiling);
-	glDeleteBuffers(1, &VBOceiling);
-	gl3fonsDelete(fs);
-
-	//Destroy window
-	SDL_DestroyWindow(window);
-	window = NULL;
-
-	//Quit SDL subsystems
-	SDL_Quit();
-}
-
-void ManageEvents() {
-	while (SDL_PollEvent(&sdlEvent) != 0) {
-		// Esc button is pressed
-		switch (sdlEvent.type) {
-		case SDL_KEYDOWN:
-			if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
-				quit = true;
-			if (sdlEvent.key.keysym.sym == SDLK_f) {
-				if (ASCIION) {
-					ASCIION = false;
-				} else {
-					ASCIION = true;
-					firstRender = true;
-				}
-			}
-			if (sdlEvent.key.keysym.sym >= 0 && sdlEvent.key.keysym.sym < 1024)
-				keys[sdlEvent.key.keysym.sym] = true;
-			break;
-		case SDL_KEYUP:
-			if (sdlEvent.key.keysym.sym >= 0 && sdlEvent.key.keysym.sym < 1024)
-				keys[sdlEvent.key.keysym.sym] = false;
-			break;
-		case SDL_MOUSEMOTION:
-			camera.ProcessMouseMovement((GLfloat)sdlEvent.motion.xrel, -(GLfloat)sdlEvent.motion.yrel);
-			break;
-		case SDL_MOUSEWHEEL:
-			camera.ProcessMouseScroll((GLfloat)sdlEvent.wheel.y);
-			break;
-		case SDL_QUIT:
-			quit = true;
-			break;
-		default:
-			break;
-		}
-	}
-}
-
 // Moves/alters the camera positions based on user input
 void Do_Movement()
 {
@@ -205,7 +72,18 @@ void Do_Movement()
 		camera.ProcessKeyboard(CAM::RIGHT, deltaTime);
 }
 
-void render3Dmodells() {
+void frameLimiter() {
+	GLfloat currentFrame = (GLfloat)SDL_GetTicks() / 1000;
+	deltaTime = currentFrame - lastFrame;
+	if (globals::limitFPS && deltaTime != 0 && (int)(1.0 / deltaTime) > globals::FPS) {
+		SDL_Delay((int)(1000.0 / globals::FPS - 1000.0*deltaTime));
+		currentFrame = (GLfloat)SDL_GetTicks() / 1000;
+		deltaTime = currentFrame - lastFrame;
+	}
+	lastFrame = currentFrame;
+}
+
+void render3Dmodels() {
 	// Clear the colorbuffer
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -264,6 +142,20 @@ void render3Dmodells() {
 	glBindVertexArray(VAOceiling);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
+
+	if (ASCIION) {
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);	 // READ: Supersampled
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameDownBuffer); // WRITE
+
+		// Downsample the supersampled FBO using LINEAR interpolation
+		glBlitFramebuffer(
+			0, 0, screenWidth, screenHeight,
+			0, 0, screenWidth / FontX, screenHeight / FontY,
+			GL_COLOR_BUFFER_BIT,
+			GL_LINEAR
+			);
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void setDirtyParams() {
@@ -340,9 +232,25 @@ void RenderSubsection(int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) {
 	}
 }
 
-void DrawText() {
-	float sx, sy, dx, dy, lh = 0;
-	unsigned int white, black, brown, blue;
+void drawBufferShader() {
+	glBindVertexArray(VAO_FrameBuff);
+
+	framebufferShader->UseProgram();
+	glBindImageTexture(0, texColorBuffer, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA8);
+	glBindImageTexture(1, ASCIITexture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA8);
+	glBindImageTexture(2, ASCIIMaxIndexes, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R16F);
+	glBindImageTexture(3, prevframeTexture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+	glUniform1i(0, (GLint)ASCIION);
+	glUniform1iv(1, MAX_NUM_OF_DIRTY_BLOCKS, dirtyX.data());
+	glUniform1iv(1 + MAX_NUM_OF_DIRTY_BLOCKS, MAX_NUM_OF_DIRTY_BLOCKS, dirtyY.data());
+	glUniform1iv(1 + 2 * MAX_NUM_OF_DIRTY_BLOCKS, MAX_NUM_OF_DIRTY_BLOCKS, dirtyWidth.data());
+	glUniform1iv(1 + 3 * MAX_NUM_OF_DIRTY_BLOCKS, MAX_NUM_OF_DIRTY_BLOCKS, dirtyHeight.data());
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+}
+
+void DrawTextInit() {
 	// Update and render
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -373,143 +281,68 @@ void DrawText() {
 
 	gl3fonsProjection(fs, mat);
 
-	white = gl3fonsRGBA(255, 255, 255, 255);
-	brown = gl3fonsRGBA(192, 128, 0, 128);
-	blue = gl3fonsRGBA(0, 192, 255, 255);
-	black = gl3fonsRGBA(0, 0, 0, 255);
-
-	sx = 50; sy = 50;
-
-	dx = sx; dy = sy;
-
-	//DrawBox(0,0,screenWidth,200);
-	DrawDash(dx, dy);
-
-	fonsClearState(fs);
-
-	fonsSetSize(fs, 124.0f);
-	fonsSetFont(fs, fontNormal);
-	fonsVertMetrics(fs, NULL, NULL, &lh);
-	dx = sx;
-	dy += lh;
-	DrawDash(dx, dy);
-
-	fonsSetSize(fs, 124.0f);
-	fonsSetFont(fs, fontNormal);
-	fonsSetColor(fs, white);
-	int dTime = (int)(1.0 / deltaTime);
-	std::string dTimeStr = std::to_string(dTime);
-	dx = fonsDrawText(fs, dx, dy, dTimeStr.c_str(), NULL);
-
-	fonsSetSize(fs, 48.0f);
-	fonsSetFont(fs, fontItalic);
-	fonsSetColor(fs, brown);
-	dx = fonsDrawText(fs, dx, dy, "brown ", NULL);
-
-	fonsSetSize(fs, 24.0f);
-	fonsSetFont(fs, fontNormal);
-	fonsSetColor(fs, white);
-	float dPos = camera.Position.z;
-	std::string dPosStr = std::to_string(dPos);
-	dx = fonsDrawText(fs, dx, dy, dPosStr.c_str(), NULL);
-
-	fonsVertMetrics(fs, NULL, NULL, &lh);
+	/*fonsVertMetrics(fs, NULL, NULL, &lh);
 	dx = sx;
 	dy += lh*1.2f;
 	DrawDash(dx, dy);
-	fonsSetFont(fs, fontItalic);
-	dx = fonsDrawText(fs, dx, dy, "jumps over ", NULL);
-	fonsSetFont(fs, fontBold);
-	dx = fonsDrawText(fs, dx, dy, "the lazy ", NULL);
-	fonsSetFont(fs, fontNormal);
-	dx = fonsDrawText(fs, dx, dy, "dog.", NULL);
-
-	dx = sx;
-	dy += lh*1.2f;
-	DrawDash(dx, dy);
-	fonsSetSize(fs, 12.0f);
-	fonsSetFont(fs, fontNormal);
-	fonsSetColor(fs, blue);
-	fonsDrawText(fs, dx, dy, "Now is the time for all good men to come to the aid of the party.", NULL);
-
 	//For Unicode characters
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> convert; // #include <codecvt>
 	std::string utf8_string;
-
-	fonsVertMetrics(fs, NULL, NULL, &lh);
-	dx = sx;
-	dy += lh*1.2f * 2;
-	DrawDash(dx, dy);
-	fonsSetSize(fs, 18.0f);
-	fonsSetFont(fs, fontItalic);
-	fonsSetColor(fs, white);
-	utf8_string = convert.to_bytes(L"Ég get etið gler án þess að meiða mig.");
-	fonsDrawText(fs, dx, dy, utf8_string.c_str(), NULL);
-
-	fonsVertMetrics(fs, NULL, NULL, &lh);
-	dx = sx;
-	dy += lh*1.2f;
-	DrawDash(dx, dy);
-	fonsSetFont(fs, fontJapanese);
 	utf8_string = convert.to_bytes(L"私はガラスを食べられます。それは私を傷つけません。");
 	fonsDrawText(fs, dx, dy, utf8_string.c_str(), NULL);
-
-	// Font alignment
-	fonsSetSize(fs, 18.0f);
-	fonsSetFont(fs, fontNormal);
-	fonsSetColor(fs, white);
-
-	dx = 50; dy = 350;
-	DrawLine(dx - 10, dy, dx + 250, dy);
-	fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
-	dx = fonsDrawText(fs, dx, dy, "Top", NULL);
-	dx += 10;
-	fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_MIDDLE);
-	dx = fonsDrawText(fs, dx, dy, "Middle", NULL);
-	dx += 10;
-	fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_BASELINE);
-	dx = fonsDrawText(fs, dx, dy, "Baseline", NULL);
-	dx += 10;
-	fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_BOTTOM);
-	fonsDrawText(fs, dx, dy, "Bottom", NULL);
-
-	dx = 150; dy = 400;
-	DrawLine(dx, dy - 30, dx, dy + 80.0f);
-	fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_BASELINE);
-	fonsDrawText(fs, dx, dy, "Left", NULL);
-	dy += 30;
-	fonsSetAlign(fs, FONS_ALIGN_CENTER | FONS_ALIGN_BASELINE);
-	fonsDrawText(fs, dx, dy, "Center", NULL);
-	dy += 30;
-	fonsSetAlign(fs, FONS_ALIGN_RIGHT | FONS_ALIGN_BASELINE);
-	fonsDrawText(fs, dx, dy, "Right", NULL);
-
-	// Blur
-	dx = 500; dy = 350;
-	fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_BASELINE);
-
-	fonsSetSize(fs, 60.0f);
-	fonsSetFont(fs, fontItalic);
-	fonsSetColor(fs, white);
-	fonsSetSpacing(fs, 5.0f);
 	fonsSetBlur(fs, 10.0f);
-	fonsDrawText(fs, dx, dy, "Blurry...", NULL);
+	DrawLine(dx, dy - 30, dx, dy + 80.0f);*/
+}
 
-	dy += 50.0f;
+void DrawText() {
+	float dx, dy, lh = 0;
+	unsigned int white = gl3fonsRGBA(255, 255, 255, 255);
+	unsigned int brown = gl3fonsRGBA(192, 128, 0, 128);
+	unsigned int blue = gl3fonsRGBA(0, 192, 255, 255);
+	unsigned int black = gl3fonsRGBA(0, 0, 0, 255);
+	unsigned int green = gl3fonsRGBA(0, 192, 0, 255);
 
-	fonsSetSize(fs, 18.0f);
-	fonsSetFont(fs, fontBold);
+	DrawTextInit();
+
+	//DrawBox(0,0,screenWidth,200);
+	fonsClearState(fs);
+
+
+	fonsSetSize(fs, 36.0f);
+	fonsSetFont(fs, fontZig);
 	fonsSetColor(fs, black);
-	fonsSetSpacing(fs, 0.0f);
-	fonsSetBlur(fs, 3.0f);
-	fonsDrawText(fs, dx, dy + 2, "DROP THAT SHADOW", NULL);
+	fonsSetBlur(fs, 2.0f);
+	fonsSetSpacing(fs, 2.0f);
+	fonsSetAlign(fs, FONS_ALIGN_RIGHT | FONS_ALIGN_TOP);
+	dx = (float)screenWidth;
+	dy = 0;
+	int dTime = globals::FPS;
+	if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
+	std::string dTimeStr = std::to_string(dTime);
+	fonsDrawText(fs, dx, dy, dTimeStr.c_str(), NULL);
+	fonsSetColor(fs, green);
+	fonsSetBlur(fs, 0.0f);
+	dx = fonsDrawText(fs, dx, dy, dTimeStr.c_str(), NULL);
 
-	fonsSetColor(fs, white);
-	fonsSetBlur(fs, 0);
-	fonsDrawText(fs, dx, dy, "DROP THAT SHADOW", NULL);
+	/*for (int i = 0;i<texts.size();i++) {
+		fonsSetSize(fs, texts[i].fontSize);
+		fonsSetFont(fs, texts[i].fontType);
+		fonsSetBlur(fs, texts[i].blurSize);
+		fonsSetSpacing(fs, texts[i].fontSpacing);
+		fonsSetAlign(fs, texts[i].fontAlign);
+		dx = texts[i].dx;
+		dy = texts[i].dy;
+		for (int j = 0; j<texts[i].text.size(); j++) {
+			fonsSetColor(fs, texts[i].text[j].fontColor);
+			dx = fonsDrawText(fs, dx, dy, texts[i].text[j].text.c_str(), NULL);
+			if (texts[i].text[j].newLine) {
+				fonsVertMetrics(fs, NULL, NULL, &lh);
+				dx = texts[i].dx;
+				dy += lh;
+			}
+		}
+	}*/
 
-	/*if (debug)
-	fonsDrawDebug(fs, 800.0, 50.0);*/
 
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);

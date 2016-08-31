@@ -42,10 +42,10 @@ void DrawBox(GLint x0, GLint y0, GLint x1, GLint y1);
 
 // extern variables
 extern SDL_Window* window;
-extern const GLuint screenWidth, screenHeight;
+extern GLuint screenWidth, screenHeight;
 extern const int MAX_NUM_OF_DIRTY_BLOCKS;
 
-extern int fontNormal, fontItalic, fontBold, fontJapanese;
+extern int fontNormal, fontItalic, fontBold, fontJapanese, fontZig;
 extern FONScontext* fs;
 
 extern GLuint VAO_FrameBuff, VBO_FrameBuff;

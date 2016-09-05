@@ -15,8 +15,9 @@ namespace globals {
 	/* Globals */
 	static const std::string IMAGE_PATH = "images/";
 	static const std::string DOLGOK_PATH = "dolgok/";
-	static bool limitFPS = true;
-	static const int FPS = 60;
+	static bool limitFPSvsync = true;
+	static bool limitFPSmanually = false;
+	static const int FPS_manual_limit = 60;
 	static const std::string ERR_LOG = "error.log";
 
 	extern CHAR_SET CharSet;

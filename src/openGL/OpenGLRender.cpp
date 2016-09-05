@@ -75,8 +75,8 @@ void Do_Movement()
 void frameLimiter() {
 	GLfloat currentFrame = (GLfloat)SDL_GetTicks() / 1000;
 	deltaTime = currentFrame - lastFrame;
-	if (globals::limitFPS && deltaTime != 0 && (int)(1.0 / deltaTime) > globals::FPS) {
-		SDL_Delay((int)(1000.0 / globals::FPS - 1000.0*deltaTime));
+	if (globals::limitFPSmanually && deltaTime != 0 && (int)(1.0 / deltaTime) > globals::FPS_manual_limit) {
+		SDL_Delay((int)(1000.0 / globals::FPS_manual_limit - 1000.0*deltaTime));
 		currentFrame = (GLfloat)SDL_GetTicks() / 1000;
 		deltaTime = currentFrame - lastFrame;
 	}
@@ -317,7 +317,7 @@ void DrawText() {
 	fonsSetAlign(fs, FONS_ALIGN_RIGHT | FONS_ALIGN_TOP);
 	dx = (float)screenWidth;
 	dy = 0;
-	int dTime = globals::FPS;
+	int dTime = globals::FPS_manual_limit;
 	if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
 	std::string dTimeStr = std::to_string(dTime);
 	fonsDrawText(fs, dx, dy, dTimeStr.c_str(), NULL);
@@ -327,7 +327,7 @@ void DrawText() {
 
 	static bool asdasd = true;
 	if (asdasd) {
-		for (int i = 0; i < texts.size(); i++) {
+		for (size_t i = 0; i < texts.size(); i++) {
 			fonsSetSize(fs, texts[i].fontSize);
 			fonsSetFont(fs, texts[i].fontType);
 			fonsSetBlur(fs, texts[i].blurSize);
@@ -335,7 +335,7 @@ void DrawText() {
 			fonsSetAlign(fs, texts[i].fontAlign);
 			dx = texts[i].dx;
 			dy = texts[i].dy;
-			for (int j = 0; j < texts[i].text.size(); j++) {
+			for (size_t j = 0; j < texts[i].text.size(); j++) {
 				fonsSetColor(fs, texts[i].text[j].fontColor);
 				dx = fonsDrawText(fs, dx, dy, texts[i].text[j].text.c_str(), NULL);
 				if (texts[i].text[j].newLine) {

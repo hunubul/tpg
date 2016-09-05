@@ -21,6 +21,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Vertices.h"
+#include "../globals.h"
 
 // GLM Mathemtics
 #include <glm/glm.hpp>
@@ -125,6 +126,11 @@ void initOpenGL() {
 		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
 		return;
 	}
+
+	if (globals::limitFPSvsync)
+		SDL_GL_SetSwapInterval(1); //enable vsync
+	else
+		SDL_GL_SetSwapInterval(0); //disable vsync
 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 

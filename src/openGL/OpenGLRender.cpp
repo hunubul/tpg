@@ -308,6 +308,7 @@ void DrawText() {
 	fonsClearState(fs);
 
 
+
 	fonsSetSize(fs, 36.0f);
 	fonsSetFont(fs, fontZig);
 	fonsSetColor(fs, black);
@@ -324,24 +325,28 @@ void DrawText() {
 	fonsSetBlur(fs, 0.0f);
 	dx = fonsDrawText(fs, dx, dy, dTimeStr.c_str(), NULL);
 
-	/*for (int i = 0;i<texts.size();i++) {
-		fonsSetSize(fs, texts[i].fontSize);
-		fonsSetFont(fs, texts[i].fontType);
-		fonsSetBlur(fs, texts[i].blurSize);
-		fonsSetSpacing(fs, texts[i].fontSpacing);
-		fonsSetAlign(fs, texts[i].fontAlign);
-		dx = texts[i].dx;
-		dy = texts[i].dy;
-		for (int j = 0; j<texts[i].text.size(); j++) {
-			fonsSetColor(fs, texts[i].text[j].fontColor);
-			dx = fonsDrawText(fs, dx, dy, texts[i].text[j].text.c_str(), NULL);
-			if (texts[i].text[j].newLine) {
-				fonsVertMetrics(fs, NULL, NULL, &lh);
-				dx = texts[i].dx;
-				dy += lh;
+	static bool asdasd = true;
+	if (asdasd) {
+		for (int i = 0; i < texts.size(); i++) {
+			fonsSetSize(fs, texts[i].fontSize);
+			fonsSetFont(fs, texts[i].fontType);
+			fonsSetBlur(fs, texts[i].blurSize);
+			fonsSetSpacing(fs, texts[i].fontSpacing);
+			fonsSetAlign(fs, texts[i].fontAlign);
+			dx = texts[i].dx;
+			dy = texts[i].dy;
+			for (int j = 0; j < texts[i].text.size(); j++) {
+				fonsSetColor(fs, texts[i].text[j].fontColor);
+				dx = fonsDrawText(fs, dx, dy, texts[i].text[j].text.c_str(), NULL);
+				if (texts[i].text[j].newLine) {
+					fonsVertMetrics(fs, NULL, NULL, &lh);
+					dx = texts[i].dx;
+					dy += lh;
+				}
 			}
 		}
-	}*/
+		asdasd = false;
+	}
 
 
 	glDisable(GL_BLEND);

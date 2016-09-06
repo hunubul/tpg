@@ -1,6 +1,6 @@
 #include <fstream>
 #include <stdlib.h>
-#include "itemek.h"
+#include "items.h"
 #include "globals.h"
 
 using namespace std;

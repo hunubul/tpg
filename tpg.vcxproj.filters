@@ -20,9 +20,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\szoba.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -30,12 +27,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\harc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Image2ASCIIcolors.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\itemek.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\level.cpp">
@@ -65,6 +56,12 @@
     <ClCompile Include="src\openGL\Vertices.cpp">
       <Filter>Source Files\openGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\room.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\items.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h">
@@ -76,19 +73,10 @@
     <ClInclude Include="src\harc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Image2ASCIIcolors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\itemek.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SelectionMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\szoba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\logging.h">
@@ -114,6 +102,12 @@
     </ClInclude>
     <ClInclude Include="src\openGL\Vertices.h">
       <Filter>Header Files\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\items.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\room.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

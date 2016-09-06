@@ -166,8 +166,7 @@
     <ClInclude Include="src\globals.h" />
     <ClCompile Include="src\globals.cpp" />
     <ClCompile Include="src\harc.cpp" />
-    <ClCompile Include="src\Image2ASCIIcolors.cpp" />
-    <ClCompile Include="src\itemek.cpp" />
+    <ClCompile Include="src\items.cpp" />
     <ClCompile Include="src\level.cpp" />
     <ClCompile Include="src\logging.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -175,15 +174,14 @@
     <ClCompile Include="src\openGL\initOpenGL.cpp" />
     <ClCompile Include="src\openGL\OpenGLRender.cpp" />
     <ClCompile Include="src\openGL\Vertices.cpp" />
+    <ClCompile Include="src\room.cpp" />
     <ClCompile Include="src\SelectionMenu.cpp" />
-    <ClCompile Include="src\szoba.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\effects.h" />
     <ClInclude Include="src\harc.h" />
-    <ClInclude Include="src\Image2ASCIIcolors.h" />
-    <ClInclude Include="src\itemek.h" />
+    <ClInclude Include="src\items.h" />
     <ClInclude Include="src\level.h" />
     <ClInclude Include="src\logging.h" />
     <ClInclude Include="src\openGL\ASCII.h" />
@@ -192,8 +190,8 @@
     <ClInclude Include="src\openGL\OpenGLRender.h" />
     <ClInclude Include="src\openGL\Shader.h" />
     <ClInclude Include="src\openGL\Vertices.h" />
+    <ClInclude Include="src\room.h" />
     <ClInclude Include="src\SelectionMenu.h" />
-    <ClInclude Include="src\szoba.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\shaders\computeASCII.shd" />

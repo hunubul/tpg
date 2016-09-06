@@ -1,6 +1,5 @@
 #include "globals.h"
 #include "logging.h"
-#include "lodepng\lodepng.h"
 #include <algorithm>
 
 using namespace std;

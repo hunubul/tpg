@@ -1,8 +1,7 @@
 #ifndef LEVEL_H_INCLUDED
 #define LEVEL_H_INCLUDED
 
-#include "Image2ASCIIcolors.h"
-#include "szoba.h"
+#include "room.h"
 
 class level {
 private:

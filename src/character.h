@@ -2,8 +2,7 @@
 #define CHARACTER_H_INCLUDED
 
 #include <vector>
-#include "Image2ASCIIcolors.h"
-#include "itemek.h"
+#include "items.h"
 
 typedef enum {ALEFT=4,AMID=0,AUP=1,ARIGHT=2,ADOWN=3,ANONE=-1} ADIR; //preferált támadási irány
 
@@ -57,9 +56,9 @@ public:
     ADIR def; //preferált védekezési oldal
     ADIR atc; //preferált támadási oldal
     std::string name;
-    IMAGE PNG;
-    static SIZES BoxSize;
-    static SIZES TopLeft;
+    //IMAGE PNG;
+    //static SIZES BoxSize;
+    //static SIZES TopLeft;
     enemy(std::string name,int defense,int offense,ADIR def,ADIR atc);
     ~enemy();
 };

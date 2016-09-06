@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
-#include "szoba.h"
+#include "room.h"
 #include "globals.h"
 
 /*ELVILEG MINDEN FELÜLET MEGVAN, DE CSAK A SZEMBE MEG PADLÓ VAN BERAKVA, A BEOLVASANDÓ FÁJLOKAT MÉG BUHERÁLNI KÉNE*/

@@ -6,8 +6,8 @@
 
 using namespace globals;
 
-SIZES enemy::BoxSize;
-SIZES enemy::TopLeft;
+//SIZES enemy::BoxSize;
+//SIZES enemy::TopLeft;
 
 character::character(int maxhp,int maxstam,int defense,int offense) :
     maxhp(maxhp),hp(maxhp),maxstam(maxstam),stam(maxstam),defense(defense),offense(offense) {}

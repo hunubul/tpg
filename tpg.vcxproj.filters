@@ -56,10 +56,10 @@
     <ClCompile Include="src\openGL\Vertices.cpp">
       <Filter>Source Files\openGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\room.cpp">
+    <ClCompile Include="src\items.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\items.cpp">
+    <ClCompile Include="src\szoba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -106,7 +106,7 @@
     <ClInclude Include="src\items.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\room.h">
+    <ClInclude Include="src\szoba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,5 @@
 #pragma once
 // OpenGL headers
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -30,8 +29,10 @@
 
 // Other Libs
 #include <SOIL.h>
-//#define FONS_USE_FREETYPE
-#include "fontstash.h"
+#include "freetype-gl.h"
+#include "vertex-buffer.h"
+#include "text-buffer.h"
+#include "mat4.h"
 
 void initOpenGL();
 
@@ -45,8 +46,10 @@ extern SDL_Window* window;
 extern GLuint screenWidth, screenHeight;
 extern const int MAX_NUM_OF_DIRTY_BLOCKS;
 
-extern int fontNormal, fontItalic, fontBold, fontJapanese, fontZig;
-extern FONScontext* fs;
+//extern int fontNormal, fontItalic, fontBold, fontJapanese, fontZig;
+extern text_buffer_t * FontBuffer;
+extern markup_t FontMarkup;
+extern mat4   FontModelMat, FontViewMat, FontProjectionMat;
 
 extern GLuint VAO_FrameBuff, VBO_FrameBuff;
 extern GLuint VAOfront, VBOfront;

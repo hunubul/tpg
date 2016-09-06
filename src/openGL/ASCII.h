@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-namespace CHAR {
+namespace ASCIICHAR {
 	enum CHAR;
 }
 class FontChar;
@@ -18,17 +18,17 @@ extern FontChar fontChar;
 class FontChar {
 private:
 public:
-	std::map<CHAR::CHAR, std::vector<std::vector<bool>> > ASCIIFont;
-	std::map<CHAR::CHAR, std::vector<std::vector<bool>> > ASCIIFontWriteOut;
+	std::map<ASCIICHAR::CHAR, std::vector<std::vector<bool>> > ASCIIFont;
+	std::map<ASCIICHAR::CHAR, std::vector<std::vector<bool>> > ASCIIFontWriteOut;
 	std::vector<unsigned char> ASCIIChar;
 	std::vector<unsigned char> ASCIIBrightness;
-	std::map<CHAR::CHAR, std::vector<unsigned short>> ASCIIHistogram;
+	std::map<ASCIICHAR::CHAR, std::vector<unsigned short>> ASCIIHistogram;
 
 	FontChar();
 	int size();
 };
 
-namespace CHAR {
+namespace ASCIICHAR {
 	enum CHAR {
 		EMPTY = 0,
 		SMILE,

@@ -1,4 +1,3 @@
-#include "Image2ASCIIcolors.h"
 #include "character.h"
 #include "level.h"
 #include "logging.h"

@@ -4,7 +4,6 @@
 /* Define this to enable DEBUG MODE */
 #define DEBUG
 
-#include "Image2ASCIIcolors.h"
 #include "character.h"
 #include <vector>
 
@@ -20,15 +19,15 @@ namespace globals {
 	static const int FPS_manual_limit = 60;
 	static const std::string ERR_LOG = "error.log";
 
-	extern CHAR_SET CharSet;
+	//extern CHAR_SET CharSet;
 	extern int ConsoleWidthPixels, ConsoleHeightPixels;
 	extern int ConsoleWidth, ConsoleHeight;
 	static const int FontX = 8;
 	static const int FontY = 8;
-	extern SIZES UpperBoxSiz, UpperBoxPos;
-	extern SIZES SideBoxSiz, SideBoxPosLeft, SideBoxPosRight;
-	extern SIZES BottomBoxSiz, BottomBoxPos;
-	extern SIZES MiddleBoxSiz, MiddleBoxPos;
+	//extern SIZES UpperBoxSiz, UpperBoxPos;
+	//extern SIZES SideBoxSiz, SideBoxPosLeft, SideBoxPosRight;
+	//extern SIZES BottomBoxSiz, BottomBoxPos;
+	//extern SIZES MiddleBoxSiz, MiddleBoxPos;
 	extern player p1;
 	extern std::vector<enemy> enemies;
 
@@ -48,22 +47,22 @@ namespace globals {
 	/* Szoba globals */
 	static const int MAX_RARITY = 10; //Max ritkasága egy itemnek
     // Szoba Vízszintes pontok
-	extern std::vector<std::vector<POINTS>> POINTS_LEFT;
-	extern std::vector<std::vector<POINTS>> POINTS_MIDDLE;
-	extern std::vector<std::vector<POINTS>> POINTS_RIGHT;
-	extern std::vector<std::vector<POINTS>> POINTS_TOP;
-	extern std::vector<std::vector<POINTS>> POINTS_BOTTOM;
+	//extern std::vector<std::vector<POINTS>> POINTS_LEFT;
+	//extern std::vector<std::vector<POINTS>> POINTS_MIDDLE;
+	//extern std::vector<std::vector<POINTS>> POINTS_RIGHT;
+	//extern std::vector<std::vector<POINTS>> POINTS_TOP;
+	//extern std::vector<std::vector<POINTS>> POINTS_BOTTOM;
 
 	/* Global functions */
 	std::vector<std::string> split(const std::string &s, char delim); /**< Split string by tokens */
-	void ClearBox(SIZES TopLeft, SIZES BoxSize);
+	//void ClearBox(SIZES TopLeft, SIZES BoxSize);
 	/**< Clear Polygon Box @param lu left-upper @param ru right-upper @param rl right-lower @param ll left-lower*/
-	void ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll);
-	void Pic2ASCIIandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize);
+	//void ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll);
+	//void Pic2ASCIIandWrite(std::string PicName, SIZES TopLeft, SIZES BoxSize);
 	/**< Warps and prints image, start destiny Points from TOPLEFT clockwise */
-	void Pic2ASCIIWarpandWrite(std::string PicName, WALL wall, std::vector<POINTS> PointsTo);
-	void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
-	inline double PerspektivaKozeprolY(POINTS A, double x);
+	//void Pic2ASCIIWarpandWrite(std::string PicName, WALL wall, std::vector<POINTS> PointsTo);
+	//void Pic2ASCII(std::string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII);
+	//inline double PerspektivaKozeprolY(POINTS A, double x);
 }
 
 #endif

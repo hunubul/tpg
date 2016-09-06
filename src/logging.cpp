@@ -4,7 +4,6 @@
 #include "logging.h"
 #include "globals.h"
 #include "openGL/initOpenGL.h"
-#include "gl3fontstash.h"
 
 using namespace globals;
 
@@ -66,7 +65,7 @@ void Exitting() {
 	glDeleteBuffers(1, &VBOfloor);
 	glDeleteVertexArrays(1, &VAOceiling);
 	glDeleteBuffers(1, &VBOceiling);
-	gl3fonsDelete(fs);
+	//gl3fonsDelete(fs);
 
 	//Destroy window
 	SDL_DestroyWindow(window);

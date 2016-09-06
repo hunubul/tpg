@@ -12,7 +12,7 @@ FontChar fontChar;
 FontChar::FontChar() {
 	int width, height;
 	terminal = SOIL_load_image("terminal.png", &width, &height, 0, SOIL_LOAD_RGB);
-	CHAR::CHAR index = (CHAR::CHAR)0;
+	ASCIICHAR::CHAR index = (ASCIICHAR::CHAR)0;
 	std::vector<bool> tempFont;
 	// NUMBER OF ASCIIs SHOULD BE DIVISIBLE BY 4
 	for (int i = 0; i < width / FontX; i++) {
@@ -35,7 +35,7 @@ FontChar::FontChar() {
 					ASCIIChar.push_back(ASCIIFont[index][m][n]*255);
 				}
 			}
-			index = (CHAR::CHAR)(index + 1);
+			index = (ASCIICHAR::CHAR)(index + 1);
 		}
 	}
 	SOIL_free_image_data(terminal);
@@ -45,12 +45,12 @@ FontChar::FontChar() {
 	for (unsigned int k = 0; k < ASCIIFont.size(); k++) {
 		for (int i = 0; i < FontY; i++) {
 			for (int j = 0; j < FontX; j++) {
-				if (ASCIIFont[(CHAR::CHAR)k][i][j] == 1) {
+				if (ASCIIFont[(ASCIICHAR::CHAR)k][i][j] == 1) {
 					brightness++;
 					brightHistogram += (j + 1) * 255;
 				}
 			}
-			ASCIIHistogram[(CHAR::CHAR)k].push_back(brightHistogram);
+			ASCIIHistogram[(ASCIICHAR::CHAR)k].push_back(brightHistogram);
 			brightHistogram = 0;
 		}
 		ASCIIBrightness.push_back(brightness * 255 / (FontX*FontY));

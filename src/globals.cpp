@@ -6,16 +6,16 @@ using namespace std;
 
 int    globals::ConsoleWidth, globals::ConsoleHeight;
 int    globals::ConsoleWidthPixels, globals::ConsoleHeightPixels;
-SIZES  globals::UpperBoxSiz, globals::UpperBoxPos;
-SIZES  globals::SideBoxSiz, globals::SideBoxPosLeft, globals::SideBoxPosRight;
-SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;
-SIZES  globals::MiddleBoxSiz, globals::MiddleBoxPos;
+//SIZES  globals::UpperBoxSiz, globals::UpperBoxPos;
+//SIZES  globals::SideBoxSiz, globals::SideBoxPosLeft, globals::SideBoxPosRight;
+//SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;
+//SIZES  globals::MiddleBoxSiz, globals::MiddleBoxPos;
 player globals::p1;
 std::vector<enemy> globals::enemies;
-CHAR_SET globals::CharSet;
+//CHAR_SET globals::CharSet;
 int globals::menu_attack_size = 5;
 std::vector< std::string> globals::attack_choices = { "from left","from above","from right","from below","frontal attack" };
-std::vector<std::vector<POINTS>> globals::POINTS_LEFT = {
+/*std::vector<std::vector<POINTS>> globals::POINTS_LEFT = {
 	{ {  0, 0   },{   0, 180 },{   0, 360 },{   0, 540 },{   0, 720 } },
 	{ {190, 106 },{ 190, 230 },{ 190, 360 },{ 190, 483 },{ 190, 611 } },
 	{ {316, 180 },{ 316, 268 },{ 316, 360 },{ 316, 450 },{ 316, 537 } }
@@ -39,7 +39,7 @@ std::vector<std::vector<POINTS>> globals::POINTS_BOTTOM = {
 	{ {  316, 537 },{  190, 611 },{    0, 720 } },
 	{ {  638, 537 },{  638, 611 },{  638, 720 } },
 	{ { 1028, 537 },{ 1090, 611 },{ 1280, 720 } }
-};
+};*/
 
 /** Split string by tokens
 @param s string to tokenize
@@ -59,7 +59,7 @@ vector<string> globals::split(const string &s, char delim) {
 	return elems;
 }
 
-void globals::Pic2ASCII(string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII) {
+//void globals::Pic2ASCII(string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII) {
 	//CONSOLEINFO Con;
 	//IMAGE PNG;
 	//SUBSECTION subsec;
@@ -87,8 +87,8 @@ void globals::Pic2ASCII(string PicName, SIZES BoxSize, ASCII_IMAGE &ASCII) {
 	//	//free(PNG.ASCII_Color);
 	//}
 	//else ErrorOccured(PicName + ".png was not found");
-}
-void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
+//}
+//void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	//CONSOLEINFO Con;
 	//IMAGE PNG;
 	//SUBSECTION subsec;
@@ -112,8 +112,8 @@ void globals::Pic2ASCIIandWrite(string PicName, SIZES TopLeft, SIZES BoxSize) {
 	//	free(PNG.ASCII_Color);
 	//}
 	//else ErrorOccured(PicName + ".png was not found");
-}
-void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> PointsTo) {
+//}
+//void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> PointsTo) {
 	//if (PointsTo.size() < 4) FatalError("Not enough Points to warp!!");
 	//CONSOLEINFO Con;
 	//IMAGE PNG;
@@ -283,8 +283,8 @@ void globals::Pic2ASCIIWarpandWrite(string PicName, WALL wall, vector<POINTS> Po
 	//	free(PNG.ASCII_Color);
 	//}
 	//else ErrorOccured(PicName + ".png was not found");
-}
-void globals::ClearBox(SIZES TopLeft, SIZES BoxSize) {
+//}
+//void globals::ClearBox(SIZES TopLeft, SIZES BoxSize) {
 //#ifdef DEBUG
 //	TCODConsole::root->setDefaultForeground(TCODColor::grey);
 //	for (int i = 0; i < BoxSize.Y; i++) {
@@ -295,8 +295,8 @@ void globals::ClearBox(SIZES TopLeft, SIZES BoxSize) {
 //	}
 //	TCODConsole::root->setDefaultForeground(TCODColor::white);
 //#endif // DEBUG
-}
-void globals::ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll) {
+//}
+//void globals::ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& rl, const POINTS& ll) {
 	//Check if params are valid
 	/*if (lu.X > ru.X||ru.Y>rl.Y||rl.X < ll.X||ll.Y < lu.Y) throw "ClearPolygonBox params not valid!";
 	TCODConsole::root->setDefaultForeground(TCODColor::grey);
@@ -308,9 +308,9 @@ void globals::ClearPolygonBox(const POINTS& lu, const POINTS& ru, const POINTS& 
 		}
 	}
 	TCODConsole::root->setDefaultForeground(TCODColor::white);*/
-}
+//}
 
-inline double globals::PerspektivaKozeprolY(POINTS A, double x) {
+/*inline double globals::PerspektivaKozeprolY(POINTS A, double x) {
 	if(ConsoleWidthPixels/2 < A.X)
 		if(ConsoleHeightPixels/2 < A.Y)
 			return (x - ConsoleWidthPixels / 2)*(A.Y - ConsoleHeightPixels / 2) / (A.X - ConsoleWidthPixels / 2) + ConsoleHeightPixels / 2;
@@ -321,4 +321,4 @@ inline double globals::PerspektivaKozeprolY(POINTS A, double x) {
 			return A.Y - (x - A.X)*(A.Y - ConsoleHeightPixels / 2) / (ConsoleWidthPixels / 2 - A.X);
 		else // if(ConsoleHeightPixels/2 >= A.Y)
 			return (x - A.X)*(ConsoleHeightPixels / 2 - A.Y) / (ConsoleWidthPixels / 2 - A.X) + A.Y;
-}
+}*/

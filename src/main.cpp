@@ -5,7 +5,6 @@
 
 #include <fstream>
 #include <time.h>
-#include "Image2ASCIIcolors.h"
 #include "character.h"
 #include "level.h"
 #include "logging.h"

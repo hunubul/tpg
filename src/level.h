@@ -1,7 +1,7 @@
 #ifndef LEVEL_H_INCLUDED
 #define LEVEL_H_INCLUDED
 
-#include "room.h"
+#include "szoba.h"
 
 class level {
 private:

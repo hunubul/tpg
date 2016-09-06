@@ -1,5 +1,4 @@
 ﻿// OpenGL headers
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -32,10 +31,8 @@
 
 // Other Libs
 #include <SOIL.h>
-//#define FONS_USE_FREETYPE
-#include "fontstash.h"
-//#include "glfontstash.h"
-#include "gl3fontstash.h"
+#include "freetype-gl.h"
+#include "text-buffer.h"
 
 SDL_Event sdlEvent;
 std::vector<Font> texts;
@@ -250,52 +247,22 @@ void drawBufferShader() {
 	glBindVertexArray(0);
 }
 
-void DrawTextInit() {
-	// Update and render
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_TEXTURE_2D);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, screenWidth, screenHeight, 0, -1, 1);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glDisable(GL_DEPTH_TEST);
-	glColor4ub(255, 255, 255, 255);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_CULL_FACE);
-
-
-	GLfloat mat[16];
-
-	memset(mat, 0, 16 * sizeof(GLfloat));
-	mat[0] = (GLfloat)2.0 / screenWidth;
-	mat[5] = (GLfloat)-2.0 / screenHeight;
-	mat[10] = 2.0;
-	mat[12] = -1.0;
-	mat[13] = 1.0;
-	mat[14] = -1.0;
-	mat[15] = 1.0;
-
-	gl3fonsProjection(fs, mat);
-
-	/*fonsVertMetrics(fs, NULL, NULL, &lh);
-	dx = sx;
-	dy += lh*1.2f;
-	DrawDash(dx, dy);
-	//For Unicode characters
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> convert; // #include <codecvt>
-	std::string utf8_string;
-	utf8_string = convert.to_bytes(L"私はガラスを食べられます。それは私を傷つけません。");
-	fonsDrawText(fs, dx, dy, utf8_string.c_str(), NULL);
-	fonsSetBlur(fs, 10.0f);
-	DrawLine(dx, dy - 30, dx, dy + 80.0f);*/
-}
-
 void DrawText() {
-	float dx, dy, lh = 0;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glUseProgram(FontBuffer->shader);
+	{
+		glUniformMatrix4fv(glGetUniformLocation(FontBuffer->shader, "model"),
+			1, 0, FontModelMat.data);
+		glUniformMatrix4fv(glGetUniformLocation(FontBuffer->shader, "view"),
+			1, 0, FontViewMat.data);
+		glUniformMatrix4fv(glGetUniformLocation(FontBuffer->shader, "projection"),
+			1, 0, FontProjectionMat.data);
+		text_buffer_render(FontBuffer);
+	}
+
+	/*float dx, dy, lh = 0;
 	unsigned int white = gl3fonsRGBA(255, 255, 255, 255);
 	unsigned int brown = gl3fonsRGBA(192, 128, 0, 128);
 	unsigned int blue = gl3fonsRGBA(0, 192, 255, 255);
@@ -346,7 +313,7 @@ void DrawText() {
 			}
 		}
 		asdasd = false;
-	}
+	}*/
 
 
 	glDisable(GL_BLEND);

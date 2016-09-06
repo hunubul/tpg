@@ -1,5 +1,4 @@
 // OpenGL headers
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -258,7 +257,7 @@ void level::writeout() {
 	//TCODConsole::root->flush();
 }
 void level::WriteOutMiniMap() {
-	Font miniMap(fontZig, 255, 255, 255);
+	/*Font miniMap(fontZig, 255, 255, 255);
 	miniMap.fontAlign = FONS_ALIGN_LEFT | FONS_ALIGN_TOP;
 	miniMap.fontSize = 12.0f;
 	for (int i = 0; i < MaxRoomX; i++) {
@@ -294,7 +293,7 @@ void level::WriteOutMiniMap() {
 		miniMap.append("-");
 	}
 	miniMap.append("-");
-	texts.push_back(miniMap);
+	texts.push_back(miniMap);*/
 }
 void level::writearrow() {
 	/*switch (most) {
@@ -348,291 +347,291 @@ void level::RoomWriteout() {
 	//	throw runtime_error(ErrorText);
 	//}
 }
-void level::WriteOutBoxes() {
-	SIZES TopLeft;
-	SIZES BoxSize;
-	szoba aktSzoba = terkep[posX][posY];
-	//*** Ceiling ***
-	if (aktSzoba.c.size() == 0) {
-		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
-		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
-		//ClearBox(TopLeft, BoxSize);
-	}
-	else if (aktSzoba.c.size() == 1) {
-		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
-		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
-		Pic2ASCIIWarpandWrite(aktSzoba.c[0], CEILING_WALL, {POINTS_TOP[0][0],POINTS_TOP[2][0],POINTS_TOP[2][2],POINTS_TOP[0][2]} );
-		//Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
-	}
-	else if (aktSzoba.c.size() == 2) {
-		//Elso dolog
-		TopLeft = SIZES{ UpperBoxPos.X  , UpperBoxPos.Y };
-		BoxSize = SIZES{ UpperBoxSiz.X / 2, UpperBoxSiz.Y };
-		//Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
-		Pic2ASCIIWarpandWrite(aktSzoba.c[0], CEILING_WALL, { POINTS_TOP[0][0],POINTS_TOP[1][0],POINTS_TOP[1][2],POINTS_TOP[0][2] });
-		//Masodik dolog
-		TopLeft = SIZES{ UpperBoxPos.X + UpperBoxSiz.X / 2,UpperBoxPos.Y };
-		BoxSize = SIZES{ UpperBoxSiz.X / 2,UpperBoxSiz.Y };
-		//Pic2ASCIIandWrite(aktSzoba.c[1], TopLeft, BoxSize);
-		Pic2ASCIIWarpandWrite(aktSzoba.c[1], CEILING_WALL, { POINTS_TOP[1][0],POINTS_TOP[2][0],POINTS_TOP[2][2],POINTS_TOP[1][2] });
-	}
-	//*** Middle ***
-	if (most == LEFT) {
-		WriteWarpMiddleBox(aktSzoba.west);
-	}
-	else if (most == UP) {
-		WriteWarpMiddleBox(aktSzoba.north);
-	}
-	else if (most == RIGHT) {
-		WriteWarpMiddleBox(aktSzoba.east);
-	}
-	else if (most == DOWN) {
-		WriteWarpMiddleBox(aktSzoba.south);
-	}
-	//*** Left Side ***
-	if (most == LEFT) {
-		WriteWarpLeftBox(aktSzoba.south);
-	}
-	else if (most == UP) {
-		WriteWarpLeftBox(aktSzoba.west);
-	}
-	else if (most == RIGHT) {
-		WriteWarpLeftBox(aktSzoba.north);
-	}
-	else if (most == DOWN) {
-		WriteWarpLeftBox(aktSzoba.east);
-	}
-	//*** Right Side ***
-	if (most == LEFT) {
-		WriteWarpRightBox(aktSzoba.north);
-	}
-	else if (most == UP) {
-		WriteWarpRightBox(aktSzoba.east);
-	}
-	else if (most == RIGHT) {
-		WriteWarpRightBox(aktSzoba.south);
-	}
-	else if (most == DOWN) {
-		WriteWarpRightBox(aktSzoba.west);
-	}
-	//*** Bottom ***
-	if (aktSzoba.f.size() == 0) {
-		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
-		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
-		//ClearBox(TopLeft, BoxSize);
-	}
-	else if (aktSzoba.f.size() == 1) {
-		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
-		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
-		//Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
-		Pic2ASCIIWarpandWrite(aktSzoba.f[0], FLOOR_WALL, { POINTS_BOTTOM[0][0],POINTS_BOTTOM[2][0],POINTS_BOTTOM[2][2],POINTS_BOTTOM[0][2] });
-	}
-	else if (aktSzoba.f.size() == 2) {
-		//Elso dolog
-		TopLeft = SIZES{ BottomBoxPos.X, BottomBoxPos.Y };
-		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
-		//Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
-		Pic2ASCIIWarpandWrite(aktSzoba.f[0], FLOOR_WALL, { POINTS_BOTTOM[0][0],POINTS_BOTTOM[1][0],POINTS_BOTTOM[1][2],POINTS_BOTTOM[0][2] });
-		//Masodik dolog
-		TopLeft = SIZES{ BottomBoxPos.X + BottomBoxSiz.X / 2, BottomBoxPos.Y };
-		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
-		//Pic2ASCIIandWrite(aktSzoba.f[1], TopLeft, BoxSize);
-		Pic2ASCIIWarpandWrite(aktSzoba.f[1], FLOOR_WALL, { POINTS_BOTTOM[1][0],POINTS_BOTTOM[2][0],POINTS_BOTTOM[2][2],POINTS_BOTTOM[1][2] });
-	}
-}
-void level::WriteMiddleBox(vector<string> aktFal) {
-	SIZES TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y };
-	SIZES BoxSize = SIZES{ MiddleBoxSiz.X, MiddleBoxSiz.Y };
-	switch (aktFal.size()) {
-	case 1:
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		break;
-	case 2:
-		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		break;
-	case 3:
-		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
-		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
-		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
-		break;
-	case 4:
-		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
-		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
-		break;
-	default:
-		ClearBox(TopLeft, BoxSize);
-		break;
-	}
-}
-void level::WriteLeftBox(vector<string> aktFal) {
-	SIZES TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y };
-	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
-	switch (aktFal.size()) {
-	case 1:
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		break;
-	case 2:
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		break;
-	case 3:
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
-		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
-		break;
-	case 4:
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
-		break;
-	default:
-		ClearBox(TopLeft, BoxSize);
-		break;
-	}
-}
-void level::WriteRightBox(vector<string> aktFal) {
-	SIZES TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y };
-	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
-	switch (aktFal.size()) {
-	case 1:
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		break;
-	case 2:
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		break;
-	case 3:
-		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
-		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
-		break;
-	case 4:
-		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
-		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
-		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
-		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
-		break;
-	default:
-		ClearBox(TopLeft, BoxSize);
-		break;
-	}
-}
-
-void level::WriteWarpMiddleBox(vector<string> aktFal) {
-	SIZES TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y };
-	SIZES BoxSize = SIZES{ MiddleBoxSiz.X, MiddleBoxSiz.Y };
-	switch (aktFal.size()) {
-	case 1:
-		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, {POINTS_MIDDLE[0][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][4],POINTS_MIDDLE[0][4] });
-		break;
-	case 2:
-		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[1], MIDDLE_WALL, { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
-		break;
-	case 3:
-		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[1], MIDDLE_WALL, { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[2], MIDDLE_WALL, { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
-		break;
-	case 4:
-		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][2],POINTS_MIDDLE[0][2] });
-		Pic2ASCIIWarpandWrite(aktFal[1], MIDDLE_WALL, { POINTS_MIDDLE[0][2],POINTS_MIDDLE[1][2],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[2], MIDDLE_WALL, { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[3], MIDDLE_WALL, { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
-		break;
-	default:
-		ClearBox(TopLeft, BoxSize);
-		break;
-	}
-}
-void level::WriteWarpLeftBox(vector<string> aktFal) {
-	SIZES TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y };
-	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
-	switch (aktFal.size()) {
-	case 1:
-		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[2][0],POINTS_LEFT[2][4],POINTS_LEFT[0][4] });
-		break;
-	case 2:
-		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[1], LEFT_WALL, { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
-		break;
-	case 3:
-		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[1], LEFT_WALL, { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[2], LEFT_WALL, { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
-		break;
-	case 4:
-		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][2],POINTS_LEFT[0][2] });
-		Pic2ASCIIWarpandWrite(aktFal[1], LEFT_WALL, { POINTS_LEFT[0][2],POINTS_LEFT[1][2],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[2], LEFT_WALL, { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[3], LEFT_WALL, { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
-		break;
-	default:
-		ClearBox(TopLeft, BoxSize);
-		break;
-	}
-}
-void level::WriteWarpRightBox(vector<string> aktFal) {
-	SIZES TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y };
-	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
-	switch (aktFal.size()) {
-	case 1:
-		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][4],POINTS_RIGHT[0][4] });
-		break;
-	case 2:
-		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[1], RIGHT_WALL, { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
-		break;
-	case 3:
-		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[1], RIGHT_WALL, { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[2], RIGHT_WALL, { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
-		break;
-	case 4:
-		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][2],POINTS_RIGHT[0][2] });
-		Pic2ASCIIWarpandWrite(aktFal[1], RIGHT_WALL, { POINTS_RIGHT[0][2],POINTS_RIGHT[1][2],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
-		Pic2ASCIIWarpandWrite(aktFal[2], RIGHT_WALL, { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
-		Pic2ASCIIWarpandWrite(aktFal[3], RIGHT_WALL, { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
-		break;
-	default:
-		ClearBox(TopLeft, BoxSize);
-		break;
-	}
-}
+//void level::WriteOutBoxes() {
+//	SIZES TopLeft;
+//	SIZES BoxSize;
+//	szoba aktSzoba = terkep[posX][posY];
+//	//*** Ceiling ***
+//	if (aktSzoba.c.size() == 0) {
+//		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
+//		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
+//		//ClearBox(TopLeft, BoxSize);
+//	}
+//	else if (aktSzoba.c.size() == 1) {
+//		TopLeft = SIZES{ UpperBoxPos.X, UpperBoxPos.Y };
+//		BoxSize = SIZES{ UpperBoxSiz.X, UpperBoxSiz.Y };
+//		Pic2ASCIIWarpandWrite(aktSzoba.c[0], CEILING_WALL, {POINTS_TOP[0][0],POINTS_TOP[2][0],POINTS_TOP[2][2],POINTS_TOP[0][2]} );
+//		//Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
+//	}
+//	else if (aktSzoba.c.size() == 2) {
+//		//Elso dolog
+//		TopLeft = SIZES{ UpperBoxPos.X  , UpperBoxPos.Y };
+//		BoxSize = SIZES{ UpperBoxSiz.X / 2, UpperBoxSiz.Y };
+//		//Pic2ASCIIandWrite(aktSzoba.c[0], TopLeft, BoxSize);
+//		Pic2ASCIIWarpandWrite(aktSzoba.c[0], CEILING_WALL, { POINTS_TOP[0][0],POINTS_TOP[1][0],POINTS_TOP[1][2],POINTS_TOP[0][2] });
+//		//Masodik dolog
+//		TopLeft = SIZES{ UpperBoxPos.X + UpperBoxSiz.X / 2,UpperBoxPos.Y };
+//		BoxSize = SIZES{ UpperBoxSiz.X / 2,UpperBoxSiz.Y };
+//		//Pic2ASCIIandWrite(aktSzoba.c[1], TopLeft, BoxSize);
+//		Pic2ASCIIWarpandWrite(aktSzoba.c[1], CEILING_WALL, { POINTS_TOP[1][0],POINTS_TOP[2][0],POINTS_TOP[2][2],POINTS_TOP[1][2] });
+//	}
+//	//*** Middle ***
+//	if (most == LEFT) {
+//		WriteWarpMiddleBox(aktSzoba.west);
+//	}
+//	else if (most == UP) {
+//		WriteWarpMiddleBox(aktSzoba.north);
+//	}
+//	else if (most == RIGHT) {
+//		WriteWarpMiddleBox(aktSzoba.east);
+//	}
+//	else if (most == DOWN) {
+//		WriteWarpMiddleBox(aktSzoba.south);
+//	}
+//	//*** Left Side ***
+//	if (most == LEFT) {
+//		WriteWarpLeftBox(aktSzoba.south);
+//	}
+//	else if (most == UP) {
+//		WriteWarpLeftBox(aktSzoba.west);
+//	}
+//	else if (most == RIGHT) {
+//		WriteWarpLeftBox(aktSzoba.north);
+//	}
+//	else if (most == DOWN) {
+//		WriteWarpLeftBox(aktSzoba.east);
+//	}
+//	//*** Right Side ***
+//	if (most == LEFT) {
+//		WriteWarpRightBox(aktSzoba.north);
+//	}
+//	else if (most == UP) {
+//		WriteWarpRightBox(aktSzoba.east);
+//	}
+//	else if (most == RIGHT) {
+//		WriteWarpRightBox(aktSzoba.south);
+//	}
+//	else if (most == DOWN) {
+//		WriteWarpRightBox(aktSzoba.west);
+//	}
+//	//*** Bottom ***
+//	if (aktSzoba.f.size() == 0) {
+//		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
+//		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
+//		//ClearBox(TopLeft, BoxSize);
+//	}
+//	else if (aktSzoba.f.size() == 1) {
+//		TopLeft = SIZES{ BottomBoxPos.X,BottomBoxPos.Y };
+//		BoxSize = SIZES{ BottomBoxSiz.X,BottomBoxSiz.Y };
+//		//Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
+//		Pic2ASCIIWarpandWrite(aktSzoba.f[0], FLOOR_WALL, { POINTS_BOTTOM[0][0],POINTS_BOTTOM[2][0],POINTS_BOTTOM[2][2],POINTS_BOTTOM[0][2] });
+//	}
+//	else if (aktSzoba.f.size() == 2) {
+//		//Elso dolog
+//		TopLeft = SIZES{ BottomBoxPos.X, BottomBoxPos.Y };
+//		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
+//		//Pic2ASCIIandWrite(aktSzoba.f[0], TopLeft, BoxSize);
+//		Pic2ASCIIWarpandWrite(aktSzoba.f[0], FLOOR_WALL, { POINTS_BOTTOM[0][0],POINTS_BOTTOM[1][0],POINTS_BOTTOM[1][2],POINTS_BOTTOM[0][2] });
+//		//Masodik dolog
+//		TopLeft = SIZES{ BottomBoxPos.X + BottomBoxSiz.X / 2, BottomBoxPos.Y };
+//		BoxSize = SIZES{ BottomBoxSiz.X / 2, BottomBoxSiz.Y };
+//		//Pic2ASCIIandWrite(aktSzoba.f[1], TopLeft, BoxSize);
+//		Pic2ASCIIWarpandWrite(aktSzoba.f[1], FLOOR_WALL, { POINTS_BOTTOM[1][0],POINTS_BOTTOM[2][0],POINTS_BOTTOM[2][2],POINTS_BOTTOM[1][2] });
+//	}
+//}
+//void level::WriteMiddleBox(vector<string> aktFal) {
+//	SIZES TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y };
+//	SIZES BoxSize = SIZES{ MiddleBoxSiz.X, MiddleBoxSiz.Y };
+//	switch (aktFal.size()) {
+//	case 1:
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		break;
+//	case 2:
+//		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		break;
+//	case 3:
+//		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y };
+//		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
+//		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
+//		break;
+//	case 4:
+//		BoxSize = SIZES{ MiddleBoxSiz.X / 2, MiddleBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
+//		TopLeft = SIZES{ MiddleBoxPos.X + MiddleBoxSiz.X / 2, MiddleBoxPos.Y + MiddleBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
+//		break;
+//	default:
+//		ClearBox(TopLeft, BoxSize);
+//		break;
+//	}
+//}
+//void level::WriteLeftBox(vector<string> aktFal) {
+//	SIZES TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y };
+//	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
+//	switch (aktFal.size()) {
+//	case 1:
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		break;
+//	case 2:
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		break;
+//	case 3:
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
+//		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+//		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
+//		break;
+//	case 4:
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosLeft.X + SideBoxSiz.X / 2, SideBoxPosLeft.Y + SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
+//		break;
+//	default:
+//		ClearBox(TopLeft, BoxSize);
+//		break;
+//	}
+//}
+//void level::WriteRightBox(vector<string> aktFal) {
+//	SIZES TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y };
+//	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
+//	switch (aktFal.size()) {
+//	case 1:
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		break;
+//	case 2:
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		break;
+//	case 3:
+//		BoxSize = { SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y };
+//		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+//		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
+//		break;
+//	case 4:
+//		BoxSize = SIZES{ SideBoxSiz.X / 2, SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[0], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y };
+//		Pic2ASCIIandWrite(aktFal[1], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[2], TopLeft, BoxSize);
+//		TopLeft = SIZES{ SideBoxPosRight.X + SideBoxSiz.X / 2, SideBoxPosRight.Y + SideBoxSiz.Y / 2 };
+//		Pic2ASCIIandWrite(aktFal[3], TopLeft, BoxSize);
+//		break;
+//	default:
+//		ClearBox(TopLeft, BoxSize);
+//		break;
+//	}
+//}
+//
+//void level::WriteWarpMiddleBox(vector<string> aktFal) {
+//	SIZES TopLeft = SIZES{ MiddleBoxPos.X, MiddleBoxPos.Y };
+//	SIZES BoxSize = SIZES{ MiddleBoxSiz.X, MiddleBoxSiz.Y };
+//	switch (aktFal.size()) {
+//	case 1:
+//		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, {POINTS_MIDDLE[0][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][4],POINTS_MIDDLE[0][4] });
+//		break;
+//	case 2:
+//		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], MIDDLE_WALL, { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
+//		break;
+//	case 3:
+//		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], MIDDLE_WALL, { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[2], MIDDLE_WALL, { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
+//		break;
+//	case 4:
+//		Pic2ASCIIWarpandWrite(aktFal[0], MIDDLE_WALL, { POINTS_MIDDLE[0][0],POINTS_MIDDLE[1][0],POINTS_MIDDLE[1][2],POINTS_MIDDLE[0][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], MIDDLE_WALL, { POINTS_MIDDLE[0][2],POINTS_MIDDLE[1][2],POINTS_MIDDLE[1][4],POINTS_MIDDLE[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[2], MIDDLE_WALL, { POINTS_MIDDLE[1][0],POINTS_MIDDLE[2][0],POINTS_MIDDLE[2][2],POINTS_MIDDLE[1][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[3], MIDDLE_WALL, { POINTS_MIDDLE[1][2],POINTS_MIDDLE[2][2],POINTS_MIDDLE[2][4],POINTS_MIDDLE[1][4] });
+//		break;
+//	default:
+//		ClearBox(TopLeft, BoxSize);
+//		break;
+//	}
+//}
+//void level::WriteWarpLeftBox(vector<string> aktFal) {
+//	SIZES TopLeft = SIZES{ SideBoxPosLeft.X, SideBoxPosLeft.Y };
+//	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
+//	switch (aktFal.size()) {
+//	case 1:
+//		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[2][0],POINTS_LEFT[2][4],POINTS_LEFT[0][4] });
+//		break;
+//	case 2:
+//		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], LEFT_WALL, { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
+//		break;
+//	case 3:
+//		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], LEFT_WALL, { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[2], LEFT_WALL, { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
+//		break;
+//	case 4:
+//		Pic2ASCIIWarpandWrite(aktFal[0], LEFT_WALL, { POINTS_LEFT[0][0],POINTS_LEFT[1][0],POINTS_LEFT[1][2],POINTS_LEFT[0][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], LEFT_WALL, { POINTS_LEFT[0][2],POINTS_LEFT[1][2],POINTS_LEFT[1][4],POINTS_LEFT[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[2], LEFT_WALL, { POINTS_LEFT[1][0],POINTS_LEFT[2][0],POINTS_LEFT[2][2],POINTS_LEFT[1][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[3], LEFT_WALL, { POINTS_LEFT[1][2],POINTS_LEFT[2][2],POINTS_LEFT[2][4],POINTS_LEFT[1][4] });
+//		break;
+//	default:
+//		ClearBox(TopLeft, BoxSize);
+//		break;
+//	}
+//}
+//void level::WriteWarpRightBox(vector<string> aktFal) {
+//	SIZES TopLeft = SIZES{ SideBoxPosRight.X, SideBoxPosRight.Y };
+//	SIZES BoxSize = SIZES{ SideBoxSiz.X, SideBoxSiz.Y };
+//	switch (aktFal.size()) {
+//	case 1:
+//		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][4],POINTS_RIGHT[0][4] });
+//		break;
+//	case 2:
+//		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], RIGHT_WALL, { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
+//		break;
+//	case 3:
+//		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], RIGHT_WALL, { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[2], RIGHT_WALL, { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
+//		break;
+//	case 4:
+//		Pic2ASCIIWarpandWrite(aktFal[0], RIGHT_WALL, { POINTS_RIGHT[0][0],POINTS_RIGHT[1][0],POINTS_RIGHT[1][2],POINTS_RIGHT[0][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[1], RIGHT_WALL, { POINTS_RIGHT[0][2],POINTS_RIGHT[1][2],POINTS_RIGHT[1][4],POINTS_RIGHT[0][4] });
+//		Pic2ASCIIWarpandWrite(aktFal[2], RIGHT_WALL, { POINTS_RIGHT[1][0],POINTS_RIGHT[2][0],POINTS_RIGHT[2][2],POINTS_RIGHT[1][2] });
+//		Pic2ASCIIWarpandWrite(aktFal[3], RIGHT_WALL, { POINTS_RIGHT[1][2],POINTS_RIGHT[2][2],POINTS_RIGHT[2][4],POINTS_RIGHT[1][4] });
+//		break;
+//	default:
+//		ClearBox(TopLeft, BoxSize);
+//		break;
+//	}
+//}

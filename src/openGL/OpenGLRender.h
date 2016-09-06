@@ -2,7 +2,6 @@
 #define OPENGLRENDER_H
 
 // OpenGL headers
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -14,8 +13,6 @@
 
 // GL includes
 #include "Camera.h"
-#include "fontstash.h"
-#include "gl3fontstash.h"
 
 class Font {
 private:
@@ -32,7 +29,7 @@ public:
 	float dx, dy;
 	bool shadow;
 
-	Font(int fontType) :
+	/*Font(int fontType) :
 		fontType(fontType), fontAlign(FONS_ALIGN_LEFT | FONS_ALIGN_BASELINE), idx(0),
 		fontSize(36.f), fontSpacing(0.f), blurSize(0.f), dx(0.f), dy(0.f), shadow(false) {
 		text.push_back({"", gl3fonsRGBA(255, 255, 255, 255), true});
@@ -56,7 +53,7 @@ public:
 	void changeFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 		text.push_back({ "", gl3fonsRGBA(r, g, b, a), false });
 		idx++;
-	}
+	}*/
 	void append(std::string str) {
 		text[idx].text.append(str);
 	}

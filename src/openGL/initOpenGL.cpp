@@ -1,5 +1,4 @@
 ﻿// OpenGL headers
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -30,19 +29,17 @@
 
 // Other Libs
 #include <SOIL.h>
-//#define FONS_USE_FREETYPE
-#define FONTSTASH_IMPLEMENTATION
-#include "fontstash.h"
-#define GLFONTSTASH_IMPLEMENTATION
-//#include "glfontstash.h"
-#include "gl3fontstash.h"
+#include "freetype-gl.h"
+#include "vertex-buffer.h"
+#include "text-buffer.h"
+#include "mat4.h"
 
 SDL_Window* window;
 SDL_GLContext glContext;
 
 // Properties
 GLuint screenWidth, screenHeight;
-const int MAX_NUM_OF_DIRTY_BLOCKS = 5;
+const int MAX_NUM_OF_DIRTY_BLOCKS = 5; // Max number of locations to re-render ASCII
 
 //Shaders location
 std::string texturesVertPath = "./shaders/textures.vert";
@@ -51,6 +48,9 @@ std::string framebufferVertPath = "./shaders/framebuffer.vert";
 std::string framebufferFragPath = "./shaders/framebuffer.frag";
 std::string computeASCIIShaderPath = "./shaders/computeASCII.shd";
 std::string computeASCIIMaxIndexShaderPath = "./shaders/computeASCIIMaxIndex.shd";
+std::string fontShadersVertPath = "./shaders/FontShaders/text.vert";
+std::string fontShadersFragPath = "./shaders/FontShaders/text.frag";
+char* fontLuckiestGuyPath = "./fonts/LuckiestGuy.ttf";
 
 // OpenGL VAO, VBO
 GLuint VAO_FrameBuff, VBO_FrameBuff;
@@ -78,8 +78,10 @@ ComputeShader* computeASCIIMaxIndexShader;
 
 // Function prototypes
 void LoadFonts();
-FONScontext* fs = NULL;
-int fontNormal, fontItalic, fontBold, fontJapanese, fontZig;
+// Font global variables
+text_buffer_t * FontBuffer;
+markup_t FontMarkup;
+mat4   FontModelMat, FontViewMat, FontProjectionMat;
 
 int gcd(int a, int b); //Greatest Common Divisor
 void ClaculateVertices();
@@ -160,11 +162,6 @@ void initOpenGL() {
 	computeASCIIMaxIndexShader = new ComputeShader(computeASCIIMaxIndexShaderPath, std::vector<int>());
 
 	// Fonts generation
-	fs = gl3fonsCreate(512, 512, FONS_ZERO_TOPLEFT);
-	if (!fs) {
-		fprintf(stderr, "Could not create stash.\n");
-		return;
-	}
 	LoadFonts();
 
 	ClaculateVertices();
@@ -354,31 +351,44 @@ void initOpenGL() {
 
 void LoadFonts() {
 	// Load truetype fonts directly.
-	fontNormal = fonsAddFont(fs, "sans", "DroidSerif-Regular.ttf");
-	if (fontNormal == FONS_INVALID) {
-		printf("Could not add font normal.\n");
-		return;
-	}
-	fontItalic = fonsAddFont(fs, "sans-italic", "DroidSerif-Italic.ttf");
-	if (fontItalic == FONS_INVALID) {
-		printf("Could not add font italic.\n");
-		return;
-	}
-	fontBold = fonsAddFont(fs, "sans-bold", "DroidSerif-Bold.ttf");
-	if (fontBold == FONS_INVALID) {
-		printf("Could not add font bold.\n");
-		return;
-	}
-	fontJapanese = fonsAddFont(fs, "sans-jp", "DroidSansJapanese.ttf");
-	if (fontJapanese == FONS_INVALID) {
-		printf("Could not add font japanese.\n");
-		return;
-	}
-	fontZig = fonsAddFont(fs, "zig", "zig.ttf");
-	if (fontZig == FONS_INVALID) {
-		printf("Could not add font zig.\n");
-		return;
-	}
+	FontBuffer = text_buffer_new(LCD_FILTERING_OFF,
+		fontShadersVertPath.c_str(),
+		fontShadersFragPath.c_str());
+
+	vec4 black = { { 0.0, 0.0, 0.0, 1.0 } };
+	vec4 none = { { 1.0, 1.0, 1.0, 0.0 } };
+
+	FontMarkup.family = fontLuckiestGuyPath;
+	FontMarkup.size = 128.0;
+	FontMarkup.bold = 0;
+	FontMarkup.italic = 0;
+	FontMarkup.rise = 0.0;
+	FontMarkup.spacing = 0.0;
+	FontMarkup.gamma = 1.0;
+	FontMarkup.foreground_color = black;
+	FontMarkup.background_color = none;
+	FontMarkup.underline = 0;
+	FontMarkup.underline_color = black;
+	FontMarkup.overline = 0;
+	FontMarkup.overline_color = black;
+	FontMarkup.strikethrough = 0;
+	FontMarkup.strikethrough_color = black;
+	FontMarkup.font = 0;
+
+	vec2 pen = { { 0, 0 } };
+	FontMarkup.font = font_manager_get_from_markup(FontBuffer->manager, &FontMarkup);
+	text_buffer_add_text(FontBuffer, &pen, &FontMarkup, "1234567890", 10);
+
+	glGenTextures(1, &FontBuffer->manager->atlas->id);
+	glBindTexture(GL_TEXTURE_2D, FontBuffer->manager->atlas->id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	mat4_set_identity(&FontProjectionMat);
+	mat4_set_identity(&FontModelMat);
+	mat4_set_identity(&FontViewMat);
 }
 
 void DrawDash(float dx, float dy)

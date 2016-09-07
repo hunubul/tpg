@@ -51,6 +51,7 @@ std::string computeASCIIMaxIndexShaderPath = "./shaders/computeASCIIMaxIndex.shd
 std::string fontShadersVertPath = "./shaders/FontShaders/text.vert";
 std::string fontShadersFragPath = "./shaders/FontShaders/text.frag";
 char* fontLuckiestGuyPath = "./fonts/LuckiestGuy.ttf";
+char* fontZigPath = "./fonts/zig.ttf";
 
 // OpenGL VAO, VBO
 GLuint VAO_FrameBuff, VBO_FrameBuff;
@@ -80,7 +81,6 @@ ComputeShader* computeASCIIMaxIndexShader;
 void LoadFonts();
 // Font global variables
 text_buffer_t * FontBuffer;
-markup_t FontMarkup;
 mat4   FontModelMat, FontViewMat, FontProjectionMat;
 
 int gcd(int a, int b); //Greatest Common Divisor
@@ -355,10 +355,12 @@ void LoadFonts() {
 		fontShadersVertPath.c_str(),
 		fontShadersFragPath.c_str());
 
-	vec4 black = { { 0.0, 0.0, 0.0, 1.0 } };
+	/*vec4 black = { { 0.0, 0.0, 0.0, 1.0 } };
 	vec4 none = { { 1.0, 1.0, 1.0, 0.0 } };
 
-	FontMarkup.family = fontLuckiestGuyPath;
+	markup_t FontMarkup;
+
+	FontMarkup.family = fontZigPath;
 	FontMarkup.size = 128.0;
 	FontMarkup.bold = 0;
 	FontMarkup.italic = 0;
@@ -377,7 +379,7 @@ void LoadFonts() {
 
 	vec2 pen = { { 0, 0 } };
 	FontMarkup.font = font_manager_get_from_markup(FontBuffer->manager, &FontMarkup);
-	text_buffer_add_text(FontBuffer, &pen, &FontMarkup, "1234567890", 10);
+	text_buffer_add_text(FontBuffer, &pen, &FontMarkup, "1234567890", 10);*/
 
 	glGenTextures(1, &FontBuffer->manager->atlas->id);
 	glBindTexture(GL_TEXTURE_2D, FontBuffer->manager->atlas->id);
@@ -385,28 +387,11 @@ void LoadFonts() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
-	mat4_set_identity(&FontProjectionMat);
+	mat4_set_orthographic(&FontProjectionMat, 0, screenWidth, 0, screenHeight, -1, 1);
 	mat4_set_identity(&FontModelMat);
 	mat4_set_identity(&FontViewMat);
-}
-
-void DrawDash(float dx, float dy)
-{
-	glBegin(GL_LINES);
-	glColor4ub(0, 0, 0, 128);
-	glVertex2f(dx - 5, dy);
-	glVertex2f(dx - 10, dy);
-	glEnd();
-}
-
-void DrawLine(float sx, float sy, float ex, float ey)
-{
-	glBegin(GL_LINES);
-	glColor4ub(0, 0, 0, 128);
-	glVertex2f(sx, sy);
-	glVertex2f(ex, ey);
-	glEnd();
 }
 
 /// Draws a black recangle, left-lower vertex: (x0,y0), right-upper vertex: (x1,y1)

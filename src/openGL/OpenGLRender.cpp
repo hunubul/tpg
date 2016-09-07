@@ -248,6 +248,59 @@ void drawBufferShader() {
 }
 
 void DrawText() {
+	vec4 green = { 0.f / 255, 192.f / 255, 0.f / 255, 255.f / 255 };
+	vec4 black = { 0.f / 255,   0.f / 255, 0.f / 255, 255.f / 255 };
+
+	//DrawBox(0,0,screenWidth,200);
+	
+	/*glBindTexture(GL_TEXTURE_2D, FontBuffer->manager->atlas->id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);*/
+
+	text_buffer_clear(FontBuffer);
+
+	Font::textType fontFPS(fontZigPath);
+	
+	vec2 pen = { {0,0} };
+	fontFPS.FontMarkup.size = 36.0f;
+	//fontFPS.FontMarkup.spacing = 2.0f;
+	//text_buffer_align(FontBuffer, &pen, ALIGN_RIGHT);
+	int dTime = globals::FPS_manual_limit;
+	if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
+	std::string dTimeStr = std::to_string(dTime);
+	//text_buffer_add_text(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), dTimeStr.size());
+	fontFPS.FontMarkup.foreground_color = black;
+	pen.x = (float)screenWidth - 30* dTimeStr.size();
+	pen.y = (float)screenHeight - 3;
+	text_buffer_printf(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), NULL);
+
+	fontFPS.FontMarkup.foreground_color = green;
+	pen.x = (float)screenWidth - 30 * dTimeStr.size() - 3;
+	pen.y = (float)screenHeight;
+	text_buffer_printf(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), NULL);
+
+	static bool asdasd = true;
+	if (asdasd) {
+		for (size_t i = 0; i < texts.size(); i++) {
+			pen.x = texts[i].pen_x;
+			pen.y = texts[i].pen_y;
+			text_buffer_align(FontBuffer, &pen, texts[i].fontAlign);
+			for (size_t j = 0; j < texts[i].text.size(); j++) {
+				text_buffer_printf(FontBuffer, &pen, &texts[i].text[j].FontMarkup, texts[i].text[j].text.c_str(), NULL);
+			}
+		}
+		//asdasd = false;
+	}
+
+	
+	glBindTexture(GL_TEXTURE_2D, FontBuffer->manager->atlas->id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, FontBuffer->manager->atlas->width,
+		FontBuffer->manager->atlas->height, 0, GL_RED, GL_UNSIGNED_BYTE,
+		FontBuffer->manager->atlas->data);
+	
+	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -262,61 +315,86 @@ void DrawText() {
 		text_buffer_render(FontBuffer);
 	}
 
-	/*float dx, dy, lh = 0;
-	unsigned int white = gl3fonsRGBA(255, 255, 255, 255);
-	unsigned int brown = gl3fonsRGBA(192, 128, 0, 128);
-	unsigned int blue = gl3fonsRGBA(0, 192, 255, 255);
-	unsigned int black = gl3fonsRGBA(0, 0, 0, 255);
-	unsigned int green = gl3fonsRGBA(0, 192, 0, 255);
-
-	DrawTextInit();
-
-	//DrawBox(0,0,screenWidth,200);
-	fonsClearState(fs);
-
-
-
-	fonsSetSize(fs, 36.0f);
-	fonsSetFont(fs, fontZig);
-	fonsSetColor(fs, black);
-	fonsSetBlur(fs, 2.0f);
-	fonsSetSpacing(fs, 2.0f);
-	fonsSetAlign(fs, FONS_ALIGN_RIGHT | FONS_ALIGN_TOP);
-	dx = (float)screenWidth;
-	dy = 0;
-	int dTime = globals::FPS_manual_limit;
-	if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
-	std::string dTimeStr = std::to_string(dTime);
-	fonsDrawText(fs, dx, dy, dTimeStr.c_str(), NULL);
-	fonsSetColor(fs, green);
-	fonsSetBlur(fs, 0.0f);
-	dx = fonsDrawText(fs, dx, dy, dTimeStr.c_str(), NULL);
-
-	static bool asdasd = true;
-	if (asdasd) {
-		for (size_t i = 0; i < texts.size(); i++) {
-			fonsSetSize(fs, texts[i].fontSize);
-			fonsSetFont(fs, texts[i].fontType);
-			fonsSetBlur(fs, texts[i].blurSize);
-			fonsSetSpacing(fs, texts[i].fontSpacing);
-			fonsSetAlign(fs, texts[i].fontAlign);
-			dx = texts[i].dx;
-			dy = texts[i].dy;
-			for (size_t j = 0; j < texts[i].text.size(); j++) {
-				fonsSetColor(fs, texts[i].text[j].fontColor);
-				dx = fonsDrawText(fs, dx, dy, texts[i].text[j].text.c_str(), NULL);
-				if (texts[i].text[j].newLine) {
-					fonsVertMetrics(fs, NULL, NULL, &lh);
-					dx = texts[i].dx;
-					dy += lh;
-				}
-			}
-		}
-		asdasd = false;
-	}*/
-
-
 	glDisable(GL_BLEND);
-	glDisable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// Font class
+Font::Font(char* FontPath) {
+	Font::fontFamily = FontPath;
+	textType newMarkup = textType(Font::fontFamily);
+	newMarkup.FontMarkup.foreground_color = { 1.0, 1.0, 1.0, 1.0 };
+	text.push_back(newMarkup);
+	idx = 0;
+}
+Font::Font(char* FontPath, float r, float g, float b) {
+	Font::fontFamily = FontPath;
+	textType newMarkup = textType(Font::fontFamily);
+	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, 1.0 };
+	text.push_back(newMarkup);
+	idx = 0;
+}
+Font::Font(char* FontPath, float r, float g, float b, float a) {
+	Font::fontFamily = FontPath;
+	textType newMarkup = textType(Font::fontFamily);
+	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, a / 255 };
+	text.push_back(newMarkup);
+	idx = 0;
+}
+
+void Font::changeFontColor(float r, float g, float b) {
+	textType newMarkup("", text[idx].FontMarkup);
+	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, 1.0 };
+	text.push_back(newMarkup);
+	idx++;
+}
+void Font::changeFontColor(float r, float g, float b, float a) {
+	textType newMarkup("",text[idx].FontMarkup);
+	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, a / 255 };
+	text.push_back(newMarkup);
+	idx++;
+}
+void Font::setFontSize(float fontSize) {
+	text[idx].FontMarkup.size = fontSize;
+}
+void Font::append(const std::string& str) {
+	text[idx].text.append(str);
+}
+void Font::NewLine() {
+	Font::append("\n");
+}
+
+Font::textType::textType(char* fontFamily) {
+	text = "";
+
+	//vec2 pen = { { 0,0 } };
+
+	vec4 black = { { 0.0, 0.0, 0.0, 1.0 } };
+	vec4 none = { { 1.0, 1.0, 1.0, 0.0 } };
+
+	FontMarkup.family = fontFamily;
+	FontMarkup.size = 128.0;
+	FontMarkup.bold = 0;
+	FontMarkup.italic = 0;
+	FontMarkup.rise = 0.0;
+	FontMarkup.spacing = 0.0;
+	FontMarkup.gamma = 1.0;
+	FontMarkup.foreground_color = black;
+	FontMarkup.background_color = none;
+	FontMarkup.outline = 0;
+	FontMarkup.outline_color = black;
+	FontMarkup.underline = 0;
+	FontMarkup.underline_color = black;
+	FontMarkup.overline = 0;
+	FontMarkup.overline_color = black;
+	FontMarkup.strikethrough = 0;
+	FontMarkup.strikethrough_color = black;
+	FontMarkup.font = 0;// font_manager_get_from_markup(FontBuffer->manager, &FontMarkup);
+	//text_buffer_add_text(FontBuffer, &pen, &FontMarkup, "1234567890", 10);
+}
+
+Font::textType::textType(const std::string& text_in, const markup_t& FontMarkup_in) {
+	text = text_in;
+	FontMarkup = FontMarkup_in;
 }

@@ -108,6 +108,7 @@ void level::engine() {
 	most = UP;
 	
 	//unsigned char* texture1Arr = new unsigned char[screenWidth *screenHeight * 3];
+	writeout();
 	
 	// Game loop
 	while (!quit) {
@@ -136,7 +137,6 @@ void level::engine() {
 		drawBufferShader();
 
 		// Update and render Font text
-		writeout();
 		DrawText();
 
 		// Swap the buffers
@@ -257,11 +257,13 @@ void level::writeout() {
 	//TCODConsole::root->flush();
 }
 void level::WriteOutMiniMap() {
-	/*Font miniMap(fontZig, 255, 255, 255);
-	miniMap.fontAlign = FONS_ALIGN_LEFT | FONS_ALIGN_TOP;
-	miniMap.fontSize = 12.0f;
-	for (int i = 0; i < MaxRoomX; i++) {
-		for (int j = 0; j < MaxRoomY; j++) {
+	Font miniMap(fontZigPath, 255, 255, 255);
+	miniMap.fontAlign = ALIGN_LEFT;
+	miniMap.setFontSize(12.0f);
+	miniMap.pen_x = 0.0f;
+	miniMap.pen_y = (float)screenHeight;
+	for (int j = 0; j < MaxRoomX; j++) {
+		for (int i = 0; i < MaxRoomY; i++) {
 			if (posX == i&&posY == j) {
 				FOV[i][j] = 1;
 				miniMap.changeFontColor(255, 0, 0);
@@ -285,15 +287,15 @@ void level::WriteOutMiniMap() {
 				miniMap.changeFontColor(255, 255, 255);
 			}
 		}
-		miniMap.append("|");
-		miniMap.endLine();
+		miniMap.append("║");
+		miniMap.NewLine();
 	}
 	// Drawing frame
 	for (int i = 0; i < MaxRoomX; i++) {
-		miniMap.append("-");
+		miniMap.append("═");
 	}
-	miniMap.append("-");
-	texts.push_back(miniMap);*/
+	miniMap.append("╝");
+	texts.push_back(miniMap);
 }
 void level::writearrow() {
 	/*switch (most) {

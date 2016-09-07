@@ -13,55 +13,38 @@
 
 // GL includes
 #include "Camera.h"
+#include "freetype-gl.h"
+#include "vertex-buffer.h"
+#include "text-buffer.h"
+#include "mat4.h"
 
 class Font {
 private:
 	int idx;
 public:
-	struct textType {
+	class textType {
+	public:
 		std::string text;
-		unsigned int fontColor;
-		bool newLine;
+		markup_t FontMarkup;
+		textType(char* fontFamily);
+		textType(const std::string& text_in, const markup_t& FontMarkup);
 	};
 	std::vector<textType> text;
-	int fontType, fontAlign;
-	float fontSize, fontSpacing, blurSize;
-	float dx, dy;
-	bool shadow;
+	enum Align fontAlign;
+	float pen_x, pen_y;
+	//bool shadow;
+	char* fontFamily;
 
-	/*Font(int fontType) :
-		fontType(fontType), fontAlign(FONS_ALIGN_LEFT | FONS_ALIGN_BASELINE), idx(0),
-		fontSize(36.f), fontSpacing(0.f), blurSize(0.f), dx(0.f), dy(0.f), shadow(false) {
-		text.push_back({"", gl3fonsRGBA(255, 255, 255, 255), true});
-	}
-	Font(int fontType, unsigned char r, unsigned char g, unsigned char b) :
-		fontType(fontType), fontAlign(FONS_ALIGN_LEFT | FONS_ALIGN_BASELINE), idx(0),
-		fontSize(36.f), fontSpacing(0.f), blurSize(0.f), dx(0.f), dy(0.f), shadow(false) {
-		text.push_back({ "", gl3fonsRGBA(r, g, b, 255), true });
-	}
-	Font(int fontType, unsigned char r, unsigned char g, unsigned char b, unsigned char a) :
-		fontType(fontType), fontAlign(FONS_ALIGN_LEFT | FONS_ALIGN_BASELINE), idx(0),
-		fontSize(36.f), fontSpacing(0.f), blurSize(0.f), dx(0.f), dy(0.f), shadow(false) {
-		text.push_back({ "", gl3fonsRGBA(r, g, b, a), true });
-	}
+	Font(char* FontPath);
+	Font(char* FontPath, float r, float g, float b);
+	Font(char* FontPath, float r, float g, float b, float a);
 
-	void changeFontColor(unsigned char r, unsigned char g, unsigned char b) {
-		text[idx].newLine = false;
-		text.push_back({ "", gl3fonsRGBA(r, g, b, 255), false });
-		idx++;
-	}
-	void changeFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
-		text.push_back({ "", gl3fonsRGBA(r, g, b, a), false });
-		idx++;
-	}*/
-	void append(std::string str) {
-		text[idx].text.append(str);
-	}
-	void endLine() {
-		text[idx].newLine = true;
-		text.push_back({ "", text[idx].fontColor, true });
-		idx++;
-	}
+	void changeFontColor(float r, float g, float b);
+	void changeFontColor(float r, float g, float b, float a);
+	void setFontSize(float fontSize);
+	void append(const std::string& str);
+
+	void NewLine();
 };
 
 // Text Vector for writing to screen

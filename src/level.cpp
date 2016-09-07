@@ -108,7 +108,6 @@ void level::engine() {
 	most = UP;
 	
 	//unsigned char* texture1Arr = new unsigned char[screenWidth *screenHeight * 3];
-	writeout();
 	
 	// Game loop
 	while (!quit) {
@@ -137,7 +136,8 @@ void level::engine() {
 		drawBufferShader();
 
 		// Update and render Font text
-		DrawText();
+		UpdateText();
+		DrawTextGL();
 
 		// Swap the buffers
 		SDL_GL_SwapWindow(window);
@@ -240,28 +240,33 @@ void level::merre(IRANY honnan) {
 		}
 		break;
 	}
+	newRoom = true;
 }
 
 /**
  * @brief kiírja az egész térképet
  */
-void level::writeout() {
-	//TCODConsole::root->clear();
-	//RoomWriteout();
-	//WriteOutBoxes();
-	WriteOutMiniMap();
+void level::UpdateText() {
+	if (newRoom) {
+		//TCODConsole::root->clear();
+		//RoomWriteout();
+		//WriteOutBoxes();
+		WriteOutMiniMap();
 #ifdef DEBUG
-	//WriteOutGenTime(timetmp);
+		writearrow();
 #endif // DEBUG
-	//terkep[posX][posY].writeout((IRANY)most);
-	//TCODConsole::root->flush();
+		//terkep[posX][posY].writeout((IRANY)most);
+		//TCODConsole::root->flush();
+		newRoom = false;
+	}
 }
 void level::WriteOutMiniMap() {
 	Font miniMap(fontZigPath, 255, 255, 255);
 	miniMap.fontAlign = ALIGN_LEFT;
-	miniMap.setFontSize(12.0f);
+	miniMap.setFontSize(11.0f);
 	miniMap.pen_x = 0.0f;
 	miniMap.pen_y = (float)screenHeight;
+	miniMap.changeBackgroundColor(0, 0, 0);
 	for (int j = 0; j < MaxRoomX; j++) {
 		for (int i = 0; i < MaxRoomY; i++) {
 			if (posX == i&&posY == j) {
@@ -269,7 +274,6 @@ void level::WriteOutMiniMap() {
 				miniMap.changeFontColor(255, 0, 0);
 			}
 #ifdef DEBUG
-			writearrow();
 			if (Map[i][j] == 1) miniMap.append("#");
 			else miniMap.append(" ");
 #else
@@ -287,35 +291,41 @@ void level::WriteOutMiniMap() {
 				miniMap.changeFontColor(255, 255, 255);
 			}
 		}
-		miniMap.append("║");
+		miniMap.append("|"); //║
 		miniMap.NewLine();
 	}
 	// Drawing frame
 	for (int i = 0; i < MaxRoomX; i++) {
-		miniMap.append("═");
+		miniMap.append("-"); //═
 	}
-	miniMap.append("╝");
-	texts.push_back(miniMap);
+	miniMap.append("-"); //╝
+	texts[MINIMAP_TEXT] = miniMap;
 }
 void level::writearrow() {
-	/*switch (most) {
+	Font arrow(fontZigPath, 255, 255, 255);
+	arrow.fontAlign = ALIGN_CENTER;
+	arrow.setFontSize(12.0f);
+	arrow.pen_x = 200.0f;
+	arrow.pen_y = (float)screenHeight;
+	switch (most) {
 	case UP:
-		TCODConsole::root->print(MaxRoomX + 3, 0, "/\\ ");
-		TCODConsole::root->print(MaxRoomX + 3, 1, "|| ");
+		arrow.append("/\\\n");
+		arrow.append("|| ");
 		break;
 	case RIGHT:
-		TCODConsole::root->print(MaxRoomX + 3, 0, "-->");
-		TCODConsole::root->print(MaxRoomX + 3, 1, "  ");
+		arrow.append("-->\n");
+		arrow.append("  ");
 		break;
 	case DOWN:
-		TCODConsole::root->print(MaxRoomX + 3, 0, "|| ");
-		TCODConsole::root->print(MaxRoomX + 3, 1, "\\/");
+		arrow.append("|| ");
+		arrow.append("\\/\n");
 		break;
 	case LEFT:
-		TCODConsole::root->print(MaxRoomX + 3, 0, "<--");
-		TCODConsole::root->print(MaxRoomX + 3, 1, "  ");
+		arrow.append("<--\n");
+		arrow.append("   ");
 		break;
-	}*/
+	}
+	texts[ARROW_TEXT] = arrow;
 }
 void level::RoomWriteout() {
 	//CONSOLEINFO Con;

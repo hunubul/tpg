@@ -19,7 +19,7 @@ public:
     level(int Max_X,int Max_Y,int MidX,int MidY,int MaxCounter);
     void engine();
 	void ManageEvents();
-    void writeout();
+    void UpdateText();
     void WriteOutMiniMap();
 
     void RoomWriteout();

@@ -35,7 +35,7 @@
 #include "text-buffer.h"
 
 SDL_Event sdlEvent;
-std::vector<Font> texts;
+std::map<TEXT_TYPE, Font> texts;
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -93,7 +93,6 @@ void render3Dmodels() {
 		glBindTexture(GL_TEXTURE_2D, texture1);
 		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texture1Arr);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		newRoom = false;
 	}
 
 	// Bind Textures using texture units
@@ -247,17 +246,11 @@ void drawBufferShader() {
 	glBindVertexArray(0);
 }
 
-void DrawText() {
+void DrawTextGL() {
 	vec4 green = { 0.f / 255, 192.f / 255, 0.f / 255, 255.f / 255 };
 	vec4 black = { 0.f / 255,   0.f / 255, 0.f / 255, 255.f / 255 };
 
 	//DrawBox(0,0,screenWidth,200);
-	
-	/*glBindTexture(GL_TEXTURE_2D, FontBuffer->manager->atlas->id);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);*/
 
 	text_buffer_clear(FontBuffer);
 
@@ -265,12 +258,9 @@ void DrawText() {
 	
 	vec2 pen = { {0,0} };
 	fontFPS.FontMarkup.size = 36.0f;
-	//fontFPS.FontMarkup.spacing = 2.0f;
-	//text_buffer_align(FontBuffer, &pen, ALIGN_RIGHT);
 	int dTime = globals::FPS_manual_limit;
 	if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
 	std::string dTimeStr = std::to_string(dTime);
-	//text_buffer_add_text(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), dTimeStr.size());
 	fontFPS.FontMarkup.foreground_color = black;
 	pen.x = (float)screenWidth - 30* dTimeStr.size();
 	pen.y = (float)screenHeight - 3;
@@ -283,13 +273,14 @@ void DrawText() {
 
 	static bool asdasd = true;
 	if (asdasd) {
-		for (size_t i = 0; i < texts.size(); i++) {
+		for (enum TEXT_TYPE i = MINIMAP_TEXT; i < (int)texts.size(); i = (TEXT_TYPE)(i+1)) {
 			pen.x = texts[i].pen_x;
 			pen.y = texts[i].pen_y;
-			text_buffer_align(FontBuffer, &pen, texts[i].fontAlign);
+			FontBuffer->origin = { pen.x ,pen.y};
 			for (size_t j = 0; j < texts[i].text.size(); j++) {
 				text_buffer_printf(FontBuffer, &pen, &texts[i].text[j].FontMarkup, texts[i].text[j].text.c_str(), NULL);
 			}
+			//text_buffer_align(FontBuffer, &pen, texts[i].fontAlign);
 		}
 		//asdasd = false;
 	}
@@ -321,7 +312,15 @@ void DrawText() {
 }
 
 // Font class
+Font::Font() {
+	fontAlign = ALIGN_LEFT;
+	pen_x = pen_y = 0;
+	fontFamily = NULL;
+	idx = 0;
+}
 Font::Font(char* FontPath) {
+	fontAlign = ALIGN_LEFT;
+	pen_x = pen_y = 0;
 	Font::fontFamily = FontPath;
 	textType newMarkup = textType(Font::fontFamily);
 	newMarkup.FontMarkup.foreground_color = { 1.0, 1.0, 1.0, 1.0 };
@@ -329,6 +328,8 @@ Font::Font(char* FontPath) {
 	idx = 0;
 }
 Font::Font(char* FontPath, float r, float g, float b) {
+	fontAlign = ALIGN_LEFT;
+	pen_x = pen_y = 0;
 	Font::fontFamily = FontPath;
 	textType newMarkup = textType(Font::fontFamily);
 	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, 1.0 };
@@ -336,6 +337,8 @@ Font::Font(char* FontPath, float r, float g, float b) {
 	idx = 0;
 }
 Font::Font(char* FontPath, float r, float g, float b, float a) {
+	fontAlign = ALIGN_LEFT;
+	pen_x = pen_y = 0;
 	Font::fontFamily = FontPath;
 	textType newMarkup = textType(Font::fontFamily);
 	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, a / 255 };
@@ -352,6 +355,18 @@ void Font::changeFontColor(float r, float g, float b) {
 void Font::changeFontColor(float r, float g, float b, float a) {
 	textType newMarkup("",text[idx].FontMarkup);
 	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, a / 255 };
+	text.push_back(newMarkup);
+	idx++;
+}
+void Font::changeBackgroundColor(float r, float g, float b) {
+	textType newMarkup("", text[idx].FontMarkup);
+	newMarkup.FontMarkup.background_color = { r / 255, g / 255, b / 255, 1.0 };
+	text.push_back(newMarkup);
+	idx++;
+}
+void Font::changeBackgroundColor(float r, float g, float b, float a) {
+	textType newMarkup("", text[idx].FontMarkup);
+	newMarkup.FontMarkup.background_color = { r / 255, g / 255, b / 255, a / 255 };
 	text.push_back(newMarkup);
 	idx++;
 }

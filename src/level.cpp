@@ -14,6 +14,7 @@
 #include "harc.h"
 #include "openGL/initOpenGL.h"
 #include "openGL/OpenGLRender.h"
+#include "definitions/Colors.h"
 
 using namespace globals;
 using namespace std;
@@ -261,17 +262,17 @@ void level::UpdateText() {
 	}
 }
 void level::WriteOutMiniMap() {
-	Font miniMap(fontZigPath, 255, 255, 255);
+	Font miniMap(fontZigPath, FONTCOLOR_WHITE);
 	miniMap.fontAlign = ALIGN_LEFT;
 	miniMap.setFontSize(11.0f);
 	miniMap.pen_x = 0.0f;
 	miniMap.pen_y = (float)screenHeight;
-	miniMap.changeBackgroundColor(0, 0, 0);
+	//miniMap.changeBackgroundColor(FONTCOLOR_BLACK);
 	for (int j = 0; j < MaxRoomX; j++) {
 		for (int i = 0; i < MaxRoomY; i++) {
 			if (posX == i&&posY == j) {
 				FOV[i][j] = 1;
-				miniMap.changeFontColor(255, 0, 0);
+				miniMap.changeFontColor(FONTCOLOR_RED);
 			}
 #ifdef DEBUG
 			if (Map[i][j] == 1) miniMap.append("#");
@@ -279,7 +280,7 @@ void level::WriteOutMiniMap() {
 #else
 			if (FOV[i][j] == 1) {
 				miniMap.append("#");
-				miniMap.changeFontColor(255, 255, 255);
+				miniMap.changeFontColor(FONTCOLOR_WHITE);
 				if (i - 1 >= 0 && Map[i - 1][j] == 1 && FOV[i - 1][j] != 1) TCODConsole::root->print(i - 1, j, "?");
 				if (j - 1 >= 0 && Map[i][j - 1] == 1 && FOV[i][j - 1] != 1) TCODConsole::root->print(i, j - 1, "?");
 				if (i + 1 < MaxRoomX&&Map[i + 1][j] == 1 && FOV[i + 1][j] != 1) TCODConsole::root->print(i + 1, j, "?");
@@ -288,7 +289,7 @@ void level::WriteOutMiniMap() {
 			else if (TCODConsole::root->getChar(i, j) != '?') miniMap.append(" ");
 #endif // DEBUG
 			if (posX == i&&posY == j) {
-				miniMap.changeFontColor(255, 255, 255);
+				miniMap.changeFontColor(FONTCOLOR_WHITE);
 			}
 		}
 		miniMap.append("|"); //║
@@ -302,7 +303,7 @@ void level::WriteOutMiniMap() {
 	texts[MINIMAP_TEXT] = miniMap;
 }
 void level::writearrow() {
-	Font arrow(fontZigPath, 255, 255, 255);
+	Font arrow(fontZigPath, FONTCOLOR_WHITE);
 	arrow.fontAlign = ALIGN_CENTER;
 	arrow.setFontSize(12.0f);
 	arrow.pen_x = 200.0f;

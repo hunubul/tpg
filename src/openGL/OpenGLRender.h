@@ -38,11 +38,14 @@ public:
 
 	Font();
 	Font(char* FontPath);
+	Font(char* FontPath, const vec4& color);
 	Font(char* FontPath, float r, float g, float b);
 	Font(char* FontPath, float r, float g, float b, float a);
 
+	void changeFontColor(const vec4& color);
 	void changeFontColor(float r, float g, float b);
 	void changeFontColor(float r, float g, float b, float a);
+	void changeBackgroundColor(const vec4& color);
 	void changeBackgroundColor(float r, float g, float b);
 	void changeBackgroundColor(float r, float g, float b, float a);
 	void setFontSize(float fontSize);

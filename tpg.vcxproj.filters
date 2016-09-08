@@ -18,6 +18,9 @@
     <Filter Include="Header Files\openGL">
       <UniqueIdentifier>{93bdcb61-e232-4580-a6d8-e08a87a0326c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\definitions">
+      <UniqueIdentifier>{e7b80258-c2c5-4497-9aa8-a7d0ee265e0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\character.cpp">
@@ -108,6 +111,9 @@
     </ClInclude>
     <ClInclude Include="src\szoba.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\definitions\Colors.h">
+      <Filter>Header Files\definitions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -33,6 +33,7 @@
 #include <SOIL.h>
 #include "freetype-gl.h"
 #include "text-buffer.h"
+#include "../definitions/Colors.h"
 
 SDL_Event sdlEvent;
 std::map<TEXT_TYPE, Font> texts;
@@ -247,9 +248,6 @@ void drawBufferShader() {
 }
 
 void DrawTextGL() {
-	vec4 green = { 0.f / 255, 192.f / 255, 0.f / 255, 255.f / 255 };
-	vec4 black = { 0.f / 255,   0.f / 255, 0.f / 255, 255.f / 255 };
-
 	//DrawBox(0,0,screenWidth,200);
 
 	text_buffer_clear(FontBuffer);
@@ -261,12 +259,12 @@ void DrawTextGL() {
 	int dTime = globals::FPS_manual_limit;
 	if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
 	std::string dTimeStr = std::to_string(dTime);
-	fontFPS.FontMarkup.foreground_color = black;
+	fontFPS.FontMarkup.foreground_color = FONTCOLOR_BLACK;
 	pen.x = (float)screenWidth - 30* dTimeStr.size();
 	pen.y = (float)screenHeight - 3;
 	text_buffer_printf(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), NULL);
 
-	fontFPS.FontMarkup.foreground_color = green;
+	fontFPS.FontMarkup.foreground_color = FONTCOLOR_GREEN;
 	pen.x = (float)screenWidth - 30 * dTimeStr.size() - 3;
 	pen.y = (float)screenHeight;
 	text_buffer_printf(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), NULL);
@@ -323,7 +321,16 @@ Font::Font(char* FontPath) {
 	pen_x = pen_y = 0;
 	Font::fontFamily = FontPath;
 	textType newMarkup = textType(Font::fontFamily);
-	newMarkup.FontMarkup.foreground_color = { 1.0, 1.0, 1.0, 1.0 };
+	newMarkup.FontMarkup.foreground_color = FONTCOLOR_WHITE;
+	text.push_back(newMarkup);
+	idx = 0;
+}
+Font::Font(char* FontPath, const vec4& color) {
+	fontAlign = ALIGN_LEFT;
+	pen_x = pen_y = 0;
+	Font::fontFamily = FontPath;
+	textType newMarkup = textType(Font::fontFamily);
+	newMarkup.FontMarkup.foreground_color = color;
 	text.push_back(newMarkup);
 	idx = 0;
 }
@@ -346,6 +353,12 @@ Font::Font(char* FontPath, float r, float g, float b, float a) {
 	idx = 0;
 }
 
+void Font::changeFontColor(const vec4& color) {
+	textType newMarkup("", text[idx].FontMarkup);
+	newMarkup.FontMarkup.foreground_color = color;
+	text.push_back(newMarkup);
+	idx++;
+}
 void Font::changeFontColor(float r, float g, float b) {
 	textType newMarkup("", text[idx].FontMarkup);
 	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, 1.0 };
@@ -355,6 +368,12 @@ void Font::changeFontColor(float r, float g, float b) {
 void Font::changeFontColor(float r, float g, float b, float a) {
 	textType newMarkup("",text[idx].FontMarkup);
 	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, a / 255 };
+	text.push_back(newMarkup);
+	idx++;
+}
+void Font::changeBackgroundColor(const vec4& color) {
+	textType newMarkup("", text[idx].FontMarkup);
+	newMarkup.FontMarkup.background_color = color;
 	text.push_back(newMarkup);
 	idx++;
 }
@@ -383,11 +402,6 @@ void Font::NewLine() {
 Font::textType::textType(char* fontFamily) {
 	text = "";
 
-	//vec2 pen = { { 0,0 } };
-
-	vec4 black = { { 0.0, 0.0, 0.0, 1.0 } };
-	vec4 none = { { 1.0, 1.0, 1.0, 0.0 } };
-
 	FontMarkup.family = fontFamily;
 	FontMarkup.size = 128.0;
 	FontMarkup.bold = 0;
@@ -395,16 +409,16 @@ Font::textType::textType(char* fontFamily) {
 	FontMarkup.rise = 0.0;
 	FontMarkup.spacing = 0.0;
 	FontMarkup.gamma = 1.0;
-	FontMarkup.foreground_color = black;
-	FontMarkup.background_color = none;
+	FontMarkup.foreground_color = FONTCOLOR_BLACK;
+	FontMarkup.background_color = FONTCOLOR_NONE;
 	FontMarkup.outline = 0;
-	FontMarkup.outline_color = black;
+	FontMarkup.outline_color = FONTCOLOR_BLACK;
 	FontMarkup.underline = 0;
-	FontMarkup.underline_color = black;
+	FontMarkup.underline_color = FONTCOLOR_BLACK;
 	FontMarkup.overline = 0;
-	FontMarkup.overline_color = black;
+	FontMarkup.overline_color = FONTCOLOR_BLACK;
 	FontMarkup.strikethrough = 0;
-	FontMarkup.strikethrough_color = black;
+	FontMarkup.strikethrough_color = FONTCOLOR_BLACK;
 	FontMarkup.font = 0;// font_manager_get_from_markup(FontBuffer->manager, &FontMarkup);
 	//text_buffer_add_text(FontBuffer, &pen, &FontMarkup, "1234567890", 10);
 }

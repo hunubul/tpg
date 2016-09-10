@@ -391,6 +391,7 @@ void Font::changeBackgroundColor(float r, float g, float b, float a) {
 }
 void Font::setFontSize(float fontSize) {
 	text[idx].FontMarkup.size = fontSize;
+	//text[idx].FontMarkup.font = font_manager_get_from_markup(FontBuffer->manager, &text[idx].FontMarkup);
 }
 void Font::append(const std::string& str) {
 	text[idx].text.append(str);

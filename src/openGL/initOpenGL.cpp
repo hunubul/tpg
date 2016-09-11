@@ -405,10 +405,10 @@ void DrawBox(GLint x0, GLint y0, GLint x1, GLint y1)
 }
 
 void ClaculateVertices() {
-	int gcdiv = gcd(screenWidth, screenHeight);
-	GLfloat width = (GLfloat)screenWidth / (GLfloat)(gcdiv*2.0);
-	GLfloat height = (GLfloat)screenHeight / (GLfloat)(gcdiv*2.0);
-	GLfloat depth = (GLfloat)screenWidth / gcdiv;
+	GLfloat maxprop = max(screenWidth,screenHeight)/10.0f;
+	GLfloat width = (GLfloat)screenWidth / maxprop;
+	GLfloat height = (GLfloat)screenHeight / maxprop;
+	GLfloat depth = (GLfloat)screenWidth / maxprop * 2.0f;
 	for (int i = 0; i < CubeVertices::CubeSides; i++) {
 		// 6 points for 1 side and 5 parameters for 1 point
 		for (int j = 0; j < 6; j++) {
@@ -417,9 +417,7 @@ void ClaculateVertices() {
 			CubeVertices::index((6 * i + j) * 5 + 2) *= depth;  // Z
 		}
 	}
-	const double rad = glm::radians((double)ZOOM / 2);
-	const double proportionalConst = 8 / (450 / tan(rad));
-	cubePositions[0] = glm::vec3(0.0f, 0.0f, -proportionalConst*screenHeight / (2 * tan(rad)));
+	cubePositions[0] = glm::vec3(0.0f, 0.0f, -width);
 }
 
 int gcd(int a, int b) {

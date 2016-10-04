@@ -50,6 +50,8 @@ std::string computeASCIIShaderPath = "./shaders/computeASCII.shd";
 std::string computeASCIIMaxIndexShaderPath = "./shaders/computeASCIIMaxIndex.shd";
 std::string fontShadersVertPath = "./shaders/FontShaders/text.vert";
 std::string fontShadersFragPath = "./shaders/FontShaders/text.frag";
+std::string uiVertPath = "./shaders/ui.vert";
+std::string uiFragPath = "./shaders/ui.frag";
 char* fontLuckiestGuyPath = "./fonts/LuckiestGuy.ttf";
 char* fontZigPath = "./fonts/zig.ttf";
 
@@ -67,6 +69,9 @@ GLuint frameDownBuffer, texColorDownBuffer;
 GLuint prevframeTexture;
 GLuint ASCIITexture, ASCIIBrightness, ASCIIScreenWeights, ASCIIMaxIndexes;
 
+GLuint VAO_ui, VBO_ui;
+GLuint uiTexture_compass;
+
 float *asciiScreenWeights, *asciiMaxIndexes;
 unsigned char *downBuffer;
 int fontSize;
@@ -74,6 +79,7 @@ int fontSize;
 // Shaders
 Shader* defaultShader;
 Shader* framebufferShader;
+Shader* uiShader;
 ComputeShader* computeASCIIShader;
 ComputeShader* computeASCIIMaxIndexShader;
 
@@ -86,6 +92,7 @@ mat4   FontModelMat, FontViewMat, FontProjectionMat;
 int gcd(int a, int b); //Greatest Common Divisor
 void ClaculateVertices();
 void InitSideVAOVBO(GLuint &VAO, GLuint &VBO, GLfloat(*vertices)[CubeVertices::ArrSize]);
+void InitUI();
 
 
 void initOpenGL() {
@@ -158,6 +165,7 @@ void initOpenGL() {
 	std::vector<int> computeParams = { (int)fontChar.size(), (int)fontChar.size() / 4, (int)fontChar.size() / 4 };
 	defaultShader = new Shader(texturesVertPath, texturesFragPath, std::vector<int>());
 	framebufferShader = new Shader(framebufferVertPath, framebufferFragPath, fragmentParams);
+	uiShader = new Shader(uiVertPath, uiFragPath, std::vector<int>());
 	computeASCIIShader = new ComputeShader(computeASCIIShaderPath, computeParams);
 	computeASCIIMaxIndexShader = new ComputeShader(computeASCIIMaxIndexShaderPath, std::vector<int>());
 
@@ -171,6 +179,8 @@ void initOpenGL() {
 	InitSideVAOVBO(VAOright, VBOright, &CubeVertices::Right);
 	InitSideVAOVBO(VAOfloor, VBOfloor, &CubeVertices::Floor);
 	InitSideVAOVBO(VAOceiling, VBOceiling, &CubeVertices::Ceiling);
+
+	InitUI();
 
 	//GLuint VAO_FrameBuff, VBO_FrameBuff;
 	{
@@ -389,7 +399,7 @@ void LoadFonts() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	mat4_set_orthographic(&FontProjectionMat, 0, screenWidth, 0, screenHeight, -1, 1);
+	mat4_set_orthographic(&FontProjectionMat, 0, (float)screenWidth, 0, (float)screenHeight, -1.f, 1.f);
 	mat4_set_identity(&FontModelMat);
 	mat4_set_identity(&FontViewMat);
 }
@@ -443,4 +453,48 @@ void InitSideVAOVBO(GLuint &VAO, GLuint &VBO, GLfloat(*vertices)[CubeVertices::A
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0); // Unbind VAO
+}
+
+void InitUI() {
+	//GLuint VAO_ui, VBO_ui;
+	{
+		glGenVertexArrays(1, &VAO_ui);
+		glGenBuffers(1, &VBO_ui);
+		// Bind our Vertex Array Object first, then bind and set our buffers and pointers.
+		glBindVertexArray(VAO_ui);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO_ui);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(UIElements::uiVertices_compass), UIElements::uiVertices_compass, GL_DYNAMIC_DRAW);
+
+		GLint posAttrib = glGetAttribLocation(uiShader->Program, "position");
+		glEnableVertexAttribArray(posAttrib);
+		glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
+		GLint texAttrib = glGetAttribLocation(uiShader->Program, "texcoord");
+		glEnableVertexAttribArray(texAttrib);
+		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+
+		glBindVertexArray(0); // Unbind VAO
+	}
+
+	// Load UI elements
+	// UI Compass
+	{
+		int width, height;
+		unsigned char* image;
+		glGenTextures(1, &uiTexture_compass);
+		glBindTexture(GL_TEXTURE_2D, uiTexture_compass); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+												// Set our texture parameters
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		// Set texture filtering
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// Load, create texture and generate mipmaps
+		image = SOIL_load_image(UIElements::uiLocations_compass, &width, &height, 0, SOIL_LOAD_RGBA);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		SOIL_free_image_data(image);
+		glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
+	}
 }

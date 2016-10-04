@@ -66,6 +66,7 @@ void RenderSubsection(int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight);
 void setDirtyParams();
 void drawBufferShader();
 void DrawTextGL();
+void DrawUIGL();
 
 extern SDL_Event sdlEvent;
 extern Camera camera;

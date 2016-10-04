@@ -20,6 +20,7 @@ public:
     void engine();
 	void ManageEvents();
     void UpdateText();
+	void UpdateUI();
     void WriteOutMiniMap();
 
     void RoomWriteout();

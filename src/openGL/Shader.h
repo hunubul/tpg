@@ -45,6 +45,7 @@ public:
 		const GLchar* vShaderCode = vertexCode.c_str();
 		const GLchar* fShaderCode;
 		std::string completedFragmentCode;
+		// Replace $ with given vector params
 		if (fragmentParams.size() > 0) {
 			std::stringstream tokenizedFragmentCode(fragmentCode);
 			std::string temp;

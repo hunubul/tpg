@@ -208,6 +208,8 @@
     <None Include="bin\shaders\framebuffer.vert" />
     <None Include="bin\shaders\textures.frag" />
     <None Include="bin\shaders\textures.vert" />
+    <None Include="bin\shaders\ui.frag" />
+    <None Include="bin\shaders\ui.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

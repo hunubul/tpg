@@ -135,5 +135,11 @@
     <None Include="bin\shaders\textures.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="bin\shaders\ui.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\shaders\ui.frag">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -66,6 +66,7 @@ GLfloat CubeVertices::Ceiling[] = {
 	-1.0f,  1.0f, -1.0f,  0.0f, 0.0f,
 	-1.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
+GLfloat CubeVertices::nullvalue = 0;
 
 glm::vec3 cubePositions[] = {
 	glm::vec3(0.0f, 0.0f, -8.0)
@@ -79,3 +80,17 @@ glm::vec3 cubePositions[] = {
 	glm::vec3(1.5f, 0.2f, -1.5f),
 	glm::vec3(-1.3f, 1.0f, -1.5f)*/
 };
+
+// UI triangles
+GLfloat UIElements::uiVertices_compass[] = {
+	// First triangle
+	-0.5f,  0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  1.0f, 0.0f,
+	// Second triangle
+	 0.5f, -0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.0f, 1.0f
+};
+
+const char* UIElements::uiLocations_compass = "./images/UI/200px-Compass.png";

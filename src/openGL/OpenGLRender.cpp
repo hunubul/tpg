@@ -309,6 +309,25 @@ void DrawTextGL() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void DrawUIGL() {
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	uiShader->UseProgram();
+
+	// Bind Textures using texture units
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, uiTexture_compass);
+	glUniform1i(glGetUniformLocation(uiShader->Program, "ourTexture1"), 0);
+
+	glBindVertexArray(VAO_ui);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+
+	glDisable(GL_BLEND);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 // Font class
 Font::Font() {
 	fontAlign = ALIGN_LEFT;

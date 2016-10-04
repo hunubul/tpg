@@ -13,6 +13,8 @@ extern glm::vec3 cubePositions[1];
 
 // Cube (with 5 sides)
 class CubeVertices {
+private:
+	static GLfloat nullvalue;
 public:
 	static const int ArrSize = 30;
 	static const int CubeSides = 5;
@@ -29,6 +31,15 @@ public:
 		if (6 * 5 * 2 <= i && i < 6 * 5 * 3) return Right[i%ArrSize];
 		if (6 * 5 * 3 <= i && i < 6 * 5 * 4) return Floor[i%ArrSize];
 		if (6 * 5 * 4 <= i && i < 6 * 5 * 5) return Ceiling[i%ArrSize];
-		return Front[2]; // 0 value
+		return nullvalue; // 0 value
 	}
+};
+
+// UI elements
+class UIElements {
+private:
+	static const int ArrSize = 6*4;
+public:
+	static const char* uiLocations_compass;
+	static GLfloat uiVertices_compass[ArrSize];
 };

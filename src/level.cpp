@@ -136,6 +136,10 @@ void level::engine() {
 		// Draw with framebuffer shader on screen
 		drawBufferShader();
 
+		// Update and render UI
+		UpdateUI();
+		DrawUIGL();
+
 		// Update and render Font text
 		UpdateText();
 		DrawTextGL();
@@ -648,3 +652,7 @@ void level::RoomWriteout() {
 //		break;
 //	}
 //}
+
+void level::UpdateUI() {
+
+}

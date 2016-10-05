@@ -63,12 +63,11 @@ extern GLuint frameDownBuffer, texColorDownBuffer;
 extern GLuint prevframeTexture;
 extern GLuint ASCIITexture, ASCIIBrightness, ASCIIScreenWeights, ASCIIMaxIndexes;
 
-extern GLuint VAO_ui, VBO_ui;
-extern GLuint uiTexture_compass;
-
 extern float *asciiScreenWeights, *asciiMaxIndexes;
 extern unsigned char *downBuffer;
 extern int fontSize;
+
+extern bool initialisedGL;
 
 // Shaders
 extern Shader* defaultShader;

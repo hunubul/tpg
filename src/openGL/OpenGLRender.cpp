@@ -317,10 +317,10 @@ void DrawUIGL() {
 
 	// Bind Textures using texture units
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, uiTexture_compass);
+	glBindTexture(GL_TEXTURE_2D, UIElements::Compass::textureID);
 	glUniform1i(glGetUniformLocation(uiShader->Program, "ourTexture1"), 0);
 
-	glBindVertexArray(VAO_ui);
+	glBindVertexArray(UIElements::Compass::VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 

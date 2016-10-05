@@ -21,16 +21,18 @@ void BeolvasEnemyk();
 
 int main(int argc, char *argv[]) {
 	srand((unsigned int)time(NULL));
-	initOpenGL();
 	try {
+		initOpenGL();
 		BeolvasEnemyk();
 		level asd(17, 17, 8, 16, 80); /* A pálya inicializálása */
 		//chest Chest; /* Chest inicializálás */
 		asd.engine(); /* A fő loop */
+	} catch (const std::string& ex) {
+		FatalError(ex);
+		return EXIT_FAILURE;
 	}
-	catch (const exception& ex) { FatalError(ex.what()); }
 	Exitting();
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 void BeolvasEnemyk() {
@@ -39,7 +41,9 @@ void BeolvasEnemyk() {
 	ADIR atcdir = ANONE;
 	string dir = "";
 	ifstream in("dolgok/enemy.txt");
-	if (in.fail()) FatalError("dolgok/enemy.txt was not found!");
+	if (in.fail()) {
+		throw std::string("dolgok/enemy.txt was not found!");
+	}
 	while (in.good()) {
 		string name = "";
 		getline(in, name, ',');

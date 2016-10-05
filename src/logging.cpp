@@ -6,6 +6,7 @@
 #include "openGL/initOpenGL.h"
 
 using namespace globals;
+bool loggedSomething = false;
 
 // Get current date/time, format is YYYY-MM-DD.HH:mm:ss
 const std::string getCurrentDateTime() {
@@ -20,52 +21,71 @@ const std::string getCurrentDateTime() {
     return buf;
 }
 
-void FatalError(std::string ErrorText) {
-    std::ofstream out(ERR_LOG.c_str(),std::ofstream::out|std::ofstream::app);
+void FatalError(const std::string& ErrorText) {
+	loggedSomething = true;
+    std::ofstream out(ERR_LOG_PATH.c_str(),std::ofstream::out|std::ofstream::app);
     std::string PrintText="[";
     PrintText.append(getCurrentDateTime());
-    PrintText.append("] A fatal error occured!");
-    //TCODConsole::root->clear();
-	std::string windowText = PrintText + " Exitting...";
-    //TCODConsole::root->print(0,0,windowText.c_str());
-    //TCODConsole::root->flush();
-    PrintText.append(" "+ErrorText+" Exitting...");
-	fprintf(stdout,"%s",PrintText.c_str());
+    PrintText.append("] A fatal error occured! - ");
+    PrintText.append(ErrorText);
+	PrintText.append("\nExitting...");
     out << PrintText << std::endl;
+    out.close();
     Exitting();
-    out.close();
-    //TCODConsole::root->waitForKeypress(true);
-    exit(1);
+
+#ifdef DEBUG
+	std::cout << PrintText << std::endl;
+	std::cout << "Press enter to exit...";
+	std::cin.ignore(); // Wait for keypress
+#endif
 }
-void ErrorOccured(std::string ErrorText) {
-    std::ofstream out(ERR_LOG.c_str(),std::ofstream::out|std::ofstream::app);
+void ErrorOccured(const std::string& ErrorText) {
+	loggedSomething = true;
+    std::ofstream out(ERR_LOG_PATH.c_str(),std::ofstream::out|std::ofstream::app);
     std::string PrintText="[";
     PrintText.append(getCurrentDateTime());
-    PrintText.append("] An error occured! "+ErrorText);
-    out << PrintText << std::endl;
-    out.close();
-}
-void Exitting() {
-    std::ofstream out(ERR_LOG.c_str(),std::ofstream::out|std::ofstream::app);
-    std::string PrintText="*******************************************************************";
+    PrintText.append("] An error occured! - ");
+	PrintText.append(ErrorText);
     out << PrintText << std::endl;
     out.close();
 
+#ifdef DEBUG
+	std::cout << PrintText << std::endl;
+#endif
+}
+void DebugLog(const std::string& DebugText) {
+#ifdef DEBUG
+	std::string PrintText = "[";
+	PrintText.append(getCurrentDateTime());
+	PrintText.append("] DEBUG INFO - ");
+	PrintText.append(DebugText);
+	std::cout << PrintText << std::endl;
+#endif
+}
+void Exitting() {
+	if (loggedSomething) {
+		std::ofstream out(ERR_LOG_PATH.c_str(), std::ofstream::out | std::ofstream::app);
+		std::string PrintText = "*******************************************************************";
+		out << PrintText << std::endl;
+		out.close();
+	}
+
 	// Properly de-allocate all resources once they've outlived their purpose
-	glDeleteFramebuffers(1, &frameBuffer);
-	glDeleteVertexArrays(1, &VAO_FrameBuff);
-	glDeleteBuffers(1, &VBO_FrameBuff);
-	glDeleteVertexArrays(1, &VAOfront);
-	glDeleteBuffers(1, &VBOfront);
-	glDeleteVertexArrays(1, &VAOleft);
-	glDeleteBuffers(1, &VBOleft);
-	glDeleteVertexArrays(1, &VAOright);
-	glDeleteBuffers(1, &VBOright);
-	glDeleteVertexArrays(1, &VAOfloor);
-	glDeleteBuffers(1, &VBOfloor);
-	glDeleteVertexArrays(1, &VAOceiling);
-	glDeleteBuffers(1, &VBOceiling);
-	//gl3fonsDelete(fs);
+	if (initialisedGL) {
+		glDeleteFramebuffers(1, &frameBuffer);
+		glDeleteVertexArrays(1, &VAO_FrameBuff);
+		glDeleteBuffers(1, &VBO_FrameBuff);
+		glDeleteVertexArrays(1, &VAOfront);
+		glDeleteBuffers(1, &VBOfront);
+		glDeleteVertexArrays(1, &VAOleft);
+		glDeleteBuffers(1, &VBOleft);
+		glDeleteVertexArrays(1, &VAOright);
+		glDeleteBuffers(1, &VBOright);
+		glDeleteVertexArrays(1, &VAOfloor);
+		glDeleteBuffers(1, &VBOfloor);
+		glDeleteVertexArrays(1, &VAOceiling);
+		glDeleteBuffers(1, &VBOceiling);
+	}
 
 	//Destroy window
 	SDL_DestroyWindow(window);

@@ -17,7 +17,7 @@ namespace globals {
 	static bool limitFPSvsync = false;
 	static bool limitFPSmanually = false;
 	static const int FPS_manual_limit = 60;
-	static const std::string ERR_LOG = "error.log";
+	static const std::string ERR_LOG_PATH = "error.log";
 
 	//extern CHAR_SET CharSet;
 	extern int ConsoleWidthPixels, ConsoleHeightPixels;

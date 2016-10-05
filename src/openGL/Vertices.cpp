@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Vertices.h"
+#include <string>
 
 // Set up our vertex data (and buffer(s)) and attribute pointers
 GLfloat screenVertices[] = {
@@ -82,7 +83,7 @@ glm::vec3 cubePositions[] = {
 };
 
 // UI triangles
-GLfloat UIElements::uiVertices_compass[] = {
+GLfloat UIElements::_GL<UIElements::Compass>::vertices[] = {
 	// First triangle
 	-0.5f,  0.5f,  0.0f, 1.0f,
 	 0.5f,  0.5f,  1.0f, 1.0f,
@@ -92,5 +93,4 @@ GLfloat UIElements::uiVertices_compass[] = {
 	-0.5f, -0.5f,  0.0f, 0.0f,
 	-0.5f,  0.5f,  0.0f, 1.0f
 };
-
-const char* UIElements::uiLocations_compass = "./images/UI/200px-Compass.png";
+std::string UIElements::_GL<UIElements::Compass>::locationPath = "./images/UI/200px-Compass.png";

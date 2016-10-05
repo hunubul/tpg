@@ -12,6 +12,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include <codecvt>
 
 // GL includes
@@ -21,6 +22,7 @@
 #include "Camera.h"
 #include "Vertices.h"
 #include "../globals.h"
+#include "../logging.h"
 
 // GLM Mathemtics
 #include <glm/glm.hpp>
@@ -69,12 +71,10 @@ GLuint frameDownBuffer, texColorDownBuffer;
 GLuint prevframeTexture;
 GLuint ASCIITexture, ASCIIBrightness, ASCIIScreenWeights, ASCIIMaxIndexes;
 
-GLuint VAO_ui, VBO_ui;
-GLuint uiTexture_compass;
-
 float *asciiScreenWeights, *asciiMaxIndexes;
 unsigned char *downBuffer;
 int fontSize;
+bool initialisedGL = false;
 
 // Shaders
 Shader* defaultShader;
@@ -104,8 +104,8 @@ void initOpenGL() {
 	// Initialize video subsystem
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		// Display error message
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-		return;
+		std::string sdlErrorText = SDL_GetError();
+		throw std::string("SDL could not initialize! SDL_Error: " + sdlErrorText); //throw FatalError string
 	}
 
 	// Declare display mode structure to be filled in.
@@ -113,12 +113,18 @@ void initOpenGL() {
 	// Get current display mode of all displays.
 	for (int i = SDL_GetNumVideoDisplays() - 1; i >= 0; i--) {
 		int should_be_zero = SDL_GetCurrentDisplayMode(i, &current);
-		if (should_be_zero != 0)
+		if (should_be_zero != 0) {
 			// In case of error...
-			SDL_Log("Could not get display mode for video display #%d: %s", i, SDL_GetError());
-		else
+			std::ostringstream sdlErrorText;
+			sdlErrorText << "#" << i << ": "  << SDL_GetError();
+			ErrorOccured("Could not get display mode for video display " + sdlErrorText.str());
+		} else {
 			// On success, print the current display mode.
-			SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", i, current.w, current.h, current.refresh_rate);
+			std::ostringstream debugLog;
+			debugLog << "Display #" << i << ": current display mode is ";
+			debugLog << current.w << "x" << current.h << "px @ " << current.refresh_rate << "hz.";
+			DebugLog(debugLog.str());
+		}
 	}
 	screenWidth = current.w;
 	screenHeight = current.h;
@@ -126,14 +132,14 @@ void initOpenGL() {
 	// Create window
 	window = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (window == NULL) {
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-		return;
+		std::string sdlErrorText = SDL_GetError();
+		throw std::string("Window could not be created! SDL_Error: " + sdlErrorText);
 	}
 	// Create OpenGL context
 	glContext = SDL_GL_CreateContext(window);
 	if (glContext == NULL) {
-		printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
-		return;
+		std::string sdlErrorText = SDL_GetError();
+		throw std::string("OpenGL context could not be created! SDL_Error: " + sdlErrorText);
 	}
 
 	if (globals::limitFPSvsync)
@@ -142,13 +148,27 @@ void initOpenGL() {
 		SDL_GL_SetSwapInterval(0); //disable vsync
 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
 
 	// Initialize GLEW to setup the OpenGL Function pointers
 	glewExperimental = GL_TRUE;
 	glewInit();
 	GLenum err = glGetError(); //Catch error code 0x500 (1280)
 
-							   // Define the viewport dimensions
+	// Check OpenGL version
+	GLint major, minor;
+	glGetIntegerv(GL_MAJOR_VERSION, &major);
+	glGetIntegerv(GL_MINOR_VERSION, &minor);
+	SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM, "OpenGL version: %d.%d", major, minor);
+	if (major < 4 || (major==4 && minor<2) || !GLEW_ARB_compute_shader ) {
+		throw std::string(
+			"OpenGL compute_shader is not supported!\n"
+			"Try to update your video card drivers "
+			"or try to set the application .exe to high performance in your video card driver software"
+		);
+	}
+
+	// Define the viewport dimensions
 	glViewport(0, 0, screenWidth, screenHeight);
 
 	// Setup some OpenGL options
@@ -163,6 +183,7 @@ void initOpenGL() {
 		(int)screenWidth, (int)screenHeight, (int)FontX, (int)FontY, (int)fontChar.size(), MAX_NUM_OF_DIRTY_BLOCKS
 	};
 	std::vector<int> computeParams = { (int)fontChar.size(), (int)fontChar.size() / 4, (int)fontChar.size() / 4 };
+
 	defaultShader = new Shader(texturesVertPath, texturesFragPath, std::vector<int>());
 	framebufferShader = new Shader(framebufferVertPath, framebufferFragPath, fragmentParams);
 	uiShader = new Shader(uiVertPath, uiFragPath, std::vector<int>());
@@ -211,7 +232,7 @@ void initOpenGL() {
 		unsigned char* image;
 		glGenTextures(1, &texture1);
 		glBindTexture(GL_TEXTURE_2D, texture1); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
-												// Set our texture parameters
+		// Set our texture parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		// Set texture filtering
@@ -357,6 +378,8 @@ void initOpenGL() {
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+
+	initialisedGL = true;
 }
 
 void LoadFonts() {
@@ -455,16 +478,17 @@ void InitSideVAOVBO(GLuint &VAO, GLuint &VBO, GLfloat(*vertices)[CubeVertices::A
 	glBindVertexArray(0); // Unbind VAO
 }
 
-void InitUI() {
+template <class UIElement>
+void InitUItemp( ) {
 	//GLuint VAO_ui, VBO_ui;
 	{
-		glGenVertexArrays(1, &VAO_ui);
-		glGenBuffers(1, &VBO_ui);
+		glGenVertexArrays(1, &UIElement::VAO);
+		glGenBuffers(1, &UIElement::VBO);
 		// Bind our Vertex Array Object first, then bind and set our buffers and pointers.
-		glBindVertexArray(VAO_ui);
+		glBindVertexArray(UIElement::VAO);
 
-		glBindBuffer(GL_ARRAY_BUFFER, VBO_ui);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(UIElements::uiVertices_compass), UIElements::uiVertices_compass, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, UIElement::VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(UIElement::vertices), UIElement::vertices, GL_DYNAMIC_DRAW);
 
 		GLint posAttrib = glGetAttribLocation(uiShader->Program, "position");
 		glEnableVertexAttribArray(posAttrib);
@@ -482,19 +506,23 @@ void InitUI() {
 	{
 		int width, height;
 		unsigned char* image;
-		glGenTextures(1, &uiTexture_compass);
-		glBindTexture(GL_TEXTURE_2D, uiTexture_compass); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
-												// Set our texture parameters
+		glGenTextures(1, &UIElement::textureID);
+		glBindTexture(GL_TEXTURE_2D, UIElement::textureID); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+		// Set our texture parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		// Set texture filtering
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// Load, create texture and generate mipmaps
-		image = SOIL_load_image(UIElements::uiLocations_compass, &width, &height, 0, SOIL_LOAD_RGBA);
+		image = SOIL_load_image(UIElement::locationPath.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		SOIL_free_image_data(image);
 		glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 	}
+}
+
+void InitUI() {
+	InitUItemp<UIElements::Compass>( );
 }

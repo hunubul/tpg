@@ -8,6 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <string>
+
 extern GLfloat screenVertices[6*4];
 extern glm::vec3 cubePositions[1];
 
@@ -39,7 +41,20 @@ public:
 class UIElements {
 private:
 	static const int ArrSize = 6*4;
+
+	template <typename T>
+	class _GL {
+	public:
+		static GLuint VAO, VBO;
+		static GLuint textureID;
+		static std::string locationPath;
+		static GLfloat vertices[ArrSize];
+	};
 public:
-	static const char* uiLocations_compass;
-	static GLfloat uiVertices_compass[ArrSize];
+	class Compass : public _GL<Compass> {	};
 };
+
+
+template <typename T> GLuint UIElements::_GL<T>::VAO = 0;
+template <typename T> GLuint UIElements::_GL<T>::VBO = 0;
+template <typename T> GLuint UIElements::_GL<T>::textureID = 0;

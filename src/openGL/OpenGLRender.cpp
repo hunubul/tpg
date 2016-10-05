@@ -23,6 +23,7 @@
 #include "Camera.h"
 #include "Vertices.h"
 #include "../globals.h"
+#include "Font.h"
 
 // GLM Mathemtics
 #include <glm/glm.hpp>
@@ -31,12 +32,9 @@
 
 // Other Libs
 #include <SOIL.h>
-#include "freetype-gl.h"
-#include "text-buffer.h"
 #include "../definitions/Colors.h"
 
 SDL_Event sdlEvent;
-std::map<TEXT_TYPE, Font> texts;
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -150,7 +148,7 @@ void render3Dmodels() {
 			0, 0, screenWidth / FontX, screenHeight / FontY,
 			GL_COLOR_BUFFER_BIT,
 			GL_LINEAR
-			);
+		);
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -269,18 +267,15 @@ void DrawTextGL() {
 	pen.y = (float)screenHeight;
 	text_buffer_printf(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), NULL);
 
-	static bool asdasd = true;
-	if (asdasd) {
-		for (enum TEXT_TYPE i = MINIMAP_TEXT; i < (int)texts.size(); i = (TEXT_TYPE)(i+1)) {
-			pen.x = texts[i].pen_x;
-			pen.y = texts[i].pen_y;
-			FontBuffer->origin = { pen.x ,pen.y};
-			for (size_t j = 0; j < texts[i].text.size(); j++) {
-				text_buffer_printf(FontBuffer, &pen, &texts[i].text[j].FontMarkup, texts[i].text[j].text.c_str(), NULL);
-			}
-			//text_buffer_align(FontBuffer, &pen, texts[i].fontAlign);
+
+	for (enum TEXT_TYPE i = MINIMAP_TEXT; i < (int)texts.size(); i = (TEXT_TYPE)(i+1)) {
+		pen.x = texts[i].pen_x;
+		pen.y = texts[i].pen_y;
+		FontBuffer->origin = { pen.x ,pen.y};
+		for (size_t j = 0; j < texts[i].text.size(); j++) {
+			text_buffer_printf(FontBuffer, &pen, &texts[i].text[j].FontMarkup, texts[i].text[j].text.c_str(), NULL);
 		}
-		//asdasd = false;
+		//text_buffer_align(FontBuffer, &pen, texts[i].fontAlign);
 	}
 
 	
@@ -326,124 +321,4 @@ void DrawUIGL() {
 
 	glDisable(GL_BLEND);
 	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-// Font class
-Font::Font() {
-	fontAlign = ALIGN_LEFT;
-	pen_x = pen_y = 0;
-	fontFamily = NULL;
-	idx = 0;
-}
-Font::Font(char* FontPath) {
-	fontAlign = ALIGN_LEFT;
-	pen_x = pen_y = 0;
-	Font::fontFamily = FontPath;
-	textType newMarkup = textType(Font::fontFamily);
-	newMarkup.FontMarkup.foreground_color = FONTCOLOR_WHITE;
-	text.push_back(newMarkup);
-	idx = 0;
-}
-Font::Font(char* FontPath, const vec4& color) {
-	fontAlign = ALIGN_LEFT;
-	pen_x = pen_y = 0;
-	Font::fontFamily = FontPath;
-	textType newMarkup = textType(Font::fontFamily);
-	newMarkup.FontMarkup.foreground_color = color;
-	text.push_back(newMarkup);
-	idx = 0;
-}
-Font::Font(char* FontPath, float r, float g, float b) {
-	fontAlign = ALIGN_LEFT;
-	pen_x = pen_y = 0;
-	Font::fontFamily = FontPath;
-	textType newMarkup = textType(Font::fontFamily);
-	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, 1.0 };
-	text.push_back(newMarkup);
-	idx = 0;
-}
-Font::Font(char* FontPath, float r, float g, float b, float a) {
-	fontAlign = ALIGN_LEFT;
-	pen_x = pen_y = 0;
-	Font::fontFamily = FontPath;
-	textType newMarkup = textType(Font::fontFamily);
-	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, a / 255 };
-	text.push_back(newMarkup);
-	idx = 0;
-}
-
-void Font::changeFontColor(const vec4& color) {
-	textType newMarkup("", text[idx].FontMarkup);
-	newMarkup.FontMarkup.foreground_color = color;
-	text.push_back(newMarkup);
-	idx++;
-}
-void Font::changeFontColor(float r, float g, float b) {
-	textType newMarkup("", text[idx].FontMarkup);
-	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, 1.0 };
-	text.push_back(newMarkup);
-	idx++;
-}
-void Font::changeFontColor(float r, float g, float b, float a) {
-	textType newMarkup("",text[idx].FontMarkup);
-	newMarkup.FontMarkup.foreground_color = { r / 255, g / 255, b / 255, a / 255 };
-	text.push_back(newMarkup);
-	idx++;
-}
-void Font::changeBackgroundColor(const vec4& color) {
-	textType newMarkup("", text[idx].FontMarkup);
-	newMarkup.FontMarkup.background_color = color;
-	text.push_back(newMarkup);
-	idx++;
-}
-void Font::changeBackgroundColor(float r, float g, float b) {
-	textType newMarkup("", text[idx].FontMarkup);
-	newMarkup.FontMarkup.background_color = { r / 255, g / 255, b / 255, 1.0 };
-	text.push_back(newMarkup);
-	idx++;
-}
-void Font::changeBackgroundColor(float r, float g, float b, float a) {
-	textType newMarkup("", text[idx].FontMarkup);
-	newMarkup.FontMarkup.background_color = { r / 255, g / 255, b / 255, a / 255 };
-	text.push_back(newMarkup);
-	idx++;
-}
-void Font::setFontSize(float fontSize) {
-	text[idx].FontMarkup.size = fontSize;
-	//text[idx].FontMarkup.font = font_manager_get_from_markup(FontBuffer->manager, &text[idx].FontMarkup);
-}
-void Font::append(const std::string& str) {
-	text[idx].text.append(str);
-}
-void Font::NewLine() {
-	Font::append("\n");
-}
-
-Font::textType::textType(char* fontFamily) {
-	text = "";
-
-	FontMarkup.family = fontFamily;
-	FontMarkup.size = 128.0;
-	FontMarkup.bold = 0;
-	FontMarkup.italic = 0;
-	FontMarkup.rise = 0.0;
-	FontMarkup.spacing = 0.0;
-	FontMarkup.gamma = 1.0;
-	FontMarkup.foreground_color = FONTCOLOR_BLACK;
-	FontMarkup.background_color = FONTCOLOR_NONE;
-	FontMarkup.outline = 0;
-	FontMarkup.outline_color = FONTCOLOR_BLACK;
-	FontMarkup.underline = 0;
-	FontMarkup.underline_color = FONTCOLOR_BLACK;
-	FontMarkup.overline = 0;
-	FontMarkup.overline_color = FONTCOLOR_BLACK;
-	FontMarkup.strikethrough = 0;
-	FontMarkup.strikethrough_color = FONTCOLOR_BLACK;
-	FontMarkup.font = 0;// font_manager_get_from_markup(FontBuffer->manager, &FontMarkup);
-	//text_buffer_add_text(FontBuffer, &pen, &FontMarkup, "1234567890", 10);
-}
-
-Font::textType::textType(const std::string& text_in, const markup_t& FontMarkup_in) {
-	text = text_in;
-	FontMarkup = FontMarkup_in;
 }

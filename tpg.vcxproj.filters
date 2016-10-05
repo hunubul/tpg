@@ -65,6 +65,9 @@
     <ClCompile Include="src\szoba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\openGL\Font.cpp">
+      <Filter>Source Files\openGL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h">
@@ -114,6 +117,9 @@
     </ClInclude>
     <ClInclude Include="src\definitions\Colors.h">
       <Filter>Header Files\definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\openGL\Font.h">
+      <Filter>Header Files\openGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -38,6 +38,9 @@ void initOpenGL();
 
 //Font functions
 void DrawBox(GLint x0, GLint y0, GLint x1, GLint y1);
+// Box starts from left-upper -> right-upper -> right-lower -> left-lower
+template <class UIElement>
+void FixUI_Vertices(const vec2 box[4]);
 
 // extern variables
 extern SDL_Window* window;

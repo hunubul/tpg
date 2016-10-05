@@ -18,46 +18,6 @@
 #include "text-buffer.h"
 #include "mat4.h"
 
-class Font {
-private:
-	int idx;
-public:
-	class textType {
-	public:
-		std::string text;
-		markup_t FontMarkup;
-		textType(char* fontFamily);
-		textType(const std::string& text_in, const markup_t& FontMarkup);
-	};
-	std::vector<textType> text;
-	enum Align fontAlign;
-	float pen_x, pen_y;
-	//float origin_x, origin_y;
-	//bool shadow;
-	char* fontFamily;
-
-	Font();
-	Font(char* FontPath);
-	Font(char* FontPath, const vec4& color);
-	Font(char* FontPath, float r, float g, float b);
-	Font(char* FontPath, float r, float g, float b, float a);
-
-	void changeFontColor(const vec4& color);
-	void changeFontColor(float r, float g, float b);
-	void changeFontColor(float r, float g, float b, float a);
-	void changeBackgroundColor(const vec4& color);
-	void changeBackgroundColor(float r, float g, float b);
-	void changeBackgroundColor(float r, float g, float b, float a);
-	void setFontSize(float fontSize);
-	void append(const std::string& str);
-
-	void NewLine();
-};
-
-// Text Vector for writing to screen
-enum TEXT_TYPE { MINIMAP_TEXT=0, ARROW_TEXT };
-extern std::map<TEXT_TYPE, Font> texts;
-
 // Function prototypes
 void Do_Movement();
 void frameLimiter();

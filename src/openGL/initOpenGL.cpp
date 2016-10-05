@@ -148,7 +148,6 @@ void initOpenGL() {
 		SDL_GL_SetSwapInterval(0); //disable vsync
 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
 
 	// Initialize GLEW to setup the OpenGL Function pointers
 	glewExperimental = GL_TRUE;
@@ -159,7 +158,9 @@ void initOpenGL() {
 	GLint major, minor;
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
-	SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM, "OpenGL version: %d.%d", major, minor);
+	std::ostringstream debugLog;
+	debugLog << "OpenGL version: " << major << "." << minor;
+	DebugLog(debugLog.str());
 	if (major < 4 || (major==4 && minor<2) || !GLEW_ARB_compute_shader ) {
 		throw std::string(
 			"OpenGL compute_shader is not supported!\n"
@@ -523,6 +524,41 @@ void InitUItemp( ) {
 	}
 }
 
+template <class UIElement>
+void FixVertPosition(size_t i) {
+	for (int j = 0; j<2; j++) {
+		UIElement::vertices[i * 4 + j] *= 2.0f;
+		UIElement::vertices[i * 4 + j] -= 1.0f;
+	}
+}
+// Box starts from left-upper -> right-upper -> right-lower -> left-lower
+template <class UIElement>
+void FixUI_Vertices(const vec2 box[4]) {
+	// First triangle (3 vertices)
+	for (int i = 0; i<3; i++) {
+		UIElement::vertices[i * 4 + 0] = box[i].x;
+		UIElement::vertices[i * 4 + 1] = box[i].y;
+		FixVertPosition<UIElement>(i);
+	}
+	// Second triangle
+	UIElement::vertices[3 * 4 + 0] = box[2].x;
+	UIElement::vertices[3 * 4 + 1] = box[2].y;
+	FixVertPosition<UIElement>(3);
+	UIElement::vertices[4 * 4 + 0] = box[3].x;
+	UIElement::vertices[4 * 4 + 1] = box[3].y;
+	FixVertPosition<UIElement>(4);
+	UIElement::vertices[5 * 4 + 0] = box[0].x;
+	UIElement::vertices[5 * 4 + 1] = box[0].y;
+	FixVertPosition<UIElement>(5);
+}
+
 void InitUI() {
+	vec2 boxCompass[4] = {
+		{ 0.0f,  1.0f },
+		{ 0.5f,  1.0f },
+		{ 0.5f,  0.5f },
+		{ 0.0f,  0.5f }
+	};
+	FixUI_Vertices<UIElements::Compass>( boxCompass );
 	InitUItemp<UIElements::Compass>( );
 }

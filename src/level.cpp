@@ -14,6 +14,7 @@
 #include "harc.h"
 #include "openGL/initOpenGL.h"
 #include "openGL/OpenGLRender.h"
+#include "openGL/Font.h"
 #include "definitions/Colors.h"
 
 using namespace globals;
@@ -136,12 +137,12 @@ void level::engine() {
 		// Draw with framebuffer shader on screen
 		drawBufferShader();
 
-		// Update and render UI
-		UpdateUI();
-		DrawUIGL();
-
-		// Update and render Font text
+		// Update Font text and UI
 		UpdateText();
+		UpdateUI();
+
+		// render UI and Font text
+		DrawUIGL();
 		DrawTextGL();
 
 		// Swap the buffers
@@ -271,6 +272,7 @@ void level::WriteOutMiniMap() {
 	miniMap.setFontSize(11.0f);
 	miniMap.pen_x = 0.0f;
 	miniMap.pen_y = (float)screenHeight;
+	miniMap.changeDescender(0.0f);
 	//miniMap.changeBackgroundColor(FONTCOLOR_BLACK);
 	for (int j = 0; j < MaxRoomX; j++) {
 		for (int i = 0; i < MaxRoomY; i++) {
@@ -304,6 +306,7 @@ void level::WriteOutMiniMap() {
 		miniMap.append("-"); //═
 	}
 	miniMap.append("-"); //╝
+	miniMap.Finish();
 	texts[MINIMAP_TEXT] = miniMap;
 }
 void level::writearrow() {
@@ -330,6 +333,7 @@ void level::writearrow() {
 		arrow.append("   ");
 		break;
 	}
+	arrow.Finish();
 	texts[ARROW_TEXT] = arrow;
 }
 void level::RoomWriteout() {
@@ -654,5 +658,21 @@ void level::RoomWriteout() {
 //}
 
 void level::UpdateUI() {
+	static bool asd = true;
+	if (asd) {
+		if ( texts.find(MINIMAP_TEXT) != texts.end() ) {
+			vec2 boxCompass[4] = {
+				{ 0.0f,  1.0f },
+				{ texts[MINIMAP_TEXT].box_x / screenWidth,  1.0f },
+				{ texts[MINIMAP_TEXT].box_x / screenWidth,  1.0f - texts[MINIMAP_TEXT].box_y / screenHeight },
+				{ 0.0f,  1.0f - texts[MINIMAP_TEXT].box_y / screenHeight }
+			};
+			FixUI_Vertices<UIElements::Compass>(boxCompass);
 
+			glBindBuffer(GL_ARRAY_BUFFER, UIElements::Compass::VBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(UIElements::Compass::vertices), UIElements::Compass::vertices);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+		asd = false;
+	}
 }

@@ -85,12 +85,12 @@ glm::vec3 cubePositions[] = {
 // UI triangles
 GLfloat UIElements::_GL<UIElements::Compass>::vertices[] = {
 	// First triangle
-	-0.5f,  0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  1.0f, 0.0f,
+	 0.0f,  1.0f,  0.0f, 1.0f,
+	 0.5f,  1.0f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  1.0f, 0.0f,
 	// Second triangle
-	 0.5f, -0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.0f, 1.0f
+	 0.5f,  0.5f,  1.0f, 0.0f,
+	 0.0f,  0.5f,  0.0f, 0.0f,
+	 0.0f,  1.0f,  0.0f, 1.0f
 };
 std::string UIElements::_GL<UIElements::Compass>::locationPath = "./images/UI/200px-Compass.png";

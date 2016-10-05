@@ -179,6 +179,7 @@
     <ClCompile Include="src\logging.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\openGL\ASCII.cpp" />
+    <ClCompile Include="src\openGL\Font.cpp" />
     <ClCompile Include="src\openGL\initOpenGL.cpp" />
     <ClCompile Include="src\openGL\OpenGLRender.cpp" />
     <ClCompile Include="src\openGL\Vertices.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\logging.h" />
     <ClInclude Include="src\openGL\ASCII.h" />
     <ClInclude Include="src\openGL\Camera.h" />
+    <ClInclude Include="src\openGL\Font.h" />
     <ClInclude Include="src\openGL\initOpenGL.h" />
     <ClInclude Include="src\openGL\OpenGLRender.h" />
     <ClInclude Include="src\openGL\Shader.h" />

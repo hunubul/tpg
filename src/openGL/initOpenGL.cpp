@@ -35,6 +35,7 @@
 #include "vertex-buffer.h"
 #include "text-buffer.h"
 #include "mat4.h"
+#include "Font.h"
 
 SDL_Window* window;
 SDL_GLContext glContext;
@@ -54,8 +55,6 @@ std::string fontShadersVertPath = "./shaders/FontShaders/text.vert";
 std::string fontShadersFragPath = "./shaders/FontShaders/text.frag";
 std::string uiVertPath = "./shaders/ui.vert";
 std::string uiFragPath = "./shaders/ui.frag";
-char* fontLuckiestGuyPath = "./fonts/LuckiestGuy.ttf";
-char* fontZigPath = "./fonts/zig.ttf";
 
 // OpenGL VAO, VBO
 GLuint VAO_FrameBuff, VBO_FrameBuff;
@@ -85,9 +84,8 @@ ComputeShader* computeASCIIMaxIndexShader;
 
 // Function prototypes
 void LoadFonts();
-// Font global variables
-text_buffer_t * FontBuffer;
 mat4   FontModelMat, FontViewMat, FontProjectionMat;
+text_buffer_t* generalTextBuffer;
 
 int gcd(int a, int b); //Greatest Common Divisor
 void ClaculateVertices();
@@ -384,39 +382,14 @@ void initOpenGL() {
 }
 
 void LoadFonts() {
-	// Load truetype fonts directly.
-	FontBuffer = text_buffer_new(LCD_FILTERING_OFF,
+	generalTextBuffer = text_buffer_new(
+		LCD_FILTERING_OFF,
 		fontShadersVertPath.c_str(),
-		fontShadersFragPath.c_str());
+		fontShadersFragPath.c_str()
+	);
 
-	/*vec4 black = { { 0.0, 0.0, 0.0, 1.0 } };
-	vec4 none = { { 1.0, 1.0, 1.0, 0.0 } };
-
-	markup_t FontMarkup;
-
-	FontMarkup.family = fontZigPath;
-	FontMarkup.size = 128.0;
-	FontMarkup.bold = 0;
-	FontMarkup.italic = 0;
-	FontMarkup.rise = 0.0;
-	FontMarkup.spacing = 0.0;
-	FontMarkup.gamma = 1.0;
-	FontMarkup.foreground_color = black;
-	FontMarkup.background_color = none;
-	FontMarkup.underline = 0;
-	FontMarkup.underline_color = black;
-	FontMarkup.overline = 0;
-	FontMarkup.overline_color = black;
-	FontMarkup.strikethrough = 0;
-	FontMarkup.strikethrough_color = black;
-	FontMarkup.font = 0;
-
-	vec2 pen = { { 0, 0 } };
-	FontMarkup.font = font_manager_get_from_markup(FontBuffer->manager, &FontMarkup);
-	text_buffer_add_text(FontBuffer, &pen, &FontMarkup, "1234567890", 10);*/
-
-	glGenTextures(1, &FontBuffer->manager->atlas->id);
-	glBindTexture(GL_TEXTURE_2D, FontBuffer->manager->atlas->id);
+	glGenTextures(1, &generalTextBuffer->manager->atlas->id);
+	glBindTexture(GL_TEXTURE_2D, generalTextBuffer->manager->atlas->id);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -426,6 +399,10 @@ void LoadFonts() {
 	mat4_set_orthographic(&FontProjectionMat, 0, (float)screenWidth, 0, (float)screenHeight, -1.f, 1.f);
 	mat4_set_identity(&FontModelMat);
 	mat4_set_identity(&FontViewMat);
+
+	for (enum TEXT_TYPE i = MINIMAP_TEXT; i < (int)texts.size(); i = (TEXT_TYPE)(i + 1)) {
+		texts[i] = Font();
+	}
 }
 
 /// Draws a black recangle, left-lower vertex: (x0,y0), right-upper vertex: (x1,y1)

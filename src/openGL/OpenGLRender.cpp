@@ -248,60 +248,73 @@ void drawBufferShader() {
 void DrawTextGL() {
 	//DrawBox(0,0,screenWidth,200);
 
-	text_buffer_clear(FontBuffer);
-
-	Font::textType fontFPS(fontZigPath);
-	
-	vec2 pen = { {0,0} };
-	fontFPS.FontMarkup.size = 36.0f;
-	int dTime = globals::FPS_manual_limit;
-	if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
-	std::string dTimeStr = std::to_string(dTime);
-	fontFPS.FontMarkup.foreground_color = FONTCOLOR_BLACK;
-	pen.x = (float)screenWidth - 30* dTimeStr.size();
-	pen.y = (float)screenHeight - 3;
-	text_buffer_printf(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), NULL);
-
-	fontFPS.FontMarkup.foreground_color = FONTCOLOR_GREEN;
-	pen.x = (float)screenWidth - 30 * dTimeStr.size() - 3;
-	pen.y = (float)screenHeight;
-	text_buffer_printf(FontBuffer, &pen, &fontFPS.FontMarkup, dTimeStr.c_str(), NULL);
-
-
-	for (enum TEXT_TYPE i = MINIMAP_TEXT; i < (int)texts.size(); i = (TEXT_TYPE)(i+1)) {
-		pen.x = texts[i].pen_x;
-		pen.y = texts[i].pen_y;
-		FontBuffer->origin = { pen.x ,pen.y};
-		for (size_t j = 0; j < texts[i].text.size(); j++) {
-			text_buffer_printf(FontBuffer, &pen, &texts[i].text[j].FontMarkup, texts[i].text[j].text.c_str(), NULL);
-		}
-		//text_buffer_align(FontBuffer, &pen, texts[i].fontAlign);
-	}
-
-	
-	glBindTexture(GL_TEXTURE_2D, FontBuffer->manager->atlas->id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, FontBuffer->manager->atlas->width,
-		FontBuffer->manager->atlas->height, 0, GL_RED, GL_UNSIGNED_BYTE,
-		FontBuffer->manager->atlas->data);
-	
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glUseProgram(FontBuffer->shader);
+	glBindTexture(GL_TEXTURE_2D, generalTextBuffer->manager->atlas->id);
+	glTexImage2D(
+		GL_TEXTURE_2D, 0, GL_RED, generalTextBuffer->manager->atlas->width,
+		generalTextBuffer->manager->atlas->height, 0, GL_RED, GL_UNSIGNED_BYTE,
+		generalTextBuffer->manager->atlas->data
+	);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glUseProgram(generalTextBuffer->shader);
 	{
-		glUniformMatrix4fv(glGetUniformLocation(FontBuffer->shader, "model"),
+		glUniformMatrix4fv(glGetUniformLocation(generalTextBuffer->shader, "model"),
 			1, 0, FontModelMat.data);
-		glUniformMatrix4fv(glGetUniformLocation(FontBuffer->shader, "view"),
+		glUniformMatrix4fv(glGetUniformLocation(generalTextBuffer->shader, "view"),
 			1, 0, FontViewMat.data);
-		glUniformMatrix4fv(glGetUniformLocation(FontBuffer->shader, "projection"),
+		glUniformMatrix4fv(glGetUniformLocation(generalTextBuffer->shader, "projection"),
 			1, 0, FontProjectionMat.data);
-		text_buffer_render(FontBuffer);
+	}
+
+	vec2 pen = { {0,0} };
+	text_buffer_clear(generalTextBuffer);
+	{
+		textBuffer::textType fontFPS(fontZigPath);
+
+		fontFPS.markup.size = 36.0f;
+		int dTime = globals::FPS_manual_limit;
+		if (deltaTime != 0) dTime = (int)(1.0 / deltaTime);
+		std::string dTimeStr = std::to_string(dTime);
+		fontFPS.markup.foreground_color = FONTCOLOR_BLACK;
+		pen.x = (float)screenWidth - 30 * dTimeStr.size();
+		pen.y = (float)screenHeight - 3;
+		text_buffer_printf(generalTextBuffer, &pen, &fontFPS.markup, dTimeStr.c_str(), NULL);
+
+		fontFPS.markup.foreground_color = FONTCOLOR_GREEN;
+		pen.x = (float)screenWidth - 30 * dTimeStr.size() - 3;
+		pen.y = (float)screenHeight;
+		text_buffer_printf(generalTextBuffer, &pen, &fontFPS.markup, dTimeStr.c_str(), NULL);
+	}
+	text_buffer_render(generalTextBuffer);
+
+	for (enum TEXT_TYPE i = MINIMAP_TEXT; i < (int)texts.size(); i = (TEXT_TYPE)(i+1)) {
+		pen.x = texts[i].pen_x;
+		pen.y = texts[i].pen_y;
+		for (size_t j = 0; j < texts[i].textBuffers.size(); j++) {
+
+			text_buffer_clear(texts[i].textBuffers[j].buffer);
+
+			texts[i].textBuffers[j].buffer->origin = { pen.x ,pen.y};
+			for (size_t k = 0; k < texts[i].textBuffers[j].type.size(); k++) {
+				text_buffer_printf(
+					texts[i].textBuffers[j].buffer, &pen,
+					&texts[i].textBuffers[j].type[k].markup,
+					texts[i].textBuffers[j].type[k].text.c_str(), NULL
+				);
+			}
+
+			text_buffer_render(texts[i].textBuffers[j].buffer);
+
+		}
+		//text_buffer_align(FontBuffer, &pen, texts[i].fontAlign);
 	}
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void DrawUIGL() {

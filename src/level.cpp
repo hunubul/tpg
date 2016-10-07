@@ -267,22 +267,21 @@ void level::UpdateText() {
 	}
 }
 void level::WriteOutMiniMap() {
-	Font miniMap(fontZigPath, FONTCOLOR_WHITE);
-	miniMap.fontAlign = ALIGN_LEFT;
-	miniMap.setFontSize(11.0f);
-	miniMap.pen_x = 0.0f;
-	miniMap.pen_y = (float)screenHeight;
-	miniMap.changeDescender(0.0f);
+	texts[MINIMAP_TEXT].Clear(fontZigPath, 11.0f, FONTCOLOR_WHITE);
+	texts[MINIMAP_TEXT].fontAlign = ALIGN_LEFT;
+	texts[MINIMAP_TEXT].pen_x = 0.0f;
+	texts[MINIMAP_TEXT].pen_y = (float)screenHeight;
+	texts[MINIMAP_TEXT].setDescender(0.0f);
 	//miniMap.changeBackgroundColor(FONTCOLOR_BLACK);
 	for (int j = 0; j < MaxRoomX; j++) {
 		for (int i = 0; i < MaxRoomY; i++) {
 			if (posX == i&&posY == j) {
 				FOV[i][j] = 1;
-				miniMap.changeFontColor(FONTCOLOR_RED);
+				texts[MINIMAP_TEXT].changeFontColor(FONTCOLOR_RED);
 			}
 #ifdef DEBUG
-			if (Map[i][j] == 1) miniMap.append("#");
-			else miniMap.append(" ");
+			if (Map[i][j] == 1) texts[MINIMAP_TEXT].append("#");
+			else texts[MINIMAP_TEXT].append(" ");
 #else
 			if (FOV[i][j] == 1) {
 				miniMap.append("#");
@@ -295,46 +294,47 @@ void level::WriteOutMiniMap() {
 			else if (TCODConsole::root->getChar(i, j) != '?') miniMap.append(" ");
 #endif // DEBUG
 			if (posX == i&&posY == j) {
-				miniMap.changeFontColor(FONTCOLOR_WHITE);
+				texts[MINIMAP_TEXT].changeFontColor(FONTCOLOR_WHITE);
 			}
 		}
-		miniMap.append("|"); //║
-		miniMap.NewLine();
+		texts[MINIMAP_TEXT].append("|"); //║
+		texts[MINIMAP_TEXT].NewLine();
 	}
 	// Drawing frame
 	for (int i = 0; i < MaxRoomX; i++) {
-		miniMap.append("-"); //═
+		texts[MINIMAP_TEXT].append("-"); //═
 	}
-	miniMap.append("-"); //╝
-	miniMap.Finish();
-	texts[MINIMAP_TEXT] = miniMap;
+	texts[MINIMAP_TEXT].append("-"); //╝
+	texts[MINIMAP_TEXT].Finish();
 }
 void level::writearrow() {
-	Font arrow(fontZigPath, FONTCOLOR_WHITE);
-	arrow.fontAlign = ALIGN_CENTER;
-	arrow.setFontSize(12.0f);
-	arrow.pen_x = 200.0f;
-	arrow.pen_y = (float)screenHeight;
+	texts[ARROW_TEXT].Clear(fontZigPath, 30.0f, FONTCOLOR_WHITE);
+	texts[ARROW_TEXT].fontAlign = ALIGN_CENTER;
+	texts[ARROW_TEXT].pen_x = 200.0f;
+	texts[ARROW_TEXT].pen_y = (float)screenHeight;
 	switch (most) {
 	case UP:
-		arrow.append("/\\\n");
-		arrow.append("|| ");
+		texts[ARROW_TEXT].append("/\\");
+		texts[ARROW_TEXT].NewLine();
+		texts[ARROW_TEXT].append("|| ");
 		break;
 	case RIGHT:
-		arrow.append("-->\n");
-		arrow.append("  ");
+		texts[ARROW_TEXT].append("-->");
+		texts[ARROW_TEXT].NewLine();
+		texts[ARROW_TEXT].append("  ");
 		break;
 	case DOWN:
-		arrow.append("|| ");
-		arrow.append("\\/\n");
+		texts[ARROW_TEXT].append("|| ");
+		texts[ARROW_TEXT].NewLine();
+		texts[ARROW_TEXT].append("\\/");
 		break;
 	case LEFT:
-		arrow.append("<--\n");
-		arrow.append("   ");
+		texts[ARROW_TEXT].append("<--");
+		texts[ARROW_TEXT].NewLine();
+		texts[ARROW_TEXT].append("   ");
 		break;
 	}
-	arrow.Finish();
-	texts[ARROW_TEXT] = arrow;
+	texts[ARROW_TEXT].Finish();
 }
 void level::RoomWriteout() {
 	//CONSOLEINFO Con;

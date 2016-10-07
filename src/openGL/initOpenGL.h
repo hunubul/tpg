@@ -49,7 +49,7 @@ extern const int MAX_NUM_OF_DIRTY_BLOCKS;
 
 // Font variables
 extern mat4   FontModelMat, FontViewMat, FontProjectionMat;
-extern text_buffer_t * FontBuffer;
+extern text_buffer_t* generalTextBuffer;
 extern char* fontLuckiestGuyPath;
 extern char* fontZigPath;
 

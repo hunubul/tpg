@@ -159,7 +159,7 @@ void initOpenGL() {
 	std::ostringstream debugLog;
 	debugLog << "OpenGL version: " << major << "." << minor;
 	DebugLog(debugLog.str());
-	if (major < 4 || (major==4 && minor<2) || !GLEW_ARB_compute_shader ) {
+	if (major < 4 || (major==4 && minor<2) || !glewGetExtension("GL_ARB_compute_shader") ) {
 		throw std::string(
 			"OpenGL compute_shader is not supported!\n"
 			"Try to update your video card drivers "

@@ -124,15 +124,8 @@ void level::engine() {
 		// Place and transform 3D to screen
 		render3Dmodels();
 
-		/*GLenum err = GL_NO_ERROR;
-		while ((err = glGetError()) != GL_NO_ERROR) {
-		printf("Error: %x\n", err);
-		}*/
-
 		// Render subsections
-		setDirtyParams();
-		RenderSubsection(dirtyX[0], dirtyY[0], dirtyWidth[0], dirtyHeight[0]);
-		RenderSubsection(dirtyX[1], dirtyY[1], dirtyWidth[1], dirtyHeight[1]);
+		setDirtyParamsAndRender();
 
 		// Draw with framebuffer shader on screen
 		drawBufferShader();

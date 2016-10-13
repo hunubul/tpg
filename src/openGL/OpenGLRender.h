@@ -23,7 +23,7 @@ void Do_Movement();
 void frameLimiter();
 void render3Dmodels();
 void RenderSubsection(int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight);
-void setDirtyParams();
+void setDirtyParamsAndRender();
 void drawBufferShader();
 void DrawTextGL();
 void DrawUIGL();

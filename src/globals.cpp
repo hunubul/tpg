@@ -4,8 +4,8 @@
 
 using namespace std;
 
-int    globals::ConsoleWidth, globals::ConsoleHeight;
-int    globals::ConsoleWidthPixels, globals::ConsoleHeightPixels;
+//int    globals::ConsoleWidth, globals::ConsoleHeight;
+//int    globals::ConsoleWidthPixels, globals::ConsoleHeightPixels;
 //SIZES  globals::UpperBoxSiz, globals::UpperBoxPos;
 //SIZES  globals::SideBoxSiz, globals::SideBoxPosLeft, globals::SideBoxPosRight;
 //SIZES  globals::BottomBoxSiz, globals::BottomBoxPos;

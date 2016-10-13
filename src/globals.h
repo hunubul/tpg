@@ -20,10 +20,10 @@ namespace globals {
 	static const std::string ERR_LOG_PATH = "error.log";
 
 	//extern CHAR_SET CharSet;
-	extern int ConsoleWidthPixels, ConsoleHeightPixels;
-	extern int ConsoleWidth, ConsoleHeight;
-	static const int FontX = 8;
-	static const int FontY = 8;
+	//extern int ConsoleWidthPixels, ConsoleHeightPixels;
+	//extern int ConsoleWidth, ConsoleHeight;
+	//static const int FontX = 8;
+	//static const int FontY = 8;
 	//extern SIZES UpperBoxSiz, UpperBoxPos;
 	//extern SIZES SideBoxSiz, SideBoxPosLeft, SideBoxPosRight;
 	//extern SIZES BottomBoxSiz, BottomBoxPos;

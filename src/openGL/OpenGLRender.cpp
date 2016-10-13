@@ -153,21 +153,38 @@ void render3Dmodels() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void setDirtyParams() {
+void setDirtyFullScreen() {
 	dirtyX[0] = 0 / FontX;
 	dirtyY[0] = 0 / FontY;
+	dirtyWidth[0] = screenWidth / FontX;
+	dirtyHeight[0] = screenHeight / FontY;
+
+	dirtyX[1] = 0;
+	dirtyY[1] = 0;
+	dirtyWidth[1] = 0;
+	dirtyHeight[1] = 0;
+}
+
+void setDirtyParamsAndRender() {
 	if (firstRender) {
-		dirtyWidth[0] = screenWidth / FontX;
-		dirtyHeight[0] = screenHeight / FontY;
+		setDirtyFullScreen();
 		firstRender = false;
 	} else {
+		dirtyX[0] = 0 / FontX;
+		dirtyY[0] = 0 / FontY;
 		dirtyWidth[0] = 20;
 		dirtyHeight[0] = 20;
+
+		dirtyX[1] = 30;
+		dirtyY[1] = 0;
+		dirtyWidth[1] = 10;
+		dirtyHeight[1] = 10;
+
+		//setDirtyFullScreen();
 	}
-	dirtyX[1] = 30;
-	dirtyY[1] = 0;
-	dirtyWidth[1] = 10;
-	dirtyHeight[1] = 10;
+
+	RenderSubsection(dirtyX[0], dirtyY[0], dirtyWidth[0], dirtyHeight[0]);
+	RenderSubsection(dirtyX[1], dirtyY[1], dirtyWidth[1], dirtyHeight[1]);
 }
 
 void RenderSubsection(int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) {
